@@ -1,9 +1,17 @@
 <html>
 <head>
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
+<script type="text/javascript" src=" https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>
+<script type="text/javascript" src="../assets/js/jquery.wijmo-open.1.2.0.min.js"></script>
+ <script id="scriptInit" type="text/javascript">
+        $(document).ready(function () {
+            $("#splitter").wijsplitter({ orientation: "vertical", fullSplit: true });
+        });       
+    </script>
 <title>codegen mobile</title>
 <link href="../style.css" rel="stylesheet" type="text/css" media="all">
+<link href="../assets/css/jquery.wijmo-open.1.2.0.css" rel="stylesheet" type="text/css" media="all">
 </head>
 
 
@@ -14,26 +22,16 @@
 		<h1>CodeGen Mobile </h1>
 	</div>
 	<div data-role="content">
-		<div class="container_12">
-			<div class="grid_3">
-				<div class="ui-content">
-					<ul data-role="listview" data-inset="true">
-						<li><a href="#page2">Page Two</a></li>
-						<li><a href="#page3">Page Three</a></li>
-						<li><a href="#page4">Page Four</a></li>
-					</ul>
-				</div>
-			</div>
-			<div class="grid_9">
-				<div class="ui-content">
-					<div data-role="collapsible">
-						<h3>Content for  class "grid_9" Goes Here</h3>
-						<p>Content for  class "grid_9" Goes Here</p>
-					</div>
-				</div>
-			
-			</div>
-		</div>
+		<!-- Begin demo markup -->
+            <div id="splitter">
+                <div>
+                    Panel 1
+                </div>
+                <div>
+                    Panel 2
+                </div>
+            </div>
+            <!-- End demo markup -->
 	</div>
 	<div data-role="footer" data-position="fixed">
 		<h4>Page Footer</h4>

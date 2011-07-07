@@ -26,7 +26,7 @@
  
 </head>
 <body> 
-	<div id="feed"></div>
+<div id="feed"></div>
 	
 <div class="container_12">
 	
@@ -38,7 +38,6 @@
 			<li><a href="?page=manager">Manager</a></li>
 			<li><a href="?page=utilities">Utilities</a></li>
 			<li><a href="?page=settings">Settings</a></li>
-			<li id="cg_global_loader"><img src="assets/images/cg_global_loader.gif" alt="loading..."/></li>
 		</ul>
 	</div>
 	<div class="clear"></div>

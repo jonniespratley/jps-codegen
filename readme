@@ -1,41 +1,46 @@
-==Features to Come==
-  * Refactoring - Completely refactored ActionScript service classes. 
-This includes creating custom event classes for dispatching upon completed requests, and using URLLoader and URLRequest for the services instead of HTTPService. 
+/**
+ * 
+ * @TODO: Sept 29th 2009
+ * 1. Fix all main generators to accept new parameters when generating code,
+ * if an array is passed as the options read from the array keys
+ * else read from the xml file.
+ * 
+ * 
+ * @TODO: Sept 28th 2009
+ * 
+ * 
+ * 
+ * 1. When creating application make main folder name of the application. For flex import.
+ * with services folder inside of folder.
+ * 2. Add new options for generation, including 
+ * getters/setters
+ * REST url style
+ * API key use
+ * Admin Logging
+ * User monitoring
+ * Field alias, as well as uploading edited config and schema files.
+ * Field toggle display.
+ *
+ * @TODO: July 11th 2009
+ * 
+ * 1. Edit php service template and add post switch statement on REST part.
+ * 2. Add my jquery pages plugin to the main navigation of the site.
+ * 3. Fix boxes to make all drag drop.
+ * 4. Use 960.css style
+ * 5. Create class to display recent updates to CodeGen repo
+ * 6. Create automation script that downloads all the recent versions
+ * 7. Create a update checker.
+ * 8. Incorporate Flex service browser and api tester.
+ * 9. Create sql schema export.
+ * 10. Create class to find table relationships using rails method of
+ * 		has_many:
+ * 		has_one:
+ * 		belongs_to:
+ * 		has_and_belongs_to_many:
+ * 		
+ *  
 
-This will allow more flexibility with the service classes for easy implementation on further resources.
-  * One Step - Generated applications will be a one click process. 
-After choosing the application name, copywrite, etc. One click of a button will have that application created with all necessary files for both server and client side.
-  * SDK Compiling - Once generated, Flex applications will be compiled using the Flex SDK, using its path specified in the settings page. 
-This will let users see a working example of there application within seconds of pressing generate. 
-  * Table relationships - Database with tables that have relationships such as has-one, has-many, belongs-to, etc.
-  * Schema uploads - Recreating applications to make the necessary changes to reflect upon the database will be as easy as changing values in the schema.xml file. Then uploading that file for code creation.
-
-
-
-Complex HTML based generator that will create full application shells on the fly, 
-all from a configuration file located in the output folder of the project.
-
-The CodeGen creates all necessary files for getting the base of an application started with easy access to the database, 
-for all database operations.
-
-All code is generated from a schema.xml file that holds the applications databases schema. 
-
-Any changes to the database or tables or fields usually would required a developer to go through the classes they made 
-for that table or database and make the correct changes reflecting the new changes. 
-
-But with the CodeGen all one would need to do is run the generator again and the newly updated tables will be re-written 
-in the schema.xml file thus generating new php classes for the CRUD operations, therefore your application never runs out of sync.
-
-Every file is generated from a template which is included in the download, you can change the templates, just be sure to 
-look over the template key at the top of the file.
-
-Also I guarantee this to be a full CRUD application on your MySQL database.
-
-Most generators aren't reliable or either working out of the box right from being generated, so I was just like screw that, 
-I am going to make this, just because I hate copy and pasting my old scripts time and time again just to do the same thing.
-
-The features that it generates:
-
-  # Flex validation on all table columns that are required.
-  # Flex Data Grid listing all of the records in the database.
-  # Flex Form that lets you view the details of the selected record, and editing or creating of a new record.
+ * @TODO: Auguest 7th 2009
+ * 1. Upon successful generation of flex application, save the information in the sqlite database cg_historys table
+ * 
+ */
