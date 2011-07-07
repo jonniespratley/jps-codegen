@@ -1,4 +1,7 @@
-/* @override http://localhost/CodeGen/assets/css/codegen.css */
+/* @override 
+	http://localhost/CodeGen/assets/css/codegen.css
+	http://localhost/jps-codegen/assets/css/codegen.css
+*/
 
 /* ===========================================================================================
  * Filename:
@@ -41,7 +44,7 @@ h1.cg_logo {
 
 h2 {
 	color: #74655f;
-	font-size: 16px;
+	font-size: 14px;
 	font-weight: 700;
 	text-transform: capitalize;
 }
