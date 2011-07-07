@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<flex-config>
+	<compiler>
+		<source-path>
+			<path-element>.</path-element>
+		</source-path>
+		<debug>true</debug>
+		<include-libraries>
+			<library>libs/Cairngorm.swc</library>
+			<library>libs/as3json.swc</library>
+		</include-libraries>
+	</compiler>
+	<metadata>
+		<title>Adobe Flex 3 Application</title>
+		<description>http://www.adobe.com/products/flex</description>
+		<publisher>unknown</publisher>
+		<creator>unknown</creator>
+		<language>EN</language>
+	</metadata>
+</flex-config>

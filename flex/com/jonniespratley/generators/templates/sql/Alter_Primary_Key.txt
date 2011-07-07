@@ -1,0 +1,1 @@
+ALTER TABLE @database.@table ADD PRIMARY KEY ( @column )

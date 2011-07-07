@@ -1,0 +1,27 @@
+/**
+@COPYWRITE
+*/
+package @NAMESPACE_AS3.events
+{
+	import com.adobe.cairngorm.control.CairngormEvent;
+	import flash.events.Event;
+	import @NAMESPACE_AS3.vo.*;
+		
+	public final class Save@TABLE_UFIRSTEvent extends CairngormEvent
+	{
+		public static const SAVE_@EVENTCONST_EVENT:String = "SAVE_@EVENTCONST_EVENT";
+
+		public var vo:@TABLE_UFIRSTVO;
+		
+		public function Save@TABLE_UFIRSTEvent( vo:@TABLE_UFIRSTVO )
+		{
+			super( SAVE_@EVENTCONST_EVENT );
+			this.vo =  vo;
+		}
+		
+		override public function clone():Event
+		{
+			return new Save@TABLE_UFIRSTEvent( vo );
+		}
+	}
+}

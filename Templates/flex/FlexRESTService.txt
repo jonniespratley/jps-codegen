@@ -1,0 +1,120 @@
+/**
+@COPYWRITE
+*/
+package @NAMESPACE_AS3.services
+{
+	import com.adobe.net.URI;
+	import com.adobe.serialization.json.JSON;
+	
+	import @NAMESPACE_AS3.vo.*;
+
+	import mx.collections.ArrayCollection;
+	import mx.controls.Alert;
+	import mx.rpc.AsyncToken;
+	import mx.rpc.events.FaultEvent;
+	import mx.rpc.events.ResultEvent;
+	import mx.rpc.http.HTTPService;
+
+	public class @DATABASEService
+	{
+		[Bindable] static public var SERVICE_DUMP:String = '';
+		
+		@TABLE_SELECTED
+		@TABLE_COLLECTION
+		
+		private var _serviceURI:URI;
+		private var _serviceURL:String;
+		private var _serviceTable:String;
+		private var _serviceQuery:String;
+		private var _serviceService:HTTPService;
+
+		public function @DATABASEService( url:String )
+		{
+			this._serviceURL = url;
+		}
+
+		private function sendQuery( whatTable:String, whatMode:String, whatParams:String, whatResultToken:*, whatResultHandler:Function ):void
+		{
+			/**
+			 * Construct the url for this shit,
+			 * URL name/value pairs are:
+			 * t = table ( the table to use )
+			 * m = mode ( the mode to use, save, remove, get )
+			 * q = query ( the arguments )
+			 */
+			this._serviceURI = new URI( _serviceURL );
+			this._serviceURI.setQueryValue( 'm', whatMode );
+			//this._serviceURI.setQueryValue( 't', whatTable );
+
+			this._serviceService = this.restService();
+			this._serviceService.url = this._serviceURI.toString().concat( whatParams );
+			this._serviceService.addEventListener(ResultEvent.RESULT, whatResultHandler );
+			this._serviceService.addEventListener(FaultEvent.FAULT, onFault );
+
+			var token:AsyncToken = this._serviceService.send();
+				token.mode = whatMode;
+				token.table = whatTable;
+				token.query = whatParams;
+				token.resultToken = whatResultToken;
+
+			var traceString:String = '\nSending service....' + '\nMode: ' + whatMode + '\nTable: ' + whatTable + '\nQuery: ' + whatParams + '\nURL: ' + _serviceService.url + '\n';
+
+			@DATABASEService.SERVICE_DUMP += traceString;
+		}
+
+	
+
+		@SERVICE_GET_CALL
+		
+		@SERVICE_SAVE_CALL
+		
+		@SERVICE_REMOVE_CALL
+		
+		/* ****************************************************************
+		 *		ALL RESULT HANDLERS FOR ALL CALLS
+		 * *************************************************************** */
+
+		@SERVICE_GET_RESULT
+		
+		@SERVICE_SAVE_RESULT
+		
+		@SERVICE_REMOVE_RESULT
+
+
+		/* ****************************************************************
+		 *		ALL GLOBAL GENERIC HANDLERS
+		 * *************************************************************** */
+
+		private function restService():HTTPService
+		{
+			var svc:HTTPService = new HTTPService();
+				svc.useProxy = false;
+				svc.contentType = 'text';
+
+			return svc;
+		}
+
+		private function onResult( event:ResultEvent ):void
+		{
+			var resultString:String = '';
+			var resultObject:Object = event.result;
+
+			for (  var s:String in resultObject )
+			{
+				resultString += s + ' ' + resultObject[ s ];
+			}
+			@DATABASEService.SERVICE_DUMP += 'Service Result: ' + resultString;
+		}
+
+		private function onFault( event:FaultEvent ):void
+		{
+			var alertString:String = event.fault.faultDetail + '\n' +
+									 event.fault.message + '\n' +
+									 event.fault.rootCause;
+
+			Alert.show( alertString );
+
+			@DATABASEService.SERVICE_DUMP += 'Service Fault: ' + alertString;
+		}
+	}
+}

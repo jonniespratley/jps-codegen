@@ -1,0 +1,5 @@
+<div class="clear"></div>
+</div><!--/wrap-->
+<div id="footer">Copywrite 2009 &copy; @APPLICATION</div><!--/footer-->
+</body>
+</html>

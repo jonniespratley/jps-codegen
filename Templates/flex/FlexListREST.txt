@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+@TABLE_UFIRSTList.mxml: This component holds listing all records in the @TABLE_UFIRST table and removing a @TABLE_UFIRST record 
+@COPYWRITE
+-->
+<mx:VBox
+	width="100%"
+	height="100%"
+	creationComplete="init()"
+	xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<mx:Script>
+		<![CDATA[
+
+			import @NAMESPACE_AS3.services.@DATABASEService;
+			import @NAMESPACE_AS3.vo.*;
+
+			import mx.controls.Alert;
+
+			private var svc:@DATABASEService = new @DATABASEService( '@ENDPOINT/@NAMESPACE_URL/@TABLE_UFIRSTService.php' );
+			/*
+			 * I add an event listener to the datagrid as well as call for the @TABLE_UFIRST records
+			 */
+			private function init():void
+			{
+				this.get@TABLE_UFIRST();
+				dg_@TABLE_UFIRST.addEventListener( KeyboardEvent.KEY_DOWN, keyboardHandler );
+			}
+
+			/*
+			 * I get all of the @TABLE_UFIRST from the database and display them in a datagrid
+			 */
+			private function get@TABLE_UFIRST():void
+			{
+				svc.get@TABLE_UFIRST();
+			}
+
+			/*
+			 * I remove a @TABLE_UFIRST from the database
+			 */
+			private function remove@TABLE_UFIRST( item:Object ):void
+			{
+				var vo:@TABLE_UFIRSTVO = item as @TABLE_UFIRSTVO;
+				var voIndex:int = dg_@TABLE_UFIRST.selectedIndex;
+
+				svc.remove@TABLE_UFIRST( vo, voIndex );
+			}
+
+			/*
+			 * I set the current selected @TABLE_UFIRST on the model, for all areas of application
+			 */
+			private function onSelect( event:Event ):void
+			{
+				 @DATABASEService.SELECTED_@TABLE_UC = event.currentTarget.selectedItem as @TABLE_UFIRSTVO;
+			}
+
+			/*
+			 * I handle when the keyboard delete key is pressed, I remove a @TABLE_UFIRST, only if it is selected first
+			 */
+			private function keyboardHandler( event:KeyboardEvent ):void
+			{
+				if ( event.keyCode == 8 &&  dg_@TABLE_UFIRST.selectedIndex != -1 )
+				{
+					remove@TABLE_UFIRST( dg_@TABLE_UFIRST.selectedItem );
+				}
+			}
+
+		]]>
+	</mx:Script>
+
+	<mx:Panel width="100%" height="100%" layout="vertical" title="@TABLE_UFIRST List" resizeEffect="Resize">
+
+		<!-- @TABLE_UFIRST DataGrid -->
+		<mx:DataGrid id="dg_@TABLE_UFIRST" 
+			width="100%" height="100%" 
+			dataProvider="{ @DATABASEService.@TABLE_UC_COLLECTION }" 
+			change="onSelect( event )">
+			<mx:columns>
+				@LISTFIELDS
+			</mx:columns>
+		</mx:DataGrid>
+
+
+		<!-- @TABLE_UFIRST Action Buttons-->
+		<mx:ControlBar>
+			<mx:Button label="Refresh" 
+			click="get@TABLE_UFIRST()"/>
+			<mx:Button label="Remove" 
+				click="remove@TABLE_UFIRST( dg_@TABLE_UFIRST.selectedItem )" 
+				enabled="{ dg_@TABLE_UFIRST.selectedIndex != -1 ? true : false }"/>
+		</mx:ControlBar>
+
+	</mx:Panel>
+
+</mx:VBox>

@@ -1,0 +1,50 @@
+<?php 
+require_once "../@TABLE_UFIRSTService.php";
+require_once "../vo/@TABLE_UFIRSTVO.php";
+
+@HTML_CLEAR_VARS
+$record_id = '';
+$mode = '';
+if ( isset( $_GET[ 'mode' ] ) == 'edit' ){
+	$mode = 'save';
+	$record_id = isset( $_GET[ '@PRIMARY_KEY' ] );
+	$service = new @TABLE_UFIRSTService();
+	$recordVO = new @TABLE_UFIRSTVO();
+	$record = $service->getOne@TABLE_UFIRST( $record_id ); 
+	$recordVO = $record[ 0 ];//First object in array
+	
+	@HTML_SET_VARS	
+} else if ( isset( $_GET['mode']) == 'new' ){
+	$mode = 'new';
+	
+	@HTML_CLEAR_VARS
+}
+?>
+
+<?php include '_header.php'; ?>
+ 
+<p>This is your form to insert a record for the @TABLE_UFIRST table, please change this description</p>
+
+<div id="left-col">
+	<form id="form@TABLE_UFIRST" name="form@TABLE_UFIRST" method="post" action="@TABLE_UFIRSTList.php">
+		@HTML_FORM_FIELDS
+	     <p>
+			<input id="mode" name="mode" value="<?php echo $mode; ?>" type="hidden"/>
+	    	<input id="txt_@PRIMARY_KEY_key" name="@PRIMARY_KEY" value="<?php echo $record_id; ?>" type="hidden"/>
+			<input id="btn_@TABLE_UFIRST_save" name="save" class="submit" value="Save" type="submit" />
+			<input id="btn_@TABLE_UFIRST_cancel" name="cancel" class="submit" value="Cancel" type="button" onclick="window.location='@TABLE_UFIRSTList.php'"/>
+	    </p>
+	</form>
+</div>
+<div id="right-col">
+	<div class="right-box">
+		<h2>Info Box</h2>
+		<ol></ol>
+		<a class="button" href="#">Done</a>
+	</div>
+</div>
+
+   
+	
+  
+<?php include '_footer.php'; ?>

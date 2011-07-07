@@ -1,0 +1,282 @@
+
+delete-cairngorm-directories:
+     [echo] @Invoking Cairngen on [CodeGen] --> Deleting Cairngorm directories
+
+create-cairngorm-directories:
+     [echo] @Invoking Cairngen on [CodeGen] --> Creating Cairngorm directories
+    [mkdir] Created dir: /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/business
+    [mkdir] Created dir: /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/commands
+    [mkdir] Created dir: /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/control
+    [mkdir] Created dir: /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/events
+    [mkdir] Created dir: /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/model
+    [mkdir] Created dir: /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/view
+    [mkdir] Created dir: /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/vo
+    [mkdir] Created dir: /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/view/components
+    [mkdir] Created dir: /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/${assets.dir}
+    [mkdir] Created dir: /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/${assets.dir}/${styles.dir}
+    [mkdir] Created dir: /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/${assets.dir}/${images.dir}
+
+clean:
+
+create-model-locator:
+     [echo] @Invoking Cairngen on [CodeGen] --> Generating file(s): ModelLocator.as
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/model
+
+create-front-controller:
+     [echo] @Invoking Cairngen on [CodeGen] --> Generating file(s): CodeGenController.as 
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/control
+
+create-service-locator:
+     [echo] @Invoking Cairngen on [CodeGen] --> Generating file(s): Services.mxml
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/business
+
+create-cairngorm-project:
+
+main:
+BUILD SUCCESSFUL
+
+BUILD SUCCESSFUL
+
+add-command-to-controller:
+     [echo] @Invoking Cairngen on [CodeGen] --> Inserting addCommand in FrontController for CallMethodEvent and CallMethodCommand
+
+add-command-to-controller-cleanup:
+
+create-sequence-include-delegate:
+     [echo] @Invoking Cairngen on [CodeGen] --> Generating file(s): CallMethodEvent.as, CallMethodCommand.as, CallMethodDelegate.as
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/events
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/commands
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/business
+BUILD SUCCESSFUL
+
+BUILD SUCCESSFUL
+
+delete-cairngorm-directories:
+
+BUILD FAILED
+
+/Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/build.xml:109: Unable to respond to <input> request
+	at org.eclipse.ant.internal.ui.antsupport.inputhandler.SWTInputHandler$1.run(SWTInputHandler.java:85)
+	at org.eclipse.swt.widgets.Synchronizer.syncExec(Synchronizer.java:158)
+	at org.eclipse.swt.widgets.Display.syncExec(Display.java:3793)
+	at org.eclipse.ant.internal.ui.antsupport.inputhandler.SWTInputHandler.handleInput(SWTInputHandler.java:65)
+	at org.eclipse.ant.internal.ui.antsupport.inputhandler.ProxyInputHandler.handleInput(ProxyInputHandler.java:24)
+	at org.apache.tools.ant.taskdefs.Input.execute(Input.java:231)
+	at org.apache.tools.ant.UnknownElement.execute(UnknownElement.java:288)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:585)
+	at org.apache.tools.ant.dispatch.DispatchUtils.execute(DispatchUtils.java:105)
+	at org.apache.tools.ant.Task.perform(Task.java:348)
+	at org.apache.tools.ant.taskdefs.Sequential.execute(Sequential.java:62)
+	at net.sf.antcontrib.logic.IfTask.execute(IfTask.java:197)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:585)
+	at org.apache.tools.ant.dispatch.DispatchUtils.execute(DispatchUtils.java:105)
+	at org.apache.tools.ant.TaskAdapter.execute(TaskAdapter.java:134)
+	at org.apache.tools.ant.UnknownElement.execute(UnknownElement.java:288)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:585)
+	at org.apache.tools.ant.dispatch.DispatchUtils.execute(DispatchUtils.java:105)
+	at org.apache.tools.ant.Task.perform(Task.java:348)
+	at org.apache.tools.ant.Target.execute(Target.java:357)
+	at org.apache.tools.ant.Target.performTasks(Target.java:385)
+	at org.apache.tools.ant.Project.executeSortedTargets(Project.java:1329)
+	at org.apache.tools.ant.Project.executeTarget(Project.java:1298)
+	at org.apache.tools.ant.helper.DefaultExecutor.executeTargets(DefaultExecutor.java:41)
+	at org.eclipse.ant.internal.ui.antsupport.EclipseDefaultExecutor.executeTargets(EclipseDefaultExecutor.java:32)
+	at org.apache.tools.ant.Project.executeTargets(Project.java:1181)
+	at org.eclipse.ant.internal.ui.antsupport.InternalAntRunner.run(InternalAntRunner.java:423)
+	at org.eclipse.ant.internal.ui.antsupport.InternalAntRunner.main(InternalAntRunner.java:137)
+
+add-command-to-controller:
+     [echo] @Invoking Cairngen on [CodeGen] --> Inserting addCommand in FrontController for GetDirectoryEvent and GetDirectoryCommand
+
+add-command-to-controller-cleanup:
+
+create-sequence-include-delegate:
+     [echo] @Invoking Cairngen on [CodeGen] --> Generating file(s): GetDirectoryEvent.as, GetDirectoryCommand.as, GetDirectoryDelegate.as
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/events
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/commands
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/business
+
+add-command-to-controller:
+     [echo] @Invoking Cairngen on [CodeGen] --> Inserting addCommand in FrontController for  ReadFileEvent and  ReadFileCommand
+
+add-command-to-controller-cleanup:
+
+create-sequence-include-delegate:
+     [echo] @Invoking Cairngen on [CodeGen] --> Generating file(s):  ReadFileEvent.as,  ReadFileCommand.as,  ReadFileDelegate.as
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/events
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/commands
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/business
+
+add-command-to-controller:
+     [echo] @Invoking Cairngen on [CodeGen] --> Inserting addCommand in FrontController for  WriteFileEvent and  WriteFileCommand
+
+add-command-to-controller-cleanup:
+
+create-sequence-include-delegate:
+     [echo] @Invoking Cairngen on [CodeGen] --> Generating file(s):  WriteFileEvent.as,  WriteFileCommand.as,  WriteFileDelegate.as
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/events
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/commands
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/business
+
+add-command-to-controller:
+     [echo] @Invoking Cairngen on [CodeGen] --> Inserting addCommand in FrontController for  SelectedFileEvent and  SelectedFileCommand
+
+add-command-to-controller-cleanup:
+
+create-sequence-include-delegate:
+     [echo] @Invoking Cairngen on [CodeGen] --> Generating file(s):  SelectedFileEvent.as,  SelectedFileCommand.as,  SelectedFileDelegate.as
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/events
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/commands
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/business
+
+add-command-to-controller:
+     [echo] @Invoking Cairngen on [CodeGen] --> Inserting addCommand in FrontController for GetDatabasesEvent and GetDatabasesCommand
+
+add-command-to-controller-cleanup:
+
+create-sequence-include-delegate:
+     [echo] @Invoking Cairngen on [CodeGen] --> Generating file(s): GetDatabasesEvent.as, GetDatabasesCommand.as, GetDatabasesDelegate.as
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/events
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/commands
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/business
+
+add-command-to-controller:
+     [echo] @Invoking Cairngen on [CodeGen] --> Inserting addCommand in FrontController for  GenerateConfigEvent and  GenerateConfigCommand
+
+add-command-to-controller-cleanup:
+
+create-sequence-include-delegate:
+     [echo] @Invoking Cairngen on [CodeGen] --> Generating file(s):  GenerateConfigEvent.as,  GenerateConfigCommand.as,  GenerateConfigDelegate.as
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/events
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/commands
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/business
+
+add-command-to-controller:
+     [echo] @Invoking Cairngen on [CodeGen] --> Inserting addCommand in FrontController for  GenerateSchemaEvent and  GenerateSchemaCommand
+
+add-command-to-controller-cleanup:
+
+create-sequence-include-delegate:
+     [echo] @Invoking Cairngen on [CodeGen] --> Generating file(s):  GenerateSchemaEvent.as,  GenerateSchemaCommand.as,  GenerateSchemaDelegate.as
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/events
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/commands
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/business
+
+add-command-to-controller:
+     [echo] @Invoking Cairngen on [CodeGen] --> Inserting addCommand in FrontController for  GenerateApplicationEvent and  GenerateApplicationCommand
+
+add-command-to-controller-cleanup:
+
+create-sequence-include-delegate:
+     [echo] @Invoking Cairngen on [CodeGen] --> Generating file(s):  GenerateApplicationEvent.as,  GenerateApplicationCommand.as,  GenerateApplicationDelegate.as
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/events
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/commands
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/business
+
+add-command-to-controller:
+     [echo] @Invoking Cairngen on [CodeGen] --> Inserting addCommand in FrontController for  GetSchemaEvent and  GetSchemaCommand
+
+add-command-to-controller-cleanup:
+
+create-sequence-include-delegate:
+     [echo] @Invoking Cairngen on [CodeGen] --> Generating file(s):  GetSchemaEvent.as,  GetSchemaCommand.as,  GetSchemaDelegate.as
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/events
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/commands
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/business
+
+add-command-to-controller:
+     [echo] @Invoking Cairngen on [CodeGen] --> Inserting addCommand in FrontController for  GetConfigEvent and  GetConfigCommand
+
+add-command-to-controller-cleanup:
+
+create-sequence-include-delegate:
+     [echo] @Invoking Cairngen on [CodeGen] --> Generating file(s):  GetConfigEvent.as,  GetConfigCommand.as,  GetConfigDelegate.as
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/events
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/commands
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/business
+
+add-command-to-controller:
+     [echo] @Invoking Cairngen on [CodeGen] --> Inserting addCommand in FrontController for  GetApplicationEvent and  GetApplicationCommand
+
+add-command-to-controller-cleanup:
+
+create-sequence-include-delegate:
+     [echo] @Invoking Cairngen on [CodeGen] --> Generating file(s):  GetApplicationEvent.as,  GetApplicationCommand.as,  GetApplicationDelegate.as
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/events
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/commands
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/business
+
+add-command-to-controller:
+     [echo] @Invoking Cairngen on [CodeGen] --> Inserting addCommand in FrontController for GetTemplatesEvent and GetTemplatesCommand
+
+add-command-to-controller-cleanup:
+
+create-sequence-include-delegate:
+     [echo] @Invoking Cairngen on [CodeGen] --> Generating file(s): GetTemplatesEvent.as, GetTemplatesCommand.as, GetTemplatesDelegate.as
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/events
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/commands
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/business
+BUILD SUCCESSFUL
+
+BUILD SUCCESSFUL
+
+add-command-to-controller:
+     [echo] @Invoking Cairngen on [CodeGen] --> Inserting addCommand in FrontController for GetOutputEvent and GetOutputCommand
+
+add-command-to-controller-cleanup:
+
+create-sequence-exclude-delegate:
+     [echo] @Invoking Cairngen on [CodeGen] --> Generating file(s): GetOutputEvent.as, GetOutputCommand.as
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/events
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/commands
+BUILD SUCCESSFUL
+
+BUILD SUCCESSFUL
+
+add-command-to-controller:
+     [echo] @Invoking Cairngen on [CodeGen] --> Inserting addCommand in FrontController for InspectPHPClassEvent and InspectPHPClassCommand
+
+add-command-to-controller-cleanup:
+
+create-sequence-exclude-delegate:
+     [echo] @Invoking Cairngen on [CodeGen] --> Generating file(s): InspectPHPClassEvent.as, InspectPHPClassCommand.as
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/events
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/commands
+BUILD SUCCESSFUL
+
+BUILD SUCCESSFUL
+
+add-command-to-controller:
+     [echo] @Invoking Cairngen on [CodeGen] --> Inserting addCommand in FrontController for GetServicesEvent and GetServicesCommand
+
+add-command-to-controller-cleanup:
+
+create-sequence-exclude-delegate:
+     [echo] @Invoking Cairngen on [CodeGen] --> Generating file(s): GetServicesEvent.as, GetServicesCommand.as
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/events
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/commands
+BUILD SUCCESSFUL
+
+BUILD SUCCESSFUL
+
+add-command-to-controller:
+     [echo] @Invoking Cairngen on [CodeGen] --> Inserting addCommand in FrontController for CallClassFunctionEvent and CallClassFunctionCommand
+
+add-command-to-controller-cleanup:
+
+create-sequence-exclude-delegate:
+     [echo] @Invoking Cairngen on [CodeGen] --> Generating file(s): CallClassFunctionEvent.as, CallClassFunctionCommand.as
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/events
+     [copy] Copying 1 file to /Volumes/Disk02/Workspace/FlexWorkspace/CodeGen/src/com/jonniespratley/codegen/commands
+BUILD SUCCESSFUL
+
+BUILD SUCCESSFUL

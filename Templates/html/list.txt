@@ -1,0 +1,96 @@
+<?php 
+require_once '../@TABLE_UFIRSTService.php';
+require_once '../vo/@TABLE_UFIRSTVO.php';
+
+$service = new @TABLE_UFIRSTService();
+$result = '';
+$recordList = '';
+
+if ( isset($_POST['mode']) == 'save' )
+{
+	unset( $_POST['mode'] );
+	$recordValues = $_POST;
+	$result = $service->save@TABLE_UFIRST( $recordValues );	
+}
+
+$recordsArray = $service->getAll@TABLE_UFIRST();
+$recordVO = new @TABLE_UFIRSTVO();
+
+for ( $i = 0; $i < count( $recordsArray ); $i++ ) 
+{
+	$recordVO = $recordsArray[ $i ];
+	$recordList .= '<tr id="'.$recordVO->@PRIMARY_KEY.'">';
+
+	@HTML_FIELD_LIST
+
+	$recordList .= '<td class="actions">';
+	$recordList .= '<button class="btn" type="submit" value="Edit Button" onclick="window.location=\'@TABLE_UFIRSTForm.php?record_id='.$recordVO->@PRIMARY_KEY.'\'">';
+	$recordList .= '<span><img height="16" width="16" alt="" src="assets/images/icons/edit.gif"/>Edit</span>';
+	$recordList .= '</button>';
+	$recordList .= '<button onclick=" remove('.$recordVO->@PRIMARY_KEY.')">Delete</button></td>';
+	
+	$recordList .= '</tr>';
+}
+?>
+
+<?php include '_header.php'; ?> 
+
+<script type="text/javascript">
+$().ready(function() {
+	
+	$("#table_@TABLE_UFIRST_list").advancedtable(
+		{
+			searchField: "#search", 
+			loadElement: "#loader", 
+			searchCaseSensitive: false, 
+			ascImage: "assets/images/down.png", 
+			descImage: "assets/images/up.png"
+		}
+	);
+});
+var service = '../@TABLE_UFIRSTService.php';
+function remove( id ){
+	$.post( service, 
+	{ 
+		m: 'remove', 
+		id: id 
+	}, 
+	function(data){
+		if ( data ) {
+			$('#'+id).fadeOut('slow');
+			
+		} else {
+			
+			alert( 'There was a problem!' );
+		}
+	});
+}
+</script>
+
+<p>Below is a list of all of your current tables records. You can click the details button to learn more about each one.</p>
+
+<!--Table Name-->
+<h2>@TABLE_UFIRST Table</h2>
+<input id="search" type="text"/>
+
+<table id="table_@TABLE_UFIRST_list" class="advancedtable" cellspacing="0" cellpadding="0" border="0" width="100%" >
+ <tbody>
+  
+	<tr class="table_header">
+     @HTML_FIELD_HEADER
+	</tr>
+	
+   <?php echo $recordList; ?>
+ </tbody>
+</table><!--/table-->
+
+<form>
+	<fieldset>
+	<a class="button right_button" href="@TABLE_UFIRSTForm.php?mode=new">New @TABLE_UFIRST Record</a>
+	</fieldset>
+</form>
+	
+	
+	
+ 
+<?php include '_footer.php'; ?>

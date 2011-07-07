@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+this is your default copywrite, much better than before.
+-->
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:Bugs="com.test.bugtracker.view.Bugs.*" >
+
+	<mx:ApplicationControlBar dock="true">
+		<mx:LinkBar dataProvider="{ vs_main }"/>
+	</mx:ApplicationControlBar>
+
+	<mx:ViewStack id="vs_main" width="100%" height="100%">
+		<Bugs:BugsMain label="Bugs"/>
+	</mx:ViewStack>
+	
+</mx:Application>

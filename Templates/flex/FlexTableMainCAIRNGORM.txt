@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+@TABLE_UFIRSTMain.mxml I am the main holder for both the form and list.
+@COPYWRITE
+-->
+<mx:HDividedBox
+	width="100%"
+	height="100%"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:@TABLE_UFIRST="@NAMESPACE_AS3.view.@TABLE_UFIRST.*">
+
+	<@TABLE_UFIRST:@TABLE_UFIRSTList id="view_@TABLE_UFIRSTList"/>
+	<@TABLE_UFIRST:@TABLE_UFIRSTForm id="view_@TABLE_UFIRSTForm"/>
+
+</mx:HDividedBox>

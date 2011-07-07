@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+@TABLE_UFIRSTForm.mxml: This component holds viewing details and creating or updating a record in the @TABLE_UFIRST. 
+@COPYWRITE
+-->
+<mx:VBox
+	width="100%"
+	height="100%"
+	creationComplete="init()"
+	xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<mx:Script>
+		<![CDATA[
+			import @NAMESPACE_AS3.services.@DATABASEService;
+			import @NAMESPACE_AS3.vo.*;
+			
+			import mx.controls.Alert;
+			import mx.validators.Validator;
+			import mx.events.ValidationResultEvent;
+
+			[Bindable] private var validators:Array = new Array();
+
+			//@ENDPOINT
+			private var svc:@DATABASEService = new @DATABASEService( '@ENDPOINT/@NAMESPACE_URL/@TABLE_UFIRSTService.php' );
+
+			/*
+			 * I set up the validation array, adding all validators to the array.
+			 */
+			private function init():void
+			{
+				validators = [ @INITVALIDATORS ];
+			}
+
+			/*
+			 * I check to see if the required fields are present, and if so, I then send the data to the server
+			 */
+			private function validateAndSubmit():void
+			{
+				var vals:Array = new Array();
+					 vals = Validator.validateAll( validators );
+
+					if ( vals.length == 0 )
+					{
+						save@TABLE_UFIRST();
+
+					} else {
+
+						var alert:Alert = Alert.show( "Please correct invalid form.", "Validation Error" );
+							 alert.isPopUp = false;
+				}
+			}
+
+			/*
+			 * I either save or update a @TABLE_UFIRST record
+			 */
+			private function save@TABLE_UFIRST():void
+			{
+				var vo:@TABLE_UFIRSTVO;
+
+				if ( @DATABASEService.SELECTED_@TABLE_UC )
+				{
+					vo = new @TABLE_UFIRSTVO();
+					@SETFIELDS
+
+				} else {
+					vo = @DATABASEService.SELECTED_@TABLE_UC;
+					@SETFIELDS
+				}
+				//make the save call
+				svc.save@TABLE_UFIRST( vo );
+			}
+
+			/*
+			 * I clear all of the form input fields, and the error strings, if any
+			 */
+			private function clear():void
+			{
+				@DATABASEService.SELECTED_@TABLE_UC = null;
+				@CLEARFIELDS
+
+			}
+
+		]]>
+	</mx:Script>
+
+	<mx:Panel width="100%" height="100%" layout="vertical" title="@TABLE_UFIRST Details">
+
+		<!-- @TABLE_UFIRST Form -->
+		<mx:Form id="form_@TABLE_UFIRST" width="100%" height="100%">
+			@FORMFIELDS
+		</mx:Form>
+
+		<!-- @TABLE_UFIRST Action Buttons -->
+		<mx:ControlBar>
+			
+			<mx:Button
+				label="Save"
+				click="validateAndSubmit()"/>
+			
+			<mx:Button
+				label="Clear"
+				click="clear()"/>
+		</mx:ControlBar>
+	</mx:Panel>
+
+	<!--All the validators for required inputs-->
+	@VALIDATORS
+
+</mx:VBox>

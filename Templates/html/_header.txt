@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>@APPLICATION</title>
+
+<!--CSS-->
+<link href="styles.css" rel="stylesheet" type="text/css" />
+
+<!--JS-->
+<script src="jquery.js" type="text/javascript" language="JavaScript"></script>
+
+
+<script type="text/javascript">
+
+</script>
+</head>
+<body>
+ 
+<div id="wrap">
+  <div id="menu">
+
+    <p class="left">
+		<!--Table Lists-->
+		<a href="index.php">Home</a>
+		@HTML_TABLE_LIST
+		
+	</p><!--/left-->
+
+	<p class="right">
+		<img src="assets/images/loader.gif" alt="Loading..." id="loader" style="display:none;"/>
+	</p><!--/right-->
+
+	<div class="clear"></div>
+  </div><!--/menu-->
+
+
+<!--Application Name-->
+<h1>@APPLICATION Dashboard</h1>

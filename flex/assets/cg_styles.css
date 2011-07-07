@@ -1,0 +1,77 @@
+/* @group Base */
+@font-face{ fontFamily:"Trebuchet MS"; fontStyle:normal; fontWeight:normal; src:local("Trebuchet MS"); }
+Application{ backgroundColor:#e7e2d3; backgroundGradientAlphas:1.0, 1.0; backgroundGradientColors:#E7E2D3, #E7E2D3; color:#101010; creationCompleteEffect:Fade; font-anti-alias-type:advanced; fontFamily:"Trebuchet MS"; font-size:11; modalTransparency:.8; modalTransparencyColor:#2A2A2A; paddingBottom:1; paddingLeft:1; paddingRight:1; paddingTop:1; themeColor:#aece2d; }
+ScrollBar{ downArrowSkin:Embed(source="cg_down_arrow.png"); thumbSkin:Embed(source="cg_thumb.png",scaleGridLeft="5",scaleGridTop="4",scaleGridRight="9",scaleGridBottom="9"); trackSkin:Embed(source="cg_scroll_track.png",scaleGridLeft="5",scaleGridTop="4",scaleGridRight="9",scaleGridBottom="34"); upArrowSkin:Embed(source="cg_up_arrow.png"); }
+.h1{ fontFamily:"Trebuchet MS"; fontSize:24; fontWeight:bold; }
+.h2{ color:#74655F; fontFamily:"Trebuchet MS"; fontSize:20; fontWeight:bold; }
+.h3{ fontFamily:"Trebuchet MS"; fontSize:18; fontWeight:bold; }
+.h4{ fontFamily:"Trebuchet MS"; fontSize:16; fontWeight:bold; }
+.grid{ horizontal-gap:20; }
+HRule{ creationCompleteEffect:Fade; strokeColor:#C2BEB1; }
+.padding{ paddingBottom:1; paddingLeft:1; paddingRight:1; paddingTop:1; }
+ApplicationControlBar{ corner-radius:0; drop-shadow-enabled:false; }
+ToolTip{ backgroundColor:#c4e63b; color:#526406; cornerRadius:6; fontWeight:bold; letterSpacing:0; paddingLeft:5; paddingRight:5; }
+/* @end */
+/* @group Alert */
+Alert{ background-color:#ffffff; border-color:#352d2b; border-style:solid; border-thickness:1; color:#111111; corner-radius:6; drop-shadow-color:#999999; drop-shadow-enabled:true; footer-colors:#352d2b, #352d2b; header-colors:#352d2b, #352d2b; header-height:20; title-style-name:"alertTitle"; }
+.alertTitle{ color:#ffffff; font-size:10; font-weight:bold; text-align:left; }
+/* @end */
+/* @group Boxes */
+.box{ backgroundColor:#FFFFFF; borderColor:#C2BEB1; borderStyle:solid; borderThickness:1; horizontal-align:center; paddingBottom:5; paddingLeft:5; paddingRight:5; paddingTop:5; }
+.boxHeader{ backgroundColor:#FFFFFF; borderColor:#C2BEB1; borderSides:bottom; borderStyle:solid; borderThickness:1; paddingBottom:5; paddingLeft:2; paddingRight:2; paddingTop:2; verticalAlign:middle; }
+/* @end */
+/* @group Tabs */
+.TabNavigator{ backgroundColor:#f3f0e9; borderColor:#c2beb1; horizontalGap:6; selectedTabTextStyleName:"mySelectedTabs"; tabHeight:27; tabStyleName:"myTabs"; tabWidth:90; }
+.mySelectedTabs{ color:#382f28; }
+.myTabs{ borderColor:#c2beb1; color:#eeeeee; cornerRadius:0; fillColors:#8c807b, #756761; fontSize:11; fontWeight:bold; highlightAlphas:0, 0; tab-height:40; tab-width:115; textRollOverColor:#ffffff; themeColor:#5d483a; }
+/* @end */
+/* @group ComboBox */
+.myComboBoxDropDowns{ borderColor:#787467; borderThickness:1; color:#333333; dropShadowEnabled:false; }
+.comboBoxDropdown{ borderStyle:none; }
+.ComboBox{  cornerRadius:5; creationCompleteEffect:Fade; fillAlphas:1.0, 1.0, 1.0, 1.0;   fontFamily:Arial; fontSize:12;  }
+/* @end */
+/* @group SubNav */
+.subnav{ backgroundAlpha:1.0; backgroundColor:#74655F; borderColor:#2E2725; borderStyle:solid; fontSize:10; fontStyle:italic; paddingBottom:1; paddingLeft:5; paddingRight:5; paddingTop:1; }
+/* @end */
+/* @group Buttons */
+.Button{  cornerRadius:5; creationCompleteEffect:Fade; fillAlphas:1.0, 1.0, 1.0, 1.0;  fontFamily:Arial; fontSize:12; highlightAlphas:0,0; textRollOverColor:#222222;
+	fontWeight: bold;
+	fontThickness: 20;
+	textSelectedColor: #222222;
+	disabledColor: #222222; }
+.LinkButton
+{
+	color: #2C2C2C;
+	textRollOverColor: #000000;
+}
+Button.green{ borderColor:#90B306; color:#4D5F04; cornerRadius:5; creationCompleteEffect:Fade; fillAlphas:1.0, 1.0, 1.0, 1.0; fillColors:#AECE2F, #AECE2F; fontFamily:Arial; fontSize:12; highlightAlphas:0,0; paddingBottom:5; paddingLeft:25; paddingRight:25; paddingTop:5; }
+/* @end */
+/* @group DataGrid */
+.DataGrid{ alternatingItemColors:#ffffff, #fbf9f4; backgroundColor:#e7e2d3; borderColor:#c2beb1; color:#74655f; creationCompleteEffect:Fade; headerColors:#e7e2d3, #e7e2d3; headerStyleName:"mydataGridHeaderStyle"; horizontalGridLineColor:#c2beb1; horizontalGridLines:true; rollOverColor:#c2beb1; selectionColor:#AECE2F; textRollOverColor:#74655f; textSelectedColor:#4d5f04; verticalGridLineColor:#c2beb1; }
+.mydataGridHeaderStyle{ color:#74655f; fontSize:13; fontStyle:normal; fontWeight:normal; textDecoration:none; }
+/* @end */
+/* @group Forms */
+Form{ paddingBottom:1; paddingLeft:1; paddingRight:1; paddingTop:1; }
+FormItem{ paddingBottom:1; paddingLeft:0; paddingRight:0; paddingTop:1; }
+.legend{ borderColor:#b9b9b9; borderSides:bottom; borderStyle:solid; borderThickness:1; fontSize:14; fontWeight:bold; }
+/* @end */
+/* @group MainNav */
+MenuBar{ backgroundColor:#74655f; borderColor:#2e2725; color:#f0ede3; fillAlphas:1, 1; fillColors:#74655f, #74655f; highlightAlphas:0, 0; rollOverColor:#2e2725; selectionColor:#2e2725; textRollOverColor:#f0f967; textSelectedColor:#f0f967; themeColor:#aece2d; }
+/* @end */
+/* @group TextInputs */
+TextInput{ borderColor:#ab9b94; borderStyle:solid; fontSize:12; paddingLeft:1; paddingRight:1; }
+TextArea{ borderColor:#ab9b94; fontSize:12; paddingLeft:1; paddingRight:1; }
+/* @end */
+/* @group Panel */
+Panel{ backgroundAlpha:1.0; backgroundColor:#FFFFFF; borderAlpha:1.0; borderColor:#C2BEB1; borderStyle:solid; borderThickness:1; borderThicknessBottom:2; borderThicknessLeft:5; borderThicknessRight:5; borderThicknessTop:2; controlBarStyleName:panelControlBar; cornerRadius:0; creationCompleteEffect:Fade; dropShadowEnabled:false; paddingBottom:0; paddingLeft:0; paddingRight:0; paddingTop:0; titleStyleName:panelTitle; }
+.panelTitle{ color:#74655F; fontFamily:"Trebuchet MS"; fontSize:18; fontWeight:bold; }
+.panelControlBar{  }
+
+@font-face
+{
+	fontFamily: "Trebuchet MS";
+	fontWeight: bold;
+	fontStyle: normal;
+	src: local("Trebuchet MS");
+}
+/* @end */

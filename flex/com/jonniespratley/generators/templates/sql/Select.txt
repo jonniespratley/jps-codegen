@@ -1,0 +1,1 @@
+SELECT @columnnames \nFROM @database.@table \n@WHERE \n@ORDER \nBY \n@LIMIT

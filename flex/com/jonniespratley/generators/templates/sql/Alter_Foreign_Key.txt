@@ -1,0 +1,3 @@
+ALTER TABLE @database.@table 
+	ADD FOREIGN KEY ( @column ) 
+	REFERENCES @table2 ( @column2 )

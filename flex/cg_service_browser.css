@@ -1,0 +1,214 @@
+/* CSS file */
+
+Panel
+{
+	borderColor: #C2BEB1;
+	borderStyle: solid;
+	borderThickness: 1;
+	cornerRadius: 0;
+	dropShadowEnabled: false;
+	controlBarStyleName: panelControlBar;
+	titleStyleName: panelTitle;
+	borderAlpha: 1.0;
+	borderThicknessLeft: 5;
+	borderThicknessRight: 5;
+	borderThicknessTop: 2;
+	borderThicknessBottom: 2;
+	backgroundColor: #FFFFFF;
+	backgroundAlpha: 1.0;
+	creationCompleteEffect: Fade;
+	paddingLeft: 0;
+	paddingRight: 0;
+	paddingTop: 0;
+	paddingBottom: 0;
+}
+.panelControlBar
+{
+}
+.panelTitle
+{
+	color: #74655F;
+	fontWeight: bold;
+	fontSize: 18;
+	fontFamily: "Trebuchet MS";
+}
+.label{
+
+	color: #74655F;
+	fontWeight: bold;
+	fontSize: 18;
+	fontFamily: "Trebuchet MS";
+}
+@font-face
+{
+	fontFamily: "Trebuchet MS";
+	fontWeight: bold;
+	fontStyle: normal;
+	src: local("Trebuchet MS");
+}
+
+.btnGreen
+{
+	borderColor: #90B306;
+	color: #4D5F04;
+	cornerRadius: 5;
+	fillAlphas: 1.0, 1.0, 1.0, 1.0;
+	fillColors: #AECE2F, #AECE2F;
+	fontFamily: Arial;
+	fontSize: 12;
+	highlightAlphas: 0,0;
+	creationCompleteEffect: Fade;
+	paddingLeft: 25;
+	paddingRight: 25;
+	paddingTop: 5;
+	paddingBottom: 5;
+}
+ComboBox {
+   color: #e7e2d3;
+   borderColor: #787467;
+   highlightAlphas: 0, 0;
+   fillAlphas: 1, 1, 1, 1;
+   fillColors: #7b6c66, #7b6c66, #7b6c66, #7b6c66;
+   textSelectedColor: #ffffff;
+   rollOverColor: #cccccc;
+   themeColor: #AECE2F;
+   openDuration: 300;
+   closeDuration: 300;
+   paddingLeft: 25;
+	paddingRight: 25;
+	paddingTop: 5;
+	paddingBottom: 5;
+   dropDownStyleName: "myComboBoxDropDowns";
+}
+
+.myComboBoxDropDowns {
+   cornerRadius: 5;
+   borderThickness: 1;
+   borderColor: #787467;
+   color: #333333;
+   dropShadowEnabled: false;
+}
+.btnBrown
+{
+	borderColor: #787467;
+	color: #e7e2d3;
+	cornerRadius: 5;
+	fillAlphas: 1.0, 1.0, 1.0, 1.0;
+	fillColors: #7b6c66, #7b6c66;
+	fontFamily: Arial;
+	fontSize: 12;
+	highlightAlphas: 0,0;
+	creationCompleteEffect: Fade;
+}
+DataGrid {
+   backgroundColor: #e7e2d3;
+   alternatingItemColors: #ffffff, #fbf9f4;
+   headerColors: #e7e2d3, #e7e2d3;
+   horizontalGridLines: true;
+   horizontalGridLineColor: #c2beb1;
+   verticalGridLineColor: #c2beb1;
+   rollOverColor: #c2beb1;
+   textRollOverColor: #74655f;
+   borderColor: #c2beb1;
+   selectionColor: #AECE2F;
+   color: #74655f;
+   textSelectedColor: #4d5f04;
+   headerStyleName: "mydataGridHeaderStyle";
+   creationCompleteEffect: Fade;
+}
+
+.mydataGridHeaderStyle {
+   color: #74655f;
+   fontWeight: normal;
+   fontSize: 13;
+   fontStyle: normal;
+   textDecoration: none;
+}
+Application
+{
+	fontFamily: Arial;
+	paddingLeft: 0;
+	paddingRight: 0;
+	paddingTop: 0;
+	paddingBottom: 0;
+	themeColor: #AECE2F;
+	backgroundColor:#e7e2d3;
+	color: #74655F;
+	backgroundGradientAlphas: 1.0, 1.0;
+	backgroundGradientColors: #E7E2D3, #E7E2D3;
+	fontSize: 11;
+	horizontalGap: 20;
+	horizontal-align:center;
+	vertical-align:middle;
+}
+HRule
+{
+	strokeColor: #C2BEB1;
+	creationCompleteEffect: Fade;
+}
+@font-face
+{
+	fontFamily: Arial;
+	fontWeight: normal;
+	fontStyle: normal;
+	src: local("Arial");
+}
+.legend
+{
+	fontSize: 14;
+	fontWeight: bold;
+	borderColor: #b9b9b9;
+	borderSides: bottom;
+	borderStyle: solid;
+	borderThickness: 1;
+
+}
+FormItem
+{
+	paddingBottom: 2;
+	paddingLeft: 2;
+	paddingRight: 2;
+	paddingTop: 2;
+}
+TextInput
+{
+	backgroundColor: #f3f3f3;
+	borderColor: #b9b9b9;
+	borderStyle: solid;
+	borderThickness: 1;
+	cornerRadius: 5;
+	fontSize: 13;
+}
+Form
+{
+	paddingBottom: 5;
+	paddingLeft: 5;
+	paddingRight: 5;
+	paddingTop: 5;
+}
+.box
+{
+	backgroundColor: #FFFFFF;
+	borderColor: #C2BEB1;
+	borderStyle: solid;
+	borderThickness: 1;
+	paddingBottom: 5;
+	paddingLeft: 5;
+	paddingRight: 5;
+	paddingTop: 5;
+	horizontal-align:center;
+
+}
+.boxHeader
+{
+	borderColor: #C2BEB1;
+	borderSides: bottom;
+	borderStyle: solid;
+	borderThickness: 1;
+	paddingBottom: 5;
+	paddingLeft: 2;
+	paddingRight: 2;
+	paddingTop: 2;
+	verticalAlign: middle;
+}
+
