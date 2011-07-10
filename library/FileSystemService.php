@@ -58,7 +58,7 @@ class FileSystemService
 	{
 		// Directories to ignore when listing output. Many hosts will deny PHP access to the cgi-bin.
 		$ignore = array ( 
-			'cgi-bin', '.', '..', '.DS_Store', '.svn' 
+			'cgi-bin', '.', '..', '.DS_Store', '.svn', '.git'
 		);
 		
 		// Open the directory to the handle $dh
@@ -84,7 +84,8 @@ class FileSystemService
 
 					// Re-call this same function but on a new directory.this is what makes function recursive.
 					$folders [] = array ( 
-						
+							//Adding label attribute
+							'label' => $file,
 							'filename' => $file, 
 							'path' => $fullPath, 
 							//'filePath' => , 
@@ -102,7 +103,7 @@ class FileSystemService
 				{
 					
 					$folders [] = array ( 
-						
+							'label' => $file,
 							'filename' => $file, 
 							'path' => "$path/$file", 
 							//'filePath' => pathinfo( $file ), 

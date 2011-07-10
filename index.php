@@ -99,6 +99,10 @@ switch ($_SERVER ['REQUEST_METHOD']) {
 			$mode = $_GET ['m'];
 			unset ( $getData ['m'] );
 		}
+		if (isset ( $_GET ['mode'] )) {
+			$mode = $_GET ['mode'];
+			unset ( $getData ['mode'] );
+		}
 		
 		switch ($mode) {
 			
