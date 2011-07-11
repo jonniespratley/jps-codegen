@@ -1,5 +1,35 @@
 <?php
 /**
+ * @name  	index.php
+ * @author  Jonnie Spratley
+ * @version 1.9
+ * @description - This is a REST Service file for the CodeGen front-end, form html, flex, jquery mobile, http rest versions.
+ *
+ */
+
+
+/**
+ * @TODO: July 10th 2011
+ * 
+ * 1. Setup firebugPHP for debuging.
+ * 2. Finish converting all html views to jquery mobilized
+ * 3. Documentent any code not documentent
+ * 4. Create UI for data manager, utilities, and inspector
+ * 5. Move CodeGen over to Backbone.js framework for client side.
+ * 6. Add new app templates to be generated, 
+ * 
+ * Including:
+ * 		jQuery Mobile Web App
+ * 		jQuery Mobile Web App with backbone.js client side
+ * 		Wordpress Plugin Web App
+ * 		Wordpress Theme Web App
+ * 		
+ * 
+ * 
+ */
+
+
+/**
  * 
  * @TODO: Sept 29th 2009
  * 1. Fix all main generators to accept new parameters when generating code,
@@ -48,14 +78,41 @@
 
 #error_reporting(0);
 
+/**
+ * FirePHP Debugging Class
+ */
+require_once 'library/FirePHPCore/FirePHP.class.php';
+$firephp = FirePHP::getInstance(true);
 
 /**
- * @name  	index.php
- * @author  Jonnie Spratley
- * @version 1.9
- * @description - This is a REST Service file for the CodeGen front-end, both html and Flex versions.
- *
- */
+ * Testing FirePHP Debugging Class
+
+
+
+$firephp->group('Group');
+$firephp->log('Hello World');
+$firephp->groupEnd();
+
+$firephp->group('Collapsed and Colored Group', array('Collapsed' => true, 'Color' => '#FF00FF'));
+$firephp->log('Plain Message');      
+$firephp->info('Info Message');     
+$firephp->warn('Warn Message');   
+$firephp->error('Error Message');
+ 
+$firephp->log('Message','Optional Label');
+  */
+/* Debug Table */ 
+$table   = array();
+$table[] = array('Col 1 Heading','Col 2 Heading');
+$table[] = array('Row 1 Col 1','Row 1 Col 2');
+$table[] = array('Row 2 Col 1','Row 2 Col 2');
+$table[] = array('Row 3 Col 1','Row 3 Col 2');
+$firephp->table('Table Label', $table);  
+
+ 
+
+
+
 
 require_once 'library/CodeGen.php';
 require_once 'library/ClassInspector.php';
@@ -87,7 +144,7 @@ $framework = '';
 $sqlitePath = dirname ( __FILE__ ) . DIRECTORY_SEPARATOR . 'CodeGen.sqlite';
 $outputPath = dirname ( __FILE__ ) . DIRECTORY_SEPARATOR . TemplateManager::$CONFIG_OUTPUT;
 
-$codegen = new CodeGen ( $sqlitePath );
+$codegen = new CodeGen ( $sqlitePath, true );
 $mysql = new MySQLService ( );
 $filesSvc = new FileSystemService ( );
 switch ($_SERVER ['REQUEST_METHOD']) {
@@ -118,6 +175,9 @@ switch ($_SERVER ['REQUEST_METHOD']) {
 				$mysql->connect ( $_GET ['h'], $_GET ['u'], $_GET ['p'] );
 				$databases = $mysql->getDatabases ();
 				
+				
+				$firephp->log($databases, $mode, 'CodeGen');
+				$firephp->table($mode, $databases);
 				echo json_encode ( $databases );
 				break;
 			
