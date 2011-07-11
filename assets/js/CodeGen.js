@@ -1,4 +1,6 @@
+
 $(function(){
+
 
 	$("#cg_db_loader").hide();
 	$("#cg_global_loader").hide();
@@ -309,8 +311,12 @@ $(function(){
 		return false;
 	});
 	
+	/**
+	 * Show/Hides .cg_box divs when h3 is clicked. 
+	 * @depreciated - Now using jquery mobile.
 	$('.cg_box h3').bind('click', function(){
 		$(this).parents('.cg_box:first').find('.cg_box_content').slideToggle('fast');
 	});
+	 */
 	
 });
