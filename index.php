@@ -9,91 +9,75 @@
 
 
 /**
- * @TODO: July 10th 2011
- * 
- * 1. Setup firebugPHP for debuging.
- * 2. Finish converting all html views to jquery mobilized
- * 3. Documentent any code not documentent
- * 4. Create UI for data manager, utilities, and inspector
- * 5. Move CodeGen over to Backbone.js framework for client side.
- * 6. Add new app templates to be generated, 
- * 
- * Including:
- * 		jQuery Mobile Web App
- * 		jQuery Mobile Web App with backbone.js client side
- * 		Wordpress Plugin Web App
- * 		Wordpress Theme Web App
- * 		
- * 
- * 
+ * Define some globals
  */
 
+define('CG_DEBUG', true);
+define('CG_VERSION', '1.9.3');
 
+define('CG_DIR', dirname ( __FILE__ ).DIRECTORY_SEPARATOR);
+define('CG_LIB', CG_DIR.'library'.DIRECTORY_SEPARATOR);
+define('CG_SQLITE', CG_DIR.'library'.DIRECTORY_SEPARATOR.'CodeGen.sqlite');
+define('CG_INCLUDES', CG_DIR.'includes'.DIRECTORY_SEPARATOR);
+define('CG_ASSETS', CG_DIR.'assets'.DIRECTORY_SEPARATOR);
+define('CG_MOBILE', CG_DIR.'mobile'.DIRECTORY_SEPARATOR);
+define('CG_FLEX', CG_DIR.'flex'.DIRECTORY_SEPARATOR);
+define('CG_SERVICES', CG_DIR.'services'.DIRECTORY_SEPARATOR);
+
+
+define('CG_TEMPLATES_DIR',  CG_DIR.'Templates'.DIRECTORY_SEPARATOR);
+define('CG_OUTPUT_DIR', CG_DIR.'output'.DIRECTORY_SEPARATOR);
+
+define('CG_DATABASE', 'jps_codegen');
+define('CG_HOST', 'VALUE');
+define('CG_USER', 'VALUE');
+define('CG_PASS', 'VALUE');
+
+ 
 /**
- * 
- * @TODO: Sept 29th 2009
- * 1. Fix all main generators to accept new parameters when generating code,
- * if an array is passed as the options read from the array keys
- * else read from the xml file.
- * 
- * 
- * @TODO: Sept 28th 2009
- * 
- * 
- * 
- * 1. When creating application make main folder name of the application. For flex import.
- * with services folder inside of folder.
- * 2. Add new options for generation, including 
- * getters/setters
- * REST url style
- * API key use
- * Admin Logging
- * User monitoring
- * Field alias, as well as uploading edited config and schema files.
- * Field toggle display.
- *
- * @TODO: July 11th 2009
- * 
- * 1. Edit php service template and add post switch statement on REST part.
- * 2. Add my jquery pages plugin to the main navigation of the site.
- * 3. Fix boxes to make all drag drop.
- * 4. Use 960.css style
- * 5. Create class to display recent updates to CodeGen repo
- * 6. Create automation script that downloads all the recent versions
- * 7. Create a update checker.
- * 8. Incorporate Flex service browser and api tester.
- * 9. Create sql schema export.
- * 10. Create class to find table relationships using rails method of
- * 		has_many:
- * 		has_one:
- * 		belongs_to:
- * 		has_and_belongs_to_many:
- * 		
- *  
-
- * @TODO: Auguest 7th 2009
- * 1. Upon successful generation of flex application, save the information in the sqlite database cg_historys table
- * 
+ * Include all required files
  */
+require_once CG_LIB. 'FirePHPCore/FirePHP.class.php';
+require_once CG_LIB.'CodeGen.php';
+require_once CG_LIB.'ClassInspector.php';
+require_once CG_LIB.'ConfigManager.php';
+require_once CG_LIB.'CGManager.php';
+require_once CG_LIB.'FileSystemService.php';
+require_once CG_LIB.'HTMLHelper.php';
+require_once CG_LIB.'MySQLService.php';
+require_once CG_LIB.'TemplateManager.php';
 
+ 
+ 
+ 
 #error_reporting(0);
-
-/**
- * FirePHP Debugging Class
- */
-require_once 'library/FirePHPCore/FirePHP.class.php';
 $firephp = FirePHP::getInstance(true);
 
-/**
+$firephp->group('jps-codegen bootstrap');
+
+$firephp->info(CG_DEBUG, 'CG_DEBUG');
+$firephp->info(CG_VERSION, 'CG_VERSION');
+$firephp->info(CG_DIR, 'CG_DIR');
+$firephp->info(CG_LIB, 'CG_LIB');
+$firephp->info(CG_INCLUDES, 'CG_INCLUDES');
+$firephp->info(CG_ASSETS, 'CG_ASSETS');
+$firephp->info(CG_TEMPLATES_DIR, 'CG_TEMPLATES_DIR');
+$firephp->info(CG_OUTPUT_DIR, 'CG_OUTPUT_DIR');
+ 
+$firephp->groupEnd();
+
+/** **********************************
+ * FirePHP Debugging Class
+ */
+
+/** **********************************
  * Testing FirePHP Debugging Class
-
-
-
 $firephp->group('Group');
 $firephp->log('Hello World');
 $firephp->groupEnd();
 
-$firephp->group('Collapsed and Colored Group', array('Collapsed' => true, 'Color' => '#FF00FF'));
+$firephp->group('Collapsed and Colored Group', 
+array('Collapsed' => true, 'Color' => '#FF00FF'));
 $firephp->log('Plain Message');      
 $firephp->info('Info Message');     
 $firephp->warn('Warn Message');   
@@ -101,27 +85,17 @@ $firephp->error('Error Message');
  
 $firephp->log('Message','Optional Label');
   */
-/* Debug Table */ 
+/* Debug Table
 $table   = array();
 $table[] = array('Col 1 Heading','Col 2 Heading');
 $table[] = array('Row 1 Col 1','Row 1 Col 2');
 $table[] = array('Row 2 Col 1','Row 2 Col 2');
 $table[] = array('Row 3 Col 1','Row 3 Col 2');
 $firephp->table('Table Label', $table);  
-
+***********************************/ 
  
 
 
-
-
-require_once 'library/CodeGen.php';
-require_once 'library/ClassInspector.php';
-require_once 'library/ConfigManager.php';
-require_once 'library/CGManager.php';
-require_once 'library/FileSystemService.php';
-require_once 'library/HTMLHelper.php';
-require_once 'library/MySQLService.php';
-require_once 'library/TemplateManager.php';
 
 $configMessage = '';
 $schemaMessage = '';
@@ -141,12 +115,16 @@ $endpoint = '';
 $copywrite = '';
 $framework = '';
 
-$sqlitePath = dirname ( __FILE__ ) . DIRECTORY_SEPARATOR . 'CodeGen.sqlite';
-$outputPath = dirname ( __FILE__ ) . DIRECTORY_SEPARATOR . TemplateManager::$CONFIG_OUTPUT;
+$sqlitePath = CG_SQLITE;
+$outputPath = CG_OUTPUT_DIR;
 
 $codegen = new CodeGen ( $sqlitePath, true );
 $mysql = new MySQLService ( );
 $filesSvc = new FileSystemService ( );
+
+$cg_result = array();
+
+
 switch ($_SERVER ['REQUEST_METHOD']) {
 	
 	case 'GET' :
@@ -175,10 +153,8 @@ switch ($_SERVER ['REQUEST_METHOD']) {
 				$mysql->connect ( $_GET ['h'], $_GET ['u'], $_GET ['p'] );
 				$databases = $mysql->getDatabases ();
 				
-				
-				$firephp->log($databases, $mode, 'CodeGen');
-				$firephp->table($mode, $databases);
-				echo json_encode ( $databases );
+				 
+				$cg_result = $databases;
 				break;
 			
 			/* ===========================================================================================
@@ -189,19 +165,23 @@ switch ($_SERVER ['REQUEST_METHOD']) {
 				$mysql->connect ( $_GET ['h'], $_GET ['u'], $_GET ['p'] );
 				$tables = $mysql->getTables ( $_GET ['d'] );
 				
-				echo json_encode ( $tables );
+				
+				
+				$cg_result = $tables;
 				break;
-			
+				
+				
+			/* ===========================================================================================
+             * getDatabasesAndTables - @param $host, $user, $pass - Your MySQL credentials, $database - Returns the databases and tables 
+             * =========================================================================================== */
 			case 'getDatabasesAndTables' :
 
 				$mysql->connect ( $_GET ['h'], $_GET ['u'], $_GET ['p'] );
 				$tables = $mysql->getDatabasesAndTables( $_GET ['d'] );
 
-				echo json_encode ( $tables );
+				$cg_result = $tables;
 				break;
-			/* ===========================================================================================
-             * getTables - @param $host, $user, $pass - Your MySQL credentials, $database - The database
-             * =========================================================================================== */
+			
 			case 'checkDatabase' :
 				
 				break;
@@ -211,7 +191,8 @@ switch ($_SERVER ['REQUEST_METHOD']) {
              * =========================================================================================== */
 			case 'getConfig' :
 				$config = file_get_contents ( $outputPath . ucfirst ( $_GET ['d'] ) );
-				echo htmlentities ( $config );
+				$cg_result = htmlentities ( $config );
+				
 				break;
 			
 			/* ===========================================================================================
@@ -220,7 +201,7 @@ switch ($_SERVER ['REQUEST_METHOD']) {
 			case 'getSchema' :
 				$schema = file_get_contents ( $outputPath . ucfirst ( $_GET ['d'] ) );
 				
-				echo htmlentities ( $schema );
+				$cg_result = htmlentities ( $schema );
 				break;
 			
 			/* ===========================================================================================
@@ -228,9 +209,9 @@ switch ($_SERVER ['REQUEST_METHOD']) {
              * =========================================================================================== */
 			case 'getTemplates' :
 				 
-				$templates = $filesSvc->browseDirectory ( dirname ( __FILE__ ) . DIRECTORY_SEPARATOR . 'Templates', true );
+				$templates = $filesSvc->browseDirectory ( CG_TEMPLATES_DIR, true );
 				
-				echo json_encode ( $templates );
+				$cg_result = $templates;
 				break;
 			
 			/* ===========================================================================================
@@ -238,64 +219,88 @@ switch ($_SERVER ['REQUEST_METHOD']) {
              * =========================================================================================== */
 			case 'getOutput' :
 				
-				$output = $filesSvc->browseDirectory ( dirname ( __FILE__ ) . DIRECTORY_SEPARATOR . 'output', true );
+				$output = $filesSvc->browseDirectory ( CG_OUTPUT_DIR, true );
 				
-				echo json_encode ( $output );
+				$cg_result = ( $output );
 				break;
 			
 			/* ===========================================================================================
-             * getDirectory -
+             * getDirectory - @param p - The directory path - Gets all of the contents in the directory
              * =========================================================================================== */
 			case 'getDirectory' :
 			 
 				$output = $filesSvc->browseDirectory ( $_GET ['p'], true );
 				
-				echo json_encode ( $output );
+				$cg_result = ( $output );
 				break;
 			
 			/* ===========================================================================================
-             * getServices -
+             * getServices - @param p - The directory path - Gets all of the services in the /jps-codegen/servies directory
              * =========================================================================================== */
 			case 'getServices' :
 			 
-				$output = $filesSvc->browseDirectory ( $_GET ['p'], true );
+				$output = $filesSvc->browseDirectory ( CG_SERVICES, true );
 				
-				echo json_encode ( $output );
+				$cg_result = ( $output );
 				break;
 			
 			/* ===========================================================================================
-             * saveSettings -
+             * saveSettings - @param s - The settings object - Saves the codegen settings to the sqlite database.
              * =========================================================================================== */
 			case 'saveSettings' :
 				$settings = CodeGen::saveSettings ( $_GET ['s'] );
-				echo json_encode ( array ($settings ) );
+				$cg_result = ( array ($settings ) );
 				break;
 			
 			/* ===========================================================================================
-             * readFile -
+             * readFile - @param f - The path to the file - Reads the contents of the file and returns
              * =========================================================================================== */
 			case 'readFile' :
 				$file = FileSystemService::readFile ( $_GET ['f'] );
 				
-				echo htmlentities ( $file );
+				$cg_result = htmlentities ( $file );
 				break;
 			
+			
+			/* ===========================================================================================
+             * callClassFunction - 
+			 * @param 
+			 * 	_class - string - The name of the class to invoke
+			 * 	_func - string - The name of the class function to call
+			 * 	_args - array - The array (if any) of arguments to pass with the calling function
+			 * 	
+             * =========================================================================================== */
+			case 'callClassFunction' :		
+				$request = ClassInspector::call ( $_GET ['_class'], $_GET ['_func'], $_GET ['_args'] );
+				$cg_result [] = array ('methodCalled' => $_GET ['_func'], 'methodResults' => $request );
+				
+				 
+				break;
+				
 			/* ===========================================================================================
              * inspectClass -
              * =========================================================================================== */
 			case 'inspectClass' :
 				$file = ClassInspector::inspectClass ( $_GET ['f'] );
-				echo json_encode ( array ($file ) );
+				$cg_result = ( $file );
+				
+				
+				
 				break;
 			
 			/* ===========================================================================================
-             * callClassFunction -
+             * inspectClassFunc - 
+			 * @param 
+			 * 	_class - string - The name of the class to invoke
+			 * 	_func - string - The name of the class function to call
+			 * 	_args - array - The array (if any) of arguments to pass with the calling function
+			 * 	
              * =========================================================================================== */
-			case 'callClassFunction' :
+			case 'inspectClassFunc' :		
 				$request = ClassInspector::call ( $_GET ['_class'], $_GET ['_func'], $_GET ['_args'] );
-				$file [] = array ('methodCalled' => $_GET ['_func'], 'methodResults' => $request );
+				$cg_result [] = array ('methodCalled' => $_GET ['_func'], 'methodResults' => $request );
 				
-				echo json_encode ( $request );
+				 
 				break;
 			
 			/* ===========================================================================================
@@ -305,7 +310,15 @@ switch ($_SERVER ['REQUEST_METHOD']) {
 				include 'includes/cg_index.php';
 				break;
 		
-		}
+		}//ends switch
+		
+	
+		$firephp->table($mode, $cg_result);
+		
+		
+		
+		echo json_encode($cg_result);
+		
 		
 		break; //ends get switch
 	
@@ -399,10 +412,11 @@ switch ($_SERVER ['REQUEST_METHOD']) {
      * If no mode is called, then just render the regular webpage
      * =========================================================================================== */
 	default :
-		include 'includes/cg_index.php';
+		include CG_INCLUDES. 'cg_index.php';
 		break;
 
 } //Ends request switch
+
 
 
 ?>

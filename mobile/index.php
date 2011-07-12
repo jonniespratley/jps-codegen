@@ -1,3 +1,4 @@
+<?php include '../index.php'; ?>
 <html>
 <head>
 <script type="text/javascript" src=" https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
@@ -33,6 +34,8 @@
 
 <body>
 
+ 
+ 
  <?php include 'mobile.page-0.php'; ?>
  <?php include 'mobile.page-1.php'; ?>
  <?php include 'mobile.page-2.php'; ?>

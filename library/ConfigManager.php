@@ -80,18 +80,31 @@ class ConfigManager
 	
 	/**
 	 * I write the config.xml file from the users information
-	 *
-	 * @param [string] $host - database host
-	 * @param [string] $user - database user
-	 * @param [string] $pass - database password
-	 * @param [string] $app - application name
-	 * @param [string] $schema - name of database
-	 * @param [string] $endpoint - url of service file
-	 * @param [string] $namespace - namespace of developer
+	 * Options Array
+	 * @param [string] host - database host
+	 * @param [string] user - database user
+	 * @param [string] pass - database password
+	 * @param [string] app - application name
+	 * @param [string] database - name of database
+	 * @param [string] endpoint - url of service file
+	 * @param [string] namespace - namespace of developer
 	 * @return [string] location of config.xml
 	 */
-	public static function writeConfig( $filepath, $host, $user, $pass, $database, $app, $endpoint, $namespace, $framework, $copywrite )
+	public static function writeConfig( $options )
 	{
+		$savepath = $options['path'];
+		$host = $options['host']; 
+		$user= $options['user'];
+		$pass= $options['pass']; 
+		$database= $options['database'];
+		$app= $options['app'];
+		$endpoint= $options['endpoint'];
+		$namespace= $options['namespace'];
+		$framework= $options['framework'];
+		$copywrite= $options['copywrite'];
+		
+		
+		
 		$dom = new DOMDocument ( '1.0' );
 		
 		//create a element
@@ -169,16 +182,22 @@ class ConfigManager
 		
 
 		$filename = '';
+		$filename = $savepath . DIRECTORY_SEPARATOR. strtolower ( $database ) . '_config.xml';
+		touch($filename);
+		chmod ( $filename, 0775 );
+
 		
-		$filename = $filepath . ucfirst ( $database ) . 'Config.xml';
 		$dom->formatOutput = true;
-		$dom->save ( $filename );
-		
+		if ( $dom->save ( $filename ) ){
+			
+			return $filename;
+		 
+		} else {
+			echo 'Problem saving file, use json.';
+		}
 		//change the permissions
-		//chmod ( $filename, 0775 );
 		
 
-		return $filename;
 	}
 	
 	/**

@@ -4,6 +4,9 @@
  * @author  Jonnie Spratley
  * @version 1.9
  */
+
+ 
+
 //require_once 'ConfigReader.php';
 require_once 'SchemaManager.php';
 require_once 'FileSystemService.php';
@@ -23,7 +26,13 @@ class CodeGen {
 	static private $cg_settings_sql = 'CREATE TABLE cg_settings (id integer NOT NULL PRIMARY KEY AUTOINCREMENT,setting_name varchar, setting_value varchar)';
 	static private $cg_users_sql = 'CREATE TABLE cg_users (id integer NOT NULL PRIMARY KEY AUTOINCREMENT,user_email varchar NOT NULL,user_pass varchar NOT NULL,user_role integer DEFAULT 0,user_lastlogin timestamp)';
 
-	public function __construct($sqlitePath ='') {
+	/**
+	 * I am the CodeGen Core constructure that opens up the local sqlite database and gathers all of the recent apps.
+	 */
+	public function __construct($sqlitePath ='', $debug = false) {
+		
+		 
+		
 		$this -> cg_dsn .= $sqlitePath;
 
 		try {
@@ -41,6 +50,7 @@ class CodeGen {
 			echo 'Line: ' . $e -> getLine() . '<br/>';
 			echo 'Trace: ' . $e -> getTraceAsString();
 			echo '</pre>';
+			exit();
 		}
 	}
 
@@ -53,6 +63,7 @@ class CodeGen {
 	public function start($filepath, $database) {
 		ConfigManager::readConfig($filepath, $database);
 		$this -> mysqli = new mysqli(ConfigManager::getHost(), ConfigManager::getUser(), ConfigManager::getPass());
+		
 	}
 
 	/**
@@ -122,8 +133,8 @@ class CodeGen {
 	 * @param [string] $namespace - namespace of developer
 	 * @return [string] location of config.xml
 	 */
-	static public function writeConfig($filepath, $host, $user, $pass, $schema, $app, $endpoint, $namespace, $framework, $copywrite) {
-		return ConfigManager::writeConfig($filepath, $host, $user, $pass, $schema, $app, $endpoint, $namespace, $framework, $copywrite);
+	static public function writeConfig($options) {
+		return ConfigManager::writeConfig($options);
 	}
 
 	/*

@@ -34,3 +34,24 @@ The features that it generates:
   # Flex validation on all table columns that are required.
   # Flex Data Grid listing all of the records in the database.
   # Flex Form that lets you view the details of the selected record, and editing or creating of a new record.
+
+
+
+
+
+GET Methods
+		
+getDatabases - @param $host, $user, $pass - Your MySQL credentials
+getTables - @param $host, $user, $pass - Your MySQL credentials, $database - The database 
+getConfig - @param $database - The database the config file is for.
+getSchema - @param database - The database the config file is for.
+getTemplates - The location of the templates
+
+getOutput - The generated files 
+
+
+
+
+
+
+		POST Methods

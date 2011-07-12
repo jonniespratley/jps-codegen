@@ -8,8 +8,11 @@
 
 class CGManager
 {
-	public static $CG_VERSION = '1.9.1';
-	public static $CG_AUTHOR = 'Jonnie Spratley - http://code.google.com/p/flex-codegen/';
+	public static $CG_VERSION = '1.9.3';
+	public static $CG_UPDATE_CHECK = '';
+	public static $CG_UPDATED_DATE = '7-11-2011';
+	public static $CG_GIT_URL = 'https://github.com/jonniespratley/jps-codegen';
+	public static $CG_AUTHOR = 'Jonnie Spratley - https://github.com/jonniespratley/';
 	public static $CG_LOG = array ();
 	
 	public static $PHP_VO_GEN;
