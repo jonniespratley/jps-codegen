@@ -60,11 +60,11 @@ class TemplateManager
 	public static $HTML_SET_VARS_PATTERN = '(@HTML_SET_VARS)';
 	public static $HTML_FORM_FIELDS_PATTERN = '(@HTML_FORM_FIELDS)';
 	
-	public static $CAIRNGORM_TEMPLATE_LOCATION = 'Templates/Cairngorm/';
-	public static $FLEX_TEMPLATE_LOCATION = 'Templates/Flex/';
-	public static $PHP_TEMPLATE_LOCATION = 'Templates/PHP/';
-	public static $ECLIPSE_TEMPLATE_LOCATION = 'Templates/Eclipse/';
-	public static $HTML_TEMPLATE_LOCATION = 'Templates/HTML/';
+	public static $CAIRNGORM_TEMPLATE_LOCATION = 'Templates/flex/cairngorm/';
+	public static $FLEX_TEMPLATE_LOCATION = 'Templates/flex/';
+	public static $PHP_TEMPLATE_LOCATION = 'Templates/php/';
+	public static $ECLIPSE_TEMPLATE_LOCATION = 'Templates/eclipse/';
+	public static $HTML_TEMPLATE_LOCATION = 'Templates/html/';
 	public static $SERVER_OUTPUT = 'output/server/';
 	public static $CLIENT_OUTPUT = 'output/client/';
 	public static $CONFIG_OUTPUT = 'output/';

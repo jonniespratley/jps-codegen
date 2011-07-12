@@ -1454,3 +1454,5 @@
 [Tue Jul 12 2011 15:58:30] [-HTML-Main] wrote index.php to output/server/
 [Tue Jul 12 2011 15:58:30] [-PHP-REST] wrote REST.php to output/server/
 [Tue Jul 12 2011 15:58:30] [-PHP-CONN] wrote Connection.php to output/server/
+[Tue Jul 12 2011 16:27:02] [-PHP-SERVICE] wrote Service.php to output/server/Array
+[Tue Jul 12 2011 16:29:43] [-PHP-SERVICE] wrote Service.php to output/server/Array

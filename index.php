@@ -330,6 +330,31 @@ switch ($_SERVER ['REQUEST_METHOD']) {
 			$mode = $_POST ['m'];
 			unset ( $postData ['m'] );
 		}
+		/* ===========================================================================================
+		 * writeFile -
+		 * =========================================================================================== */		
+					
+		$jsonOptions = str_replace('\\', '', $postData['options']);
+		$options = json_decode($jsonOptions, true);
+		require CG_LIB . 'CodeGenService.php';
+		$cg = new CodeGenService($options);
+
+		$namespaceArray = array();
+		$serverVOFolder = array();
+		$serverDAOFolder = array();
+		$serverRoot = array();
+		$serverFolder = array();
+
+		$clientVOFolder = array();
+		$clientRestFolder = array();
+		$clientViewFolder = array();
+		$clientServiceFolder = array();
+		$clientRoot = array();
+		$clientFolder = array();
+
+		if($options['namespacee']) {
+			$namespaceArray = split('\.', $options['namespacee'], 3);
+		}
 		
 		switch ($mode) {
 			/* ===========================================================================================
@@ -402,9 +427,110 @@ switch ($_SERVER ['REQUEST_METHOD']) {
 				$file = FileSystemService::writeFile ( $_POST ['f'], $_POST ['c'] );
 				echo json_encode ( $file );
 				break;
+			
+			
 		
+	 
+			//CG
+			case 'cgGen_getServerPreview' :
+				foreach($options['tables'] as $table) {
+					$serverVOFolder[] = $cg -> phpGen_genValueObject($table['name'], $table['fields']);
+					$serverDAOFolder[] = $cg -> phpGen_genBaseService($table['name'], $table['fields']);
+				}
+				$voFolder = array('label' => 'vo',
+					'children' => $serverVOFolder);
+				$daoFolder = array('label' => 'services',
+					'children' => $serverDAOFolder);
+				$serverFolder = array($voFolder,
+					$daoFolder);
+				$serverRoot[] = array('label' => $options['application'],
+					'children' => array('label' => $namespaceArray[0],
+						'children' => array('label' => $namespaceArray[1],
+							'children' => array('label' => $namespaceArray[2],
+								'children' => $serverFolder))));
+				echo json_encode($serverRoot);
+
+				break;
+
+			//Case they call for the client side preview
+			case 'cgGen_getClientPreview' :
+
+			/*
+			 * This is where all of the code generator magic happens.
+			 */
+
+			//Loop through the tables
+				foreach($options['tables'] as $table) {
+					$clientVOFolder[] = $cg -> flexGen_genValueObject($table['name'], $table['fields']);
+					$clientViewFolder[] = $cg -> flexGen_genTableForm($table['name'], $table['fields']);
+					//$clientServiceFolder[] = $cg->flexGen_genRestService($table['name'], $table['fields']);
+
+				}
+
+				//Create a folder for the vo's
+				$voFolder = array('label' => 'vo',
+					'children' => $clientVOFolder);
+				//Create a folder for the rest service files
+				$viewFolder = array('label' => 'view',
+					'children' => $clientViewFolder);
+				$serviceFolder = array(
+				//    'label'=>'services', 'children'=>$clientServiceFolder
+				);
+
+				//Add them to the client folder
+				$clientFolder = array($voFolder,
+					$viewFolder,
+					$serviceFolder);
+
+				//Add the folder to the client root folder for display
+				$clientRoot[] = array('label' => $options['application'],
+					'children' => array('label' => $namespaceArray[0],
+						'children' => array('label' => $namespaceArray[1],
+							'children' => array('label' => $namespaceArray[2],
+								'children' => $clientFolder))));
+
+				//Return JSON containing all of the information from above
+				echo json_encode($clientRoot);
+
+				break;
+
+			//PHP
+			case 'phpGen_genValueObject' :
+				foreach($options['tables'] as $table) {
+					$result[] = $cg -> phpGen_genValueObject($table['name'], $table['fields']);
+				}
+				echo json_encode($result);
+				break;
+
+			//Flex
+			case 'flexGen_genTableMain' :
+				break;
+			case 'flexGen_genTableForm' :
+				break;
+			case 'flexGen_genTableList' :
+				break;
+			case 'flexGen_genRestService' :
+				break;
+			case 'flexGen_genApplication' :
+				break;
+
+			//Eclipse
+
+			//Cairngorm
+			/* ===========================================================================================
+			 * writeFile -
+			 * =========================================================================================== */
+			case 'writeFile' :
+				$file = FileSystemService::writeFile($_POST['f'], $_POST['c']);
+				echo json_encode($file);
+				break;
 		}
-		
+			
+			
+			
+			
+			
+	 
 		break; //ends post switch
 	
 
