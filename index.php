@@ -1,548 +1,558 @@
 <?php
-/**
- * @name  	index.php
- * @author  Jonnie Spratley
- * @version 1.9
- * @description - This is a REST Service file for the CodeGen front-end, form html, flex, jquery mobile, http rest versions.
- *
- */
-
-
-/**
- * Define some globals
- */
-
-define('CG_DEBUG', true);
-define('CG_VERSION', '1.9.3');
-
-define('CG_DIR', dirname ( __FILE__ ).DIRECTORY_SEPARATOR);
-define('CG_LIB', CG_DIR.'library'.DIRECTORY_SEPARATOR);
-define('CG_SQLITE', CG_DIR.'library'.DIRECTORY_SEPARATOR.'CodeGen.sqlite');
-define('CG_INCLUDES', CG_DIR.'includes'.DIRECTORY_SEPARATOR);
-define('CG_ASSETS', CG_DIR.'assets'.DIRECTORY_SEPARATOR);
-define('CG_MOBILE', CG_DIR.'mobile'.DIRECTORY_SEPARATOR);
-define('CG_FLEX', CG_DIR.'flex'.DIRECTORY_SEPARATOR);
-define('CG_SERVICES', CG_DIR.'services'.DIRECTORY_SEPARATOR);
-
-
-define('CG_TEMPLATES_DIR',  CG_DIR.'Templates'.DIRECTORY_SEPARATOR);
-define('CG_OUTPUT_DIR', CG_DIR.'output'.DIRECTORY_SEPARATOR);
-
-define('CG_DATABASE', 'jps_codegen');
-define('CG_HOST', 'VALUE');
-define('CG_USER', 'VALUE');
-define('CG_PASS', 'VALUE');
-
- 
-/**
- * Include all required files
- */
-require_once CG_LIB. 'FirePHPCore/FirePHP.class.php';
-require_once CG_LIB.'CodeGen.php';
-require_once CG_LIB.'ClassInspector.php';
-require_once CG_LIB.'ConfigManager.php';
-require_once CG_LIB.'CGManager.php';
-require_once CG_LIB.'FileSystemService.php';
-require_once CG_LIB.'HTMLHelper.php';
-require_once CG_LIB.'MySQLService.php';
-require_once CG_LIB.'TemplateManager.php';
-
- 
- 
- 
-#error_reporting(0);
-$firephp = FirePHP::getInstance(true);
-
-$firephp->group('jps-codegen bootstrap');
-
-$firephp->info(CG_DEBUG, 'CG_DEBUG');
-$firephp->info(CG_VERSION, 'CG_VERSION');
-$firephp->info(CG_DIR, 'CG_DIR');
-$firephp->info(CG_LIB, 'CG_LIB');
-$firephp->info(CG_INCLUDES, 'CG_INCLUDES');
-$firephp->info(CG_ASSETS, 'CG_ASSETS');
-$firephp->info(CG_TEMPLATES_DIR, 'CG_TEMPLATES_DIR');
-$firephp->info(CG_OUTPUT_DIR, 'CG_OUTPUT_DIR');
- 
-$firephp->groupEnd();
-
-/** **********************************
- * FirePHP Debugging Class
- */
-
-/** **********************************
- * Testing FirePHP Debugging Class
-$firephp->group('Group');
-$firephp->log('Hello World');
-$firephp->groupEnd();
-
-$firephp->group('Collapsed and Colored Group', 
-array('Collapsed' => true, 'Color' => '#FF00FF'));
-$firephp->log('Plain Message');      
-$firephp->info('Info Message');     
-$firephp->warn('Warn Message');   
-$firephp->error('Error Message');
- 
-$firephp->log('Message','Optional Label');
-  */
-/* Debug Table
-$table   = array();
-$table[] = array('Col 1 Heading','Col 2 Heading');
-$table[] = array('Row 1 Col 1','Row 1 Col 2');
-$table[] = array('Row 2 Col 1','Row 2 Col 2');
-$table[] = array('Row 3 Col 1','Row 3 Col 2');
-$firephp->table('Table Label', $table);  
-***********************************/ 
- 
-
-
-
-$configMessage = '';
-$schemaMessage = '';
-$appMessage = '';
-$configLocation = '';
-$schemaLocation = '';
-$appOutputLog = '';
-$mode = '';
-
-$host = '';
-$user = '';
-$pass = '';
-$database = '';
-$app = '';
-$namespace = '';
-$endpoint = '';
-$copywrite = '';
-$framework = '';
-
-$sqlitePath = CG_SQLITE;
-$outputPath = CG_OUTPUT_DIR;
-
-$codegen = new CodeGen ( $sqlitePath, true );
-$mysql = new MySQLService ( );
-$filesSvc = new FileSystemService ( );
-
-$cg_result = array();
-
-
-switch ($_SERVER ['REQUEST_METHOD']) {
-	
-	case 'GET' :
-		$getData = $_GET;
-		
-		if (isset ( $_GET ['m'] )) {
-			$mode = $_GET ['m'];
-			unset ( $getData ['m'] );
-		}
-		if (isset ( $_GET ['mode'] )) {
-			$mode = $_GET ['mode'];
-			unset ( $getData ['mode'] );
-		}
-		
-		switch ($mode) {
-			
-			case 'getHTMLDemo' :
-				return ConfigManager::getHtmlDemoURL ();
-				break;
-			
-			/* ===========================================================================================
-             * getDatabases - @param $host, $user, $pass - Your MySQL credentials
-             * =========================================================================================== */
-			case 'getDatabases' :
-				
-				$mysql->connect ( $_GET ['h'], $_GET ['u'], $_GET ['p'] );
-				$databases = $mysql->getDatabases ();
-				
-				 
-				$cg_result = $databases;
-				break;
-			
-			/* ===========================================================================================
-             * getTables - @param $host, $user, $pass - Your MySQL credentials, $database - The database
-             * =========================================================================================== */
-			case 'getTables' :
-				
-				$mysql->connect ( $_GET ['h'], $_GET ['u'], $_GET ['p'] );
-				$tables = $mysql->getTables ( $_GET ['d'] );
-				
-				
-				
-				$cg_result = $tables;
-				break;
-				
-				
-			/* ===========================================================================================
-             * getDatabasesAndTables - @param $host, $user, $pass - Your MySQL credentials, $database - Returns the databases and tables 
-             * =========================================================================================== */
-			case 'getDatabasesAndTables' :
-
-				$mysql->connect ( $_GET ['h'], $_GET ['u'], $_GET ['p'] );
-				$tables = $mysql->getDatabasesAndTables( $_GET ['d'] );
-
-				$cg_result = $tables;
-				break;
-			
-			case 'checkDatabase' :
-				
-				break;
-			
-			/* ===========================================================================================
-             * getConfig - @param $database - The database the config file is for.
-             * =========================================================================================== */
-			case 'getConfig' :
-				$config = file_get_contents ( $outputPath . ucfirst ( $_GET ['d'] ) );
-				$cg_result = htmlentities ( $config );
-				
-				break;
-			
-			/* ===========================================================================================
-             * getSchema - @param database - The database the config file is for.
-             * =========================================================================================== */
-			case 'getSchema' :
-				$schema = file_get_contents ( $outputPath . ucfirst ( $_GET ['d'] ) );
-				
-				$cg_result = htmlentities ( $schema );
-				break;
-			
-			/* ===========================================================================================
-             * getTemplates - The location of the templates
-             * =========================================================================================== */
-			case 'getTemplates' :
-				 
-				$templates = $filesSvc->browseDirectory ( CG_TEMPLATES_DIR, true );
-				
-				$cg_result = $templates;
-				break;
-			
-			/* ===========================================================================================
-             * getOutput - The generated files 
-             * =========================================================================================== */
-			case 'getOutput' :
-				
-				$output = $filesSvc->browseDirectory ( CG_OUTPUT_DIR, true );
-				
-				$cg_result = ( $output );
-				break;
-			
-			/* ===========================================================================================
-             * getDirectory - @param p - The directory path - Gets all of the contents in the directory
-             * =========================================================================================== */
-			case 'getDirectory' :
-			 
-				$output = $filesSvc->browseDirectory ( $_GET ['p'], true );
-				
-				$cg_result = ( $output );
-				break;
-			
-			/* ===========================================================================================
-             * getServices - @param p - The directory path - Gets all of the services in the /jps-codegen/servies directory
-             * =========================================================================================== */
-			case 'getServices' :
-			 
-				$output = $filesSvc->browseDirectory ( CG_SERVICES, true );
-				
-				$cg_result = ( $output );
-				break;
-			
-			/* ===========================================================================================
-             * saveSettings - @param s - The settings object - Saves the codegen settings to the sqlite database.
-             * =========================================================================================== */
-			case 'saveSettings' :
-				$settings = CodeGen::saveSettings ( $_GET ['s'] );
-				$cg_result = ( array ($settings ) );
-				break;
-			
-			/* ===========================================================================================
-             * readFile - @param f - The path to the file - Reads the contents of the file and returns
-             * =========================================================================================== */
-			case 'readFile' :
-				$file = FileSystemService::readFile ( $_GET ['f'] );
-				
-				$cg_result = htmlentities ( $file );
-				break;
-			
-			
-			/* ===========================================================================================
-             * callClassFunction - 
-			 * @param 
-			 * 	_class - string - The name of the class to invoke
-			 * 	_func - string - The name of the class function to call
-			 * 	_args - array - The array (if any) of arguments to pass with the calling function
-			 * 	
-             * =========================================================================================== */
-			case 'callClassFunction' :		
-				$request = ClassInspector::call ( $_GET ['_class'], $_GET ['_func'], $_GET ['_args'] );
-				$cg_result [] = array ('methodCalled' => $_GET ['_func'], 'methodResults' => $request );
-				
-				 
-				break;
-				
-			/* ===========================================================================================
-             * inspectClass -
-             * =========================================================================================== */
-			case 'inspectClass' :
-				$file = ClassInspector::inspectClass ( $_GET ['f'] );
-				$cg_result = ( $file );
-				
-				
-				
-				break;
-			
-			/* ===========================================================================================
-             * inspectClassFunc - 
-			 * @param 
-			 * 	_class - string - The name of the class to invoke
-			 * 	_func - string - The name of the class function to call
-			 * 	_args - array - The array (if any) of arguments to pass with the calling function
-			 * 	
-             * =========================================================================================== */
-			case 'inspectClassFunc' :		
-				$request = ClassInspector::call ( $_GET ['_class'], $_GET ['_func'], $_GET ['_args'] );
-				$cg_result [] = array ('methodCalled' => $_GET ['_func'], 'methodResults' => $request );
-				
-				 
-				break;
-			
-			/* ===========================================================================================
-             * If no mode is called, then just render the regular webpage
-             * =========================================================================================== */
-			default :
-				include 'includes/cg_index.php';
-				break;
-		
-		}//ends switch
-		
-	
-		$firephp->table($mode, $cg_result);
-		
-		
-		
-		echo json_encode($cg_result);
-		
-		
-		break; //ends get switch
-	
-
-	case 'POST' :
-		$postData = $_POST;
-		
-		if (isset ( $_POST ['m'] )) {
-			$mode = $_POST ['m'];
-			unset ( $postData ['m'] );
-		}
-		/* ===========================================================================================
-		 * writeFile -
-		 * =========================================================================================== */		
-					
-		$jsonOptions = str_replace('\\', '', $postData['options']);
-		$options = json_decode($jsonOptions, true);
-		require CG_LIB . 'CodeGenService.php';
-		$cg = new CodeGenService($options);
-
-		$namespaceArray = array();
-		$serverVOFolder = array();
-		$serverDAOFolder = array();
-		$serverRoot = array();
-		$serverFolder = array();
-
-		$clientVOFolder = array();
-		$clientRestFolder = array();
-		$clientViewFolder = array();
-		$clientServiceFolder = array();
-		$clientRoot = array();
-		$clientFolder = array();
-
-		if($options['namespacee']) {
-			$namespaceArray = split('\.', $options['namespacee'], 3);
-		}
-		
-		switch ($mode) {
-			/* ===========================================================================================
-             * generateConfig
-             * =========================================================================================== */
-			case 'generateConfig' :
-				$configLocation = CodeGen::writeConfig ( $outputPath, $_POST ['h'],/*Host*/ 
-																	$_POST ['u'], /*User*/ 
-																	$_POST ['p'], /*Pass */ 
-																	$_POST ['d'], /*Database*/ 
-																	$_POST ['a'], /*Application*/ 
-																	$_POST ['e'], /*Endpoint*/ 
-																	$_POST ['n'], /*Namespace*/ 
-																	$_POST ['f'], /*Framework*/ 
-																	$_POST ['c'] ); /*Copywrite*/
-				
-				echo json_encode ( $configLocation );
-				break;
-			
-			/* ===========================================================================================
-             * generateSchema - @param $outputPath - The location where you want to output the schema
-             * =========================================================================================== */
-			case 'generateSchema' :
-				
-				$codegen->start ( $outputPath, $_POST ['d'] );
-				$schema = $codegen->writeSchema ( $outputPath );
-				
-				echo json_encode ( $schema );
-				break;
-			
-			/* ===========================================================================================
-             * generateApplication - @param $outputPath, $database - The database and output path
-             * =========================================================================================== */
-			case 'generateApplication' :
-				
-				$codegen->start ( $outputPath, $_POST ['d'] );
-				$appOutputLog = $codegen->generateCode ( $outputPath, $_POST ['d'] );
-				
-				//echo htmlentities( json_encode ( $appOutputLog ) );
-				//echo $appOutputLog;
-				break;
-			/* ===========================================================================================
-             * saveSettings - @param Array - The name value pair array of settings to be saved.
-             * =========================================================================================== */
-			case 'saveSettings' :
-				$service = $codegen->saveSettings ( $postData );
-				echo $service;
-				break;
-			
-			/* ===========================================================================================
-	          * saveApp - @param 
-             * =========================================================================================== */
-			case 'saveApp' :
-				$service = $codegen->saveApp ( $_POST ['name'], $_POST ['url'], $_POST ['config'], $_POST ['schema'] );
-				echo $service;
-				break;
-			
-			/* ===========================================================================================
-	          * removeApp - @param 
-             * =========================================================================================== */
-			case 'removeApp' :
-				$service = $codegen->removeApp ( $_POST ['id'] );
-				echo $service;
-				break;
-			
-			/* ===========================================================================================
-	             * writeFile -
-	             * =========================================================================================== */
-			case 'writeFile' :
-				$file = FileSystemService::writeFile ( $_POST ['f'], $_POST ['c'] );
-				echo json_encode ( $file );
-				break;
-			
-			
-		
-	 
-			//CG
-			case 'cgGen_getServerPreview' :
-				foreach($options['tables'] as $table) {
-					$serverVOFolder[] = $cg -> phpGen_genValueObject($table['name'], $table['fields']);
-					$serverDAOFolder[] = $cg -> phpGen_genBaseService($table['name'], $table['fields']);
-				}
-				$voFolder = array('label' => 'vo',
-					'children' => $serverVOFolder);
-				$daoFolder = array('label' => 'services',
-					'children' => $serverDAOFolder);
-				$serverFolder = array($voFolder,
-					$daoFolder);
-				$serverRoot[] = array('label' => $options['application'],
-					'children' => array('label' => $namespaceArray[0],
-						'children' => array('label' => $namespaceArray[1],
-							'children' => array('label' => $namespaceArray[2],
-								'children' => $serverFolder))));
-				echo json_encode($serverRoot);
-
-				break;
-
-			//Case they call for the client side preview
-			case 'cgGen_getClientPreview' :
-
-			/*
-			 * This is where all of the code generator magic happens.
-			 */
-
-			//Loop through the tables
-				foreach($options['tables'] as $table) {
-					$clientVOFolder[] = $cg -> flexGen_genValueObject($table['name'], $table['fields']);
-					$clientViewFolder[] = $cg -> flexGen_genTableForm($table['name'], $table['fields']);
-					//$clientServiceFolder[] = $cg->flexGen_genRestService($table['name'], $table['fields']);
-
-				}
-
-				//Create a folder for the vo's
-				$voFolder = array('label' => 'vo',
-					'children' => $clientVOFolder);
-				//Create a folder for the rest service files
-				$viewFolder = array('label' => 'view',
-					'children' => $clientViewFolder);
-				$serviceFolder = array(
-				//    'label'=>'services', 'children'=>$clientServiceFolder
-				);
-
-				//Add them to the client folder
-				$clientFolder = array($voFolder,
-					$viewFolder,
-					$serviceFolder);
-
-				//Add the folder to the client root folder for display
-				$clientRoot[] = array('label' => $options['application'],
-					'children' => array('label' => $namespaceArray[0],
-						'children' => array('label' => $namespaceArray[1],
-							'children' => array('label' => $namespaceArray[2],
-								'children' => $clientFolder))));
-
-				//Return JSON containing all of the information from above
-				echo json_encode($clientRoot);
-
-				break;
-
-			//PHP
-			case 'phpGen_genValueObject' :
-				foreach($options['tables'] as $table) {
-					$result[] = $cg -> phpGen_genValueObject($table['name'], $table['fields']);
-				}
-				echo json_encode($result);
-				break;
-
-			//Flex
-			case 'flexGen_genTableMain' :
-				break;
-			case 'flexGen_genTableForm' :
-				break;
-			case 'flexGen_genTableList' :
-				break;
-			case 'flexGen_genRestService' :
-				break;
-			case 'flexGen_genApplication' :
-				break;
-
-			//Eclipse
-
-			//Cairngorm
-			/* ===========================================================================================
-			 * writeFile -
-			 * =========================================================================================== */
-			case 'writeFile' :
-				$file = FileSystemService::writeFile($_POST['f'], $_POST['c']);
-				echo json_encode($file);
-				break;
-		}
-			
-			
-			
-			
-			
-	 
-		break; //ends post switch
-	
-
-	/* ===========================================================================================
-     * If no mode is called, then just render the regular webpage
-     * =========================================================================================== */
-	default :
-		include CG_INCLUDES. 'cg_index.php';
-		break;
-
-} //Ends request switch
+require("cg_config.php");
 
 
 
 ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>CodeGen - Version<?php echo CGManager::$CG_VERSION ?></title>
+
+<!--CSS-->
+
+<link rel="stylesheet" href="assets/css/style.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="assets/js/libs/jqueryFileTree/jqueryFileTree.css" type="text/css" media="screen" />
+ 
+
+<!--jQuery Code-->
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>
+
+<!--jQuery Plugins-->
+<script src="assets/js/jquery.debug.js" type="text/javascript"></script>
+<script src="assets/js/jquery.json.js" type="text/javascript"></script>
+<script src="assets/js/jquery.cookie.js" type="text/javascript"></script>
+<script src="assets/js/jquery.highlight.js" type="text/javascript"></script>
+<script src="assets/js/libs/jqueryFileTree/jqueryFileTree.js" type="text/javascript"></script>
+
+
+
+<!--CodeGen JS-->
+<script src="assets/js/CodeGen.js" type="text/javascript"></script>
+<script src="assets/js/CodeGenUtilities.js" type="text/javascript"></script>
+
+
+
+<script src="app/js/ICanHaz.min.js" type="text/javascript"></script>
+<script src="app/js/json2.js" type="text/javascript"></script>
+<script src="app/js/underscore-min.js" type="text/javascript"></script>
+
+<script src="app/js/backbone-min.js" type="text/javascript"></script>
+<script src="app/cgAppModels.js" type="text/javascript"></script>
+<script src="app/cgAppRouters.js" type="text/javascript"></script>
+<script src="app/cgAppView.js" type="text/javascript"></script>
+
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function() {
+		
+var appModel = new cgAppModel();
+var appView = new cgAppView();
+var appRouter = new cgAppRouter();
+	
+	
+	$('.cg-gen-databases-btn').click(function(){
+	 	cg_loadDatabases();
+	});
+	
+		
+		Backbone.history.start({pushState: true});
+		// Parsing the Url below results an object that is returned with the
+		// following properties:
+		//
+		//  obj.href:         http://jblas:password@mycompany.com:8080/mail/inbox?msg=1234&type=unread#msg-content
+		//  obj.hrefNoHash:   http://jblas:password@mycompany.com:8080/mail/inbox?msg=1234&type=unread
+		//  obj.hrefNoSearch: http://jblas:password@mycompany.com:8080/mail/inbox
+		//  obj.domain:       http://jblas:password@mycompany.com:8080
+		//  obj.protocol:     http:
+		//  obj.authority:    jblas:password@mycompany.com:8080
+		//  obj.username:     jblas
+		//  obj.password:     password
+		//  obj.host:         mycompany.com:8080
+		//  obj.hostname:     mycompany.com
+		//  obj.port:         8080
+		//  obj.pathname:     /mail/inbox
+		//  obj.directory:    /mail/
+		//  obj.filename:     inbox
+		//  obj.search:       ?msg=1234&type=unread
+		//  obj.hash:         #msg-content
+
+	
+		$(document).bind("mobileinit", function(){
+		  $.extend(  $.mobile , {
+		    foo: bar
+		  });
+			var obj = $.mobile.path.parseUrl("http://jblas:password@mycompany.com:8080/mail/inbox?msg=1234");
+		});
+
+	});
+ 
+	/* ======================================================================
+	 * Private variables for service management
+	 * ====================================================================== */
+	var baseURL = window.location.href;
+	var service = "api.php";
+	var cg_host;// Host
+	var cg_user;// Username
+	var cg_pass;// Password
+	var cg_database;// Database
+	var cg_app;// Application
+	var cg_namespace;// Namespace
+	var cg_endpoint;// Endpoint
+	var cg_framework;// Framework
+	var cg_copywrite;// Copywrite
+	var cg_config;// Config
+	var cg_schema;// Schema
+	var resultData;
+	var cg_demoURL = '';
+	
+	
+	/**
+	 *
+	 */
+	var cg_inspectClass = function(path){
+		$.get(service, {
+			m: 'inspectClass',
+			f: path
+		}, function result(resultObj){
+	 		$.each(resultObj.classMethods, function(i, obj) {
+					$('#cg_inspector_methods').html('<option>' + resultObj[i]['methodName'] + '</option>');
+				});
+		});
+	};
+
+
+	/**
+	 * Gets all databases when password input is out of focus
+	 */
+	var cg_loadDatabases = function() {
+		var host = $("#txt_settings_host").val();
+		var user = $("#txt_settings_user").val();
+		var pass = $("#txt_settings_pass ").val()
+
+		if (host != '' && user != '' && pass != '') {
+			$.get(service, {
+				m: 'getDatabases',
+				h: host,
+				u: user,
+				p: pass
+			}, function(result) {
+				var options = '';
+				var dbArray = eval(result);
+
+				$.each(dbArray, function(i, obj) {
+					options += '<option>' + dbArray[i]['label'] + '</option>';
+				})
+				for (i = 0; i < dbArray.length; i++) {
+					$('#cg_database_list').append('<li>'+ dbArray[i]['label']+'<p class="ui-li-count">'+ dbArray[i]['size']['totalSize'] +'</p></li>');
+				}
+				
+		 
+				$('#cg_database_list').listview('refresh');
+				var myselect = $("select#txt_database");
+					myselect.html(options);
+					myselect.selectmenu("refresh");
+			});
+		} else {
+			return false;
+		}
+	};
+	
+	/**
+	 *
+	 */	
+	var cg_createSchema = function() {
+
+		$.post(service, {
+			m: "generateSchema",
+			c: $('#txt_configLocation').val(),
+			d: $('#txt_database').val()
+		}, function(resultObj) {
+			resultObj = $.trim(resultObj).replace(/[\\]*[\\"]/g, '');
+			cg_schema = resultObj;
+
+	 		window.console.log(resultObj);
+			//cg_createApplication();
+		});
+	};
+	
+	/**
+	 *
+	 */	
+	var cg_createApplication = function() {
+		$.post(service, {
+			m: "generateApplication",
+			d: $('#txt_database').val(),
+			s: $('#txt_schemaLocation').val()
+		}, function(resultObj) {
+			cg_demoURL = 'http://' + window.location.hostname + window.location.pathname + '/' + resultObj
+			//alert( cg_demoURL );
+
+			 window.console.log(resultObj);
+			//cg_saveApplication();
+		});
+	};
+	
+	/**
+	 *
+	 */
+	var cg_saveApplication = function() {
+		$.post(service, {
+			m: 'saveApp',
+			name: cg_app,
+			url: cg_demoURL,
+			config: cg_config,
+			schema: cg_schema
+		}, function(resultObj) {
+			//
+			 window.console.log(resultObj);
+		});
+	};
+	
+	
+	/**
+	 * Settings form that updates the sqlite database
+	 */
+	var cg_saveSettings = function() {
+
+		$.post(service, {
+			m: 'saveSettings',
+			sdk_path: $('#txt_sdk_path').val(),
+			sdk_meta_title: $('#txt_sdk_meta_title').val(),
+			sdk_meta_description: $('#txt_sdk_meta_description').val(),
+			sdk_meta_publisher: $('#txt_sdk_meta_publisher').val(),
+			sdk_meta_creator: $('#txt_sdk_meta_creator').val(),
+			host: $('#txt_settings_host').val(),
+			user: $('#txt_settings_user').val(),
+			pass: $('#txt_settings_pass').val(),
+			issues_count: $('#txt_issues_count').val(),
+			downloads_count: $('#txt_downloads_count').val(),
+			updates_count: $('#txt_updates_count').val(),
+			app_copywrite: $('#txt_app_copywrite').val(),
+			app_namespace: $('#txt_app_namespace').val(),
+			app_endpoint: $('#txt_app_endpoint').val(),
+			app_name: $('#txt_app_name').val()
+
+		}, function(resultObj) {
+			//alert(result);
+			$('#cg_message').fadeIn().html('<p class="cg_info">Settings updated. <span>x</span></p>');
+			window.console.log(resultObj);
+		});
+	};
+	/**
+	 * Config Form
+	 */
+	var cg_generateConfig = function() {
+
+		// Step 1
+		cg_host = $("#txt_host").val();
+		cg_user = $("#txt_user").val();
+		cg_pass = $("#txt_pass").val();
+		cg_database = $("#txt_database").val();
+
+		// Step 2
+		cg_app = $("#txt_application").val();
+		cg_namespace = $("#txt_namespace").val();
+		cg_endpoint = $("#txt_endpoint").val();
+		cg_framework = $("#txt_framework").val();
+		cg_copywrite = $("#txt_copywrite").val();
+
+		//Cookies$.cookies.set('sidebar', 'Jonnie', null );
+		//Array of cookies
+		var cookieArray = {
+			h: cg_host,
+			u: cg_user,
+			p: cg_pass,
+			d: cg_database,
+			a: cg_app,
+			n: cg_namespace,
+			e: cg_endpoint,
+			f: cg_framework,
+			c: cg_copywrite
+		};
+
+		// Send the call
+		$.post(service, {
+			m: "generateConfig",
+			h: cg_host,
+			u: cg_user,
+			p: cg_pass,
+			d: cg_database,
+			a: cg_app,
+			n: cg_namespace,
+			e: cg_endpoint,
+			f: cg_framework,
+			c: cg_copywrite
+		}, function(resultObj) {
+			resultObj = $.trim(resultObj).replace(/[\\]*[\\"]/g, '');
+
+			//@TODO: Hack to remove the .. from the url
+			cg_config = resultObj;
+
+			$("#txt_configLocation").val(resultObj);
+			$("#txt_configLocation").val(resultObj).highlightFade("yellow");
+			window.console.log(resultObj);
+			//createSchema();
+
+		});
+	};
+	
+	/**
+	 *
+	 */
+	var cg_removeApp = function() {
+		var item = $(this);
+		$.post(service, {
+			m: 'removeApp',
+			id: $(this).attr('rel')
+		}, function( resultObj ) {
+			item.slideUp('slow');
+
+		})
+	};
+	
+	/**
+	 *
+	 */
+	var cg_previewApp = function() {
+		$('#cg_window_preview').attr('src', $(this).attr('href'));
+		$('#cg_window').dialog('open');
+		return false;
+	};
+
+</script>
+
+
+
+
+
+</head>
+<body>
+	
+	
+	
+	
+	
+	
+	
+	
+<!-- ********* cg_page_index ********** -->	
+<div data-role="page" data-id="cg_page_index" id="cg_page_index">
+	<div data-role="header" data-id="cg_header" id="cg_header">
+		<a href="#cg_page_index">Dashboard</a>
+		<h1>cg_page_inspector</h1>
+		<a href="#cg_page_settings" data-rel="dialog">Settings</a>
+			<div id="cg_header_navbar" data-id="cg_header_navbar" data-role="navbar">
+				<ul>
+
+					<li><a href="#cg_page_generator">Generator</a></li>
+					<li><a href="#cg_page_inspector">Inspector</a></li>
+					<li><a href="#cg_page_manager">Manager</a></li>
+					<li><a href="#cg_page_utilities">Utilities</a></li>
+
+				</ul>
+			</div><!--/navbar-->
+	</div><!--/header-->
+	<div data-role="content">
+	
+	
+		<ul id="cg_database_list" data-role="listview">
+			<li data-role="list-divider" data-theme="a">Databases</li>
+			 
+		
+		</ul>
+	
+	
+	
+	
+	
+	</div>
+ 	<div id="cg_footer" data-role="footer" class="ui-bar" data-position="fixed">
+		<a href="#" data-role="button" data-icon="refresh" class="cg-gen-databases-btn">Load Databases</a>
+	 
+	</div>
+</div><!--/page-->
+<!-- ********* cg_page_index ********** -->
+
+
+
+
+
+
+<!-- ********* cg_page_generator ********** -->
+<div data-role="page" id="cg_page_generator">
+	<div data-role="header" data-id="cg_header" id="cg_header">
+		<a href="#cg_page_index">Dashboard</a>
+		<h1>cg_page_inspector</h1>
+		<a href="#cg_page_settings" data-rel="dialog">Settings</a>
+			<div id="cg_header_navbar" data-id="cg_header_navbar" data-role="navbar">
+				<ul>
+
+					<li><a href="#cg_page_generator">Generator</a></li>
+					<li><a href="#cg_page_inspector">Inspector</a></li>
+					<li><a href="#cg_page_manager">Manager</a></li>
+					<li><a href="#cg_page_utilities">Utilities</a></li>
+
+				</ul>
+			</div><!--/navbar-->
+	</div><!--/header-->
+		<div data-role="content">
+		
+		<?php include 'cg_generate.php'; ?>
+			
+		</div>
+	 
+</div>
+<!-- ********* cg_page_generator ********** -->
+
+
+
+
+
+<!-- ********* cg_page_inspector ********** -->
+<div data-role="page" id="cg_page_inspector">
+	<div data-role="header" data-id="cg_header" id="cg_header">
+		<a href="#cg_page_index">Dashboard</a>
+		<h1>cg_page_inspector</h1>
+		<a href="#cg_page_settings" data-rel="dialog">Settings</a>
+			<div id="cg_header_navbar" data-id="cg_header_navbar" data-role="navbar">
+				<ul>
+
+					<li><a href="#cg_page_generator">Generator</a></li>
+					<li><a href="#cg_page_inspector">Inspector</a></li>
+					<li><a href="#cg_page_manager">Manager</a></li>
+					<li><a href="#cg_page_utilities">Utilities</a></li>
+
+				</ul>
+			</div><!--/navbar-->
+	</div><!--/header-->
+		<div data-role="content">
+		
+		
+			
+		</div>
+		<div data-role="footer">
+				<h4>Footer</h4>
+		</div>
+</div>
+<!-- ********* cg_page_inspector ********** -->
+
+
+
+<!-- ********* cg_page_manager ********** -->
+<div data-role="page" id="cg_page_manager">
+	<div data-role="header" data-id="cg_header" id="cg_header">
+		<h1>cg_page_manager</h1>
+		<a href="#cg_page_settings">Settings</a>
+			<div id="cg_header_navbar" data-id="cg_header_navbar" data-role="navbar">
+				<ul>
+				 
+					<li><a href="#cg_page_generator">Generator</a></li>
+					<li><a href="#cg_page_inspector">Inspector</a></li>
+					<li><a href="#cg_page_manager">Manager</a></li>
+					<li><a href="#cg_page_utilities">Utilities</a></li>
+
+				</ul>
+			</div><!--/navbar-->
+	</div><!--/header-->
+		<div data-role="content">
+		
+		
+			
+		</div>
+		<div data-role="footer">
+				<h4>Footer</h4>
+		</div>
+</div>
+<!-- ********* cg_page_manager ********** -->
+
+
+
+
+
+<!-- ********* cg_page_utilities ********** -->
+<div data-role="page" id="cg_page_utilities">
+	<div data-role="header" data-id="cg_header" id="cg_header">
+		<a href="#cg_page_index">Dashboard</a>
+		<h1>cg_page_inspector</h1>
+		<a href="#cg_page_settings" data-rel="dialog">Settings</a>
+			<div id="cg_header_navbar" data-id="cg_header_navbar" data-role="navbar">
+				<ul>
+
+					<li><a href="#cg_page_generator">Generator</a></li>
+					<li><a href="#cg_page_inspector">Inspector</a></li>
+					<li><a href="#cg_page_manager">Manager</a></li>
+					<li><a href="#cg_page_utilities">Utilities</a></li>
+
+				</ul>
+			</div><!--/navbar-->
+	</div><!--/header-->
+		<div data-role="content">
+		
+		
+			
+		</div>
+		<div data-role="footer">
+				<h4>Footer</h4>
+		</div>
+</div>
+<!-- ********* cg_page_utilities ********** -->
+
+
+
+
+<!-- ********* cg_page_settings ********** -->
+<div data-role="page" id="cg_page_settings">
+	<div data-role="header" data-id="cg_header" id="cg_header">
+		<h1>cg_page_settings</h1>
+		 
+	</div><!--/header-->
+		<div data-role="content">
+		
+	 
+				<h3 class="cg_box_header">Database Settings</h3>
+				<div class="cg_box_content">
+					<p>This is going to be the settings for the application. </p>
+					<ul data-role="listview">
+						<li>
+							<div data-role="fieldcontain">
+								<label for="txt_settings_host">Host: </label>
+								<input type="text" value="<?php echo $codegen->getSetting('host'); ?>" id="txt_settings_host"/>
+							</div>
+						</li>
+						<li>
+							<div data-role="fieldcontain">
+								<label for="txt_settings_user">User: </label>
+								<input type="text" value="<?php echo $codegen->getSetting('user'); ?>" id="txt_settings_user"/>
+							</div>
+						</li>
+						<li>
+							<div data-role="fieldcontain">
+								<label for="txt_settings_pass">Password: </label>
+								<input type="password" value="<?php echo $codegen->getSetting('pass'); ?>" id="txt_settings_pass"/>
+							</div>
+						</li>
+						<li>
+							<div data-role="fieldcontain">
+							 
+								<input type="button" value="Save" class="btn_settings_save"/>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<!--/cg_box_content--> 
+ 
+			
+		</div>
+	 
+</div>
+<!-- ********* cg_page_settings ********** -->
+
+
+
+
+
+
+</body>
+</html>

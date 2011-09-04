@@ -1,4 +1,3 @@
-<?php include '../index.php'; ?>
 <html>
 <head>
 <script type="text/javascript" src=" https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
@@ -23,12 +22,12 @@
 <script src="../assets/js/jquery.highlight.js" type="text/javascript"></script>
 <script id="scriptInit" type="text/javascript">
         $(document).ready(function () {
-            $("#splitter").wijsplitter({ orientation: "vertical", fullSplit: true });
+           
         });       
     </script>
 <title>codegen mobile</title>
 <link href="../style.css" rel="stylesheet" type="text/css" media="all">
-<link href="../assets/css/jquery.wijmo-open.1.2.0.css" rel="stylesheet" type="text/css" media="all">
+ 
  
 </head>
 

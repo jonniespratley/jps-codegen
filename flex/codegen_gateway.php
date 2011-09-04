@@ -1,7 +1,7 @@
 <?php
 
 
-include '../index.php';
+include '../api.php';
 
 
 ?>

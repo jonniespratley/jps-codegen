@@ -81,14 +81,15 @@ class MySQLService
 		error_reporting ( E_ERROR | E_USER_ERROR | E_PARSE );
 		
 		$this->mysqli = new mysqli ( $host, $username, $password );
+		//$this->mysqli = mysql_connect( $host, $username, $password );
 		
 		/* create a connection object which is not connected */
-		//$this->mysqli = mysqli_init ();
+		$this->mysqli = mysqli_init ();
 		/* set connection options */
-		//$this->mysqli->options ( MYSQLI_CLIENT_COMPRESS );
-		//$this->mysqli->options ( MYSQLI_OPT_CONNECT_TIMEOUT, 5 );
+		$this->mysqli->options ( MYSQLI_CLIENT_COMPRESS );
+		$this->mysqli->options ( MYSQLI_OPT_CONNECT_TIMEOUT, 5 );
 		/* connect to server */
-		#$this->mysqli->real_connect ( $host, $username, $password );
+		$this->mysqli->real_connect ( $host, $username, $password );
 		
 		/* check connection */
 		if ( mysqli_connect_errno () )
@@ -197,7 +198,7 @@ class MySQLService
 			
 			//Add the tables to the database array
 			$databases [] = array ( 
-				"label" => $value, "aType" => "database", "aData" => $key, "aIcon" => "databaseIcon", "children" => $tables 
+				"label" => $value, "type" => "database", "icon" => "database_icon", "children" => $tables 
 			);
 		}
 		sort ( $databases );
@@ -236,10 +237,8 @@ class MySQLService
 			
 			//Add the tables to the database array
 			$databases [] = array ( 
-				"label" => $value, 
-				"aType" => "database", 
-				"aData" => $key,  
-				"aSize" => $size
+				"label" => $value,  
+				"size" => $size
 			);
 			//"aTables" => $tables, "aStatus" => $status,  
 
@@ -286,7 +285,7 @@ class MySQLService
 			}
 			//build a tree
 			$tables [] = array ( 
-				"label" => $value, "aFields" => $fields, "aIndexes" => $indexes, 'aStatus' => $statuss 
+				"label" => $value, "fields" => $fields, "indexes" => $indexes, 'status' => $statuss 
 			);
 		}
 		
@@ -431,12 +430,12 @@ class MySQLService
 			
 			$tables [] = array ( 
 				"label" => $t_value, 
-				"aKey" => $primaryKey, 
+				"key" => $primaryKey, 
 				"aType" => "table", 
 				"aIcon" => "tableIcon", 
 				"aData" => $t_key, 
 				"children" => $fields, 
-				/*"aStatus" => $statuss,*/ 
+				"aStatus" => $statuss, 
 				"aIndexes" => $indexes 
 			);
 		}
@@ -970,851 +969,775 @@ class MySQLService
 	 */
 	public function queryResultToXML( $query )
 	{
-		$xmlResult = '<?xml version="1.0"?>';
-		
-		/* Set the content type for the browser */
-		
-		//table query
-		$sql = mysqli_query ( $this->mysqli, "$query" );
-		
-		$xmlResult .= "<results>";
-		
-		//loop all the results
-		while ( $rows = mysqli_fetch_assoc ( $sql ) )
+		$xmlResult = '<?xml version="1.0"
+?>';
+/* Set the content type for the browser */
+//table query
+$sql = mysqli_query ( $this->mysqli, "$query" );
+$xmlResult .= "
+<results>
+	";
+	//loop all the results
+	while ( $rows = mysqli_fetch_assoc ( $sql ) )
+	{
+	$xmlResult .= "
+	<result>
+		";
+		//for each table in the result make an array
+		foreach ( $rows as $key => $value )
 		{
-			$xmlResult .= "<result>";
-			//for each table in the result make an array
-			foreach ( $rows as $key => $value )
-			{
-				$xmlResult .= "<$key>" . htmlspecialchars ( $value ) . "</$key>";
-			}
-			$xmlResult .= "</result>";
+		$xmlResult .= "
+		<$key>
+			" . htmlspecialchars ( $value ) . "
+		</$key>";
 		}
-		$xmlResult .= "</results>";
-		
-		return $xmlResult;
+		$xmlResult .= "
+	</result>";
 	}
-	
-	/**
-	 * I execute a query and return JSON
-	 *
-	 * @param [string] $query the query
-	 * @return [json]
-	 */
-	private function queryResultToJSON( $query )
-	{
-		return $this->_queryToJSON ( $query );
-	}
-	
-	/**
-	 * I execute a query and return json
-	 *
-	 * @param [string] $whatDatabase the database
-	 * @param [string] $whatTable the table
-	 * @return [json]
-	 */
-	public function exportToJSON( $whatDatabase, $whatTable )
-	{
-		$sql = "SELECRT * FROM $whatDatabase.$whatTable";
-		
-		return $this->_queryToJSON ( $sql );
-	}
-	
-	/**
-	 * I export data from the database
-	 *
-	 * @param [string] $whatDatabase
-	 * @param [string] $whatTable
-	 * @param [string all, db_structure, db_data, tbl_structure, tbl_data ] $whatMode 
-	 * @return [string] the filename of the file.
-	 */
-	public function createBackup( $whatDatabase, $whatTable, $whatMode )
-	{
-		
-		$result = '';
-		$filename = $whatDatabase . '-' . $whatTable . '-' . $whatMode . '-' . $this->makeTimestamp () . '.sql';
-		
-		//$dbDir = mkdir( "backups/".$whatDatabase );
-		
-
-		//Set the database, filename, and we don't want to use compression.
-		$dumper = new MySQLDump ( $whatDatabase, "../backups/" . $filename, false );
-		$mode = $whatMode;
-		
-		//Switch based on what mode is specified
-		switch ( $mode )
-		{
-			case 'all':
-				$dumper->doDump ();
-				$result = 'Dumping all data';
-				return true;
-				break;
-			
-			case 'db_structure':
-				$dumper->getDatabaseStructure ();
-				$result = 'Database structure backed up successfully.';
-				$resultArray [] = array ( 
-					'mode' => $mode, 'result' => $result, 'filename' => $filename 
-				);
-				return $resultArray;
-				break;
-			
-			case 'db_data':
-				$dumper->getDatabaseData ( false );
-				$result = 'Database data backed up successfully.';
-				$resultArray [] = array ( 
-					'mode' => $mode, 'result' => $result, 'filename' => $filename 
-				);
-				return $resultArray;
-				break;
-			
-			case 'tbl_structure':
-				$dumper->getTableStructure ( $whatTable );
-				$result = 'Table structure backed up successfully.';
-				$resultArray [] = array ( 
-					'mode' => $mode, 'result' => $result, 'filename' => $filename 
-				);
-				return $resultArray;
-				break;
-			
-			case 'tbl_data':
-				$dumper->getTableData ( $whatTable, false );
-				$result = 'Table data backed up successfully.';
-				$resultArray [] = array ( 
-					'mode' => $mode, 'result' => $result, 'filename' => $filename 
-				);
-				return $resultArray;
-				break;
-			
-			default :
-				$result = 'Please specify a mode.';
-				$resultArray [] = array ( 
-					'mode' => $mode, 'result' => $result, 'filename' => $filename 
-				);
-				return $resultArray;
-				break;
-		}
-		return $result;
-	}
-	
-	/**
-	 * I get a list of all the backups in the backup folder
-	 *
-	 * @return [json]
-	 */
-	public function getDatabaseBackups()
-	{
-		return $this->fileSvc->browseDirectory ( './backups', 'json' );
-	}
-	
-	public function removeBackup( $whatDatabase, $whatFile )
-	{
-		return $this->fileSvc->removeFile ( './backups', $whatFile );
-	}
-	
+	$xmlResult .= "
+</results>";
+return $xmlResult;
+}
+/**
+* I execute a query and return JSON
+*
+* @param [string] $query the query
+* @return [json]
+*/
+private function queryResultToJSON( $query )
+{
+return $this->_queryToJSON ( $query );
+}
+/**
+* I execute a query and return json
+*
+* @param [string] $whatDatabase the database
+* @param [string] $whatTable the table
+* @return [json]
+*/
+public function exportToJSON( $whatDatabase, $whatTable )
+{
+$sql = "SELECRT * FROM $whatDatabase.$whatTable";
+return $this->_queryToJSON ( $sql );
+}
+/**
+* I export data from the database
+*
+* @param [string] $whatDatabase
+* @param [string] $whatTable
+* @param [string all, db_structure, db_data, tbl_structure, tbl_data ] $whatMode
+* @return [string] the filename of the file.
+*/
+public function createBackup( $whatDatabase, $whatTable, $whatMode )
+{
+$result = '';
+$filename = $whatDatabase . '-' . $whatTable . '-' . $whatMode . '-' . $this->makeTimestamp () . '.sql';
+//$dbDir = mkdir( "backups/".$whatDatabase );
+//Set the database, filename, and we don't want to use compression.
+$dumper = new MySQLDump ( $whatDatabase, "../backups/" . $filename, false );
+$mode = $whatMode;
+//Switch based on what mode is specified
+switch ( $mode )
+{
+case 'all':
+$dumper->doDump ();
+$result = 'Dumping all data';
+return true;
+break;
+case 'db_structure':
+$dumper->getDatabaseStructure ();
+$result = 'Database structure backed up successfully.';
+$resultArray [] = array (
+'mode' => $mode, 'result' => $result, 'filename' => $filename
+);
+return $resultArray;
+break;
+case 'db_data':
+$dumper->getDatabaseData ( false );
+$result = 'Database data backed up successfully.';
+$resultArray [] = array (
+'mode' => $mode, 'result' => $result, 'filename' => $filename
+);
+return $resultArray;
+break;
+case 'tbl_structure':
+$dumper->getTableStructure ( $whatTable );
+$result = 'Table structure backed up successfully.';
+$resultArray [] = array (
+'mode' => $mode, 'result' => $result, 'filename' => $filename
+);
+return $resultArray;
+break;
+case 'tbl_data':
+$dumper->getTableData ( $whatTable, false );
+$result = 'Table data backed up successfully.';
+$resultArray [] = array (
+'mode' => $mode, 'result' => $result, 'filename' => $filename
+);
+return $resultArray;
+break;
+default :
+$result = 'Please specify a mode.';
+$resultArray [] = array (
+'mode' => $mode, 'result' => $result, 'filename' => $filename
+);
+return $resultArray;
+break;
+}
+return $result;
+}
+/**
+* I get a list of all the backups in the backup folder
+*
+* @return [json]
+*/
+public function getDatabaseBackups()
+{
+return $this->fileSvc->browseDirectory ( './backups', 'json' );
+}
+public function removeBackup( $whatDatabase, $whatFile )
+{
+return $this->fileSvc->removeFile ( './backups', $whatFile );
+}
 /* ********************************************************************
- * ********************************************************************
- * 
- * 						6. SERVER VARIABLES
- * 
- * Below is all the methods that build up information about the server
- * and system.
- * 
- * 
- * ********************************************************************
- * ********************************************************************/
-	
-	/**
-	 * I kill a thread that is connected or running
-	 *
-	 * @param [int] $whatThread the id of the thread
-	 * @return [boolean] true or false
-	 */
-	public function killProcess( $whatThread )
-	{
-		$sql = "KILL $whatThread";
-		$message = '';
-		
-		if ( mysqli_query ( $this->mysqli, $sql ) )
-		{
-			$message = array ( 
-				'message' => true, 'thread' => $whatThread 
-			);
-		}
-		else
-		{
-			$message = array ( 
-				'message' => false, 'thread' => $whatThread 
-			);
-		}
-		return json_encode ( $message );
-	}
-	
-	/**
-	 * I show all mysql system variables
-	 *
-	 * @return [json]
-	 */
-	public function showSystemVariables()
-	{
-		return $this->_queryStatusToJSON ( "SHOW GLOBAL VARIABLES" );
-	}
-	
-	/**
-	 * I show all system privileges
-	 *
-	 * @return [json]
-	 */
-	public function showSystemPrivileges()
-	{
-		return $this->_queryToJSON ( "SHOW PRIVILEGES" );
-	}
-	
-	/**
-	 * I show the system status
-	 *
-	 * @return [json]
-	 */
-	public function showSystemStatus()
-	{
-		return $this->_queryStatusToJSON ( "SHOW GLOBAL STATUS" );
-	}
-	
-	/**
-	 * I show system processes
-	 *
-	 * @return [json]
-	 */
-	public function showSystemProcess()
-	{
-		return $this->_queryStatusToJSON ( "SHOW FULL PROCESSLIST" );
-	}
-	
-	/**
-	 * I show all of the systems users
-	 *
-	 * @return [json]
-	 */
-	public function showSystemUsers()
-	{
-		return $this->_queryToJSON ( "SELECT * FROM mysql.user" );
-	}
-	
-	/**
-	 * I get server info
-	 *
-	 * @return [json]
-	 */
-	public function _getServerInfo()
-	{
-		$serverArray = array ();
-		$aPath = $_SERVER [ 'DOCUMENT_ROOT' ];
-		
-		$serverArray [] = array ( 
-			
-				'aDiskFreeSpace' => disk_free_space ( $aPath ), 
-				'aDiskTotalSize' => disk_total_space ( $aPath ), 
-				'aServerSoftware' => $_SERVER [ 'SERVER_SOFTWARE' ], 
-				'aServerName' => $_SERVER [ 'SERVER_NAME' ], 
-				'aPHPVersion' => PHP_VERSION, 
-				'aPHPOs' => PHP_OS, 
-				'aPHPExtensionDir' => PHP_EXTENSION_DIR, 
-				'aMySQLClientV' => mysqli_get_client_info ( $this->mysqli ), 
-				'aMySQLServerV' => mysqli_get_server_version ( $this->mysqli ), 
-				'aMySQLHost' => mysqli_get_host_info ( $this->mysqli ), 
-				'aMySQLProtocol' => mysqli_get_proto_info ( $this->mysqli ), 
-				'aUptime' => $this->_getUptime () 
-		);
-		
-		return json_encode ( $serverArray );
-	}
-	
-	/**
-	 * I get all of the threads
-	 *
-	 * @return [json]
-	 */
-	public function _getThreads()
-	{
-		return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Threads%'" );
-	}
-	
-	/**
-	 * I get the temp size
-	 *
-	 * @return [json]
-	 */
-	public function _getTemp()
-	{
-		return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%tmp%'" );
-	}
-	
-	/**
-	 * I get open tables
-	 *
-	 * @return [json]
-	 */
-	public function _getOpen()
-	{
-		return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Open%'" );
-	}
-	
-	/**
-	 * I get the handlers variables
-	 *
-	 * @return [json]
-	 */
-	public function _getHandlers()
-	{
-		return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Handler%'" );
-	}
-	
-	/**
-	 * I get the server uptime
-	 *
-	 * @return [array]
-	 */
-	public function _getUptime()
-	{
-		$result = mysqli_query ( $this->mysqli, "SHOW STATUS LIKE '%uptime%'" );
-		$row = mysqli_fetch_row ( $result );
-		$array = $this->_formatUptime ( $row [ 1 ] );
-		
-		return $array;
-	}
-	
-	private function _getUnixTimestamp( $unix )
-	{
-		return $this->_queryToARRAY ( "SELECT UNIX_TIMESTAMP() - $unix" );
-	}
-	
-	/**
-	 * I get the recent queries
-	 *
-	 * @return [json]
-	 */
-	public function _getQuestions()
-	{
-		return $this->_queryStatusToJSON ( "SHOW STATUS LIKE 'Questions%'" );
-	}
-	
-	/**
-	 * I get the query cache
-	 *
-	 * @return [json]
-	 */
-	public function _getQcache()
-	{
-		return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Qcache%'" );
-	}
-	
-	/**
-	 * I get InnoDB
-	 *
-	 * @return [json]
-	 */
-	public function _getInnoDb()
-	{
-		return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Innodb%'" );
-	}
-	
-	/**
-	 * I get the key cache
-	 *
-	 * @return [json]
-	 */
-	public function _getKeys()
-	{
-		return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Key%'" );
-	}
-	
-	/**
-	 * I get the performance of mysql.
-	 *
-	 * @return [json]
-	 */
-	public function _getPerformance()
-	{
-		return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Slow%'" );
-	}
-	
-	/**
-	 * I get all the sort
-	 *
-	 * @return [json]
-	 */
-	public function _getSort()
-	{
-		return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Sort%'" );
-	}
-	
-	/**
-	 * I get the connections
-	 *
-	 * @return [json]
-	 */
-	public function _getConnections()
-	{
-		return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Connections%'" );
-	}
-	
-	/**
-	 * I get the aborted clients and connections
-	 *
-	 * @return unknown
-	 */
-	public function _getClients()
-	{
-		return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Aborted%'" );
-	}
-	
-	/**
-	 * I get mysql bytes
-	 *
-	 * @return [json]
-	 */
-	public function _getBytes()
-	{
-		return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Bytes%'" );
-	}
-	
-	/**
-	 * I get all the slave hosts
-	 *
-	 * @return [json]
-	 */
-	public function _getReplication()
-	{
-		return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Slave%'" );
-	}
-	
-	/**
-	 * I get the commands
-	 *
-	 * @return [json]
-	 */
-	public function _getCommands()
-	{
-		return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Com%'" );
-	}
-	
-	/**
-	 * I show all of the SHOW commands
-	 *
-	 * @return [json]
-	 */
-	public function _getShowCommands()
-	{
-		return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Com_show%'" );
-	}
-	
-	/**
-	 * I get the stats of the mysql connection
-	 *
-	 * @return [array]
-	 */
-	public function _getStat()
-	{
-		$stats = $this->mysqli->stat ();
-		$newStats = explode ( ' ', $stats );
-		
-		return $newStats;
-	}
-	
-	/* ********************************************************************
- * ********************************************************************
- * 
- * 						7. POLLING METHODS
- * 
- * Below is all the methods for executing a query on the database, 
- * and getting all records from the database.
- * 
- * ********************************************************************
- * ********************************************************************/
-	
-	/**
-	 * I get the health of a mysql server
-	 *
-	 * @return [array] of results
-	 */
-	public function _getHealth()
-	{
-		$query = $this->mysqli->query ( "SHOW GLOBAL STATUS LIKE '%Key_%'" );
-		$array = array ();
-		
-		while ( $row = mysqli_fetch_assoc ( $query ) )
-		{
-			$array [ $row [ 'Variable_name' ] ] = array ( 
-				$row [ 'Variable_name' ] => $row [ 'Value' ] 
-			);
-		}
-		
-		return $array;
-	}
-	
-	/**
-	 * I am a polling method for checking the current select statements.
-	 * @example Results
-	 * <code>
-	 * [
-	 *	   {
-	 *	      "Threads_cached":"0",
-	 *	      "aTimestamp":"2009-02-20T21:52:34-08:00"
-	 *	   },
-	 *	   {
-	 *	      "Threads_connected":"1",
-	 *	      "aTimestamp":"2009-02-20T21:52:34-08:00"
-	 *	   },
-	 *	   {
-	 *	      "Threads_created":"2070",
-	 *	      "aTimestamp":"2009-02-20T21:52:34-08:00"
-	 *	   },
-	 *	   {
-	 *	      "Threads_running":"1",
-	 *	      "aTimestamp":"2009-02-20T21:52:34-08:00"
-	 *	   }
-	 *	]
-	 *</code> 
-	 * @return [json] encoded results
-	 */
-	public function pollQueries()
-	{
-		$result = mysqli_query ( $this->mysqli, "SHOW GLOBAL STATUS LIKE '%Com_select%'" );
-		$timestamp = date ( DATE_W3C );
-		
-		while ( $row = mysqli_fetch_row ( $result ) )
-		{
-			$array [] = array ( 
-				$row [ 0 ] => $row [ 1 ], 'aTimestamp' => $timestamp 
-			);
-		}
-		return json_encode ( $array );
-	}
-	
-	/**
-	 * I am a polling method for checking the current bytes sent.
-	 * @example Results
-	 * <code>
-	 * [
-	 * 	  {
-	 * 		"Bytes_sent":"48438",
-	 * 		"aTimestamp":"2009-02-20T21:52:34-08:00"
-	 *	  }
-	 * ]
-	 *</code> 
-	 * @return [json] encoded results
-	 */
-	public function pollTraffic()
-	{
-		$result = mysqli_query ( $this->mysqli, "SHOW GLOBAL STATUS LIKE '%Bytes_sent%'" );
-		$timestamp = date ( DATE_W3C );
-		
-		while ( $row = mysqli_fetch_row ( $result ) )
-		{
-			$array [] = array ( 
-				$row [ 0 ] => $row [ 1 ], 'aTimestamp' => $timestamp 
-			);
-		}
-		return json_encode ( $array );
-	}
-	
-	/**
-	 * I am a polling method for checking the current connections.
-	 * @example Results
-	 * <code>
-	 * [
-	 * 	  {
-	 * 		"Com_select":"97",
-	 * 		"aTimestamp":"2009-02-20T21:52:34-08:00"
-	 *	  }
-	 * ]
-	 *</code> 
-	 * 
-	 * @return [json] encoded results
-	 */
-	public function pollConnections()
-	{
-		$result = mysqli_query ( $this->mysqli, "SHOW GLOBAL STATUS LIKE '%Threads_%'" );
-		$timestamp = array ( 
-			'aTimestamp' => date ( DATE_W3C ) 
-		);
-		$array = array ();
-		while ( $row = mysqli_fetch_row ( $result ) )
-		{
-			$array = array ( 
-				$row [ 0 ] => $row [ 1 ] 
-			);
-			//array_push( $array, array( $row[0] => $row[1] ) );	
-		}
-		//$a[] = array_merge( $timestamp, $array );
-		//return $a;
-		return json_encode ( $array );
-	}
-	
-	/* ********************************************************************
- * ********************************************************************
- * 
- * 						8. DATA METHODS
- * 
- * Below is all the methods for executing a query on the database, 
- * and getting all records from the database.
- * 
- * ********************************************************************
- * ********************************************************************/
-	
-	/**
-	 * I get all the table data
-	 *
-	 * @param [string] $whatDatabase the database
-	 * @param [string] $whatTable the table
-	 * @return [json]
-	 */
-	public function getTableData( $whatDatabase, $whatTable )
-	{
-		$sql = "SELECT * FROM $whatDatabase.$whatTable";
-		
-		return $this->_queryToJSON ( $sql );
-	}
-	
-	/**
-	 * I execute a query
-	 *
-	 * @param [string] $query the query to execute
-	 * @return [json]
-	 */
-	public function executeQuery( $sql )
-	{
-		$query = mysqli_escape_string ( $this->mysqli, $sql );
-		return $this->_queryToJSON ( $query );
-	}
-	
-	/* ********************************************************************
 * ********************************************************************
-* 
-* 						9. RESULT HANDLERS
-* 
+*
+* 						6. SERVER VARIABLES
+*
+* Below is all the methods that build up information about the server
+* and system.
+*
+*
 * ********************************************************************
 * ********************************************************************/
-	
-	/**
-	 * I execute a query and return the results as json.
-	 *
-	 * @param [string] $sql the query to be executed
-	 * @return [json] the result in json
-	 */
-	private function _queryToJSON( $sql )
-	{
-		$result = mysqli_query ( $this->mysqli, $sql );
-		
-		while ( $row = mysqli_fetch_assoc ( $result ) )
-		{
-			$array [] = $row;
-		}
-		//$this->dumpIt( $sql );
-		
-
-		return json_encode ( $array );
-	}
-	
-	/**
-	 * I execute a query and return the result as an array.
-	 *
-	 * @param [string] $sql the query to be executed
-	 * @return [array] the result array
-	 */
-	private function _queryToARRAY( $sql )
-	{
-		$query = mysqli_query ( $this->mysqli, $sql );
-		$array = array ();
-		
-		while ( $row = mysqli_fetch_assoc ( $query ) )
-		{
-			$array [] = $row;
-		}
-		
-		//$this->dumpIt( $sql );
-		
-
-		return $array;
-	}
-	
-	/**
-	 * I get the query status
-	 *
-	 * @param [string] $sql
-	 * @return [json] mysql status with the ('_') striped out
-	 */
-	private function _queryStatusToJSON( $sql )
-	{
-		$result = mysqli_query ( $this->mysqli, $sql );
-		
-		while ( $row = mysqli_fetch_assoc ( $result ) )
-		{
-			//replace some of the names
-			$row = str_replace ( 'Com_', '', $row );
-			//take out the _ of the rows
-			$row = str_replace ( '_', ' ', $row );
-			
-			$array [] = $row;
-		}
-		sort ( $array );
-		
-		//$this->dumpIt( $sql );
-		
-
-		return json_encode ( $array );
-	}
-	
-	/* ********************************************************************
+/**
+* I kill a thread that is connected or running
+*
+* @param [int] $whatThread the id of the thread
+* @return [boolean] true or false
+*/
+public function killProcess( $whatThread )
+{
+$sql = "KILL $whatThread";
+$message = '';
+if ( mysqli_query ( $this->mysqli, $sql ) )
+{
+$message = array (
+'message' => true, 'thread' => $whatThread
+);
+}
+else
+{
+$message = array (
+'message' => false, 'thread' => $whatThread
+);
+}
+return json_encode ( $message );
+}
+/**
+* I show all mysql system variables
+*
+* @return [json]
+*/
+public function showSystemVariables()
+{
+return $this->_queryStatusToJSON ( "SHOW GLOBAL VARIABLES" );
+}
+/**
+* I show all system privileges
+*
+* @return [json]
+*/
+public function showSystemPrivileges()
+{
+return $this->_queryToJSON ( "SHOW PRIVILEGES" );
+}
+/**
+* I show the system status
+*
+* @return [json]
+*/
+public function showSystemStatus()
+{
+return $this->_queryStatusToJSON ( "SHOW GLOBAL STATUS" );
+}
+/**
+* I show system processes
+*
+* @return [json]
+*/
+public function showSystemProcess()
+{
+return $this->_queryStatusToJSON ( "SHOW FULL PROCESSLIST" );
+}
+/**
+* I show all of the systems users
+*
+* @return [json]
+*/
+public function showSystemUsers()
+{
+return $this->_queryToJSON ( "SELECT * FROM mysql.user" );
+}
+/**
+* I get server info
+*
+* @return [json]
+*/
+public function _getServerInfo()
+{
+$serverArray = array ();
+$aPath = $_SERVER [ 'DOCUMENT_ROOT' ];
+$serverArray [] = array (
+'aDiskFreeSpace' => disk_free_space ( $aPath ),
+'aDiskTotalSize' => disk_total_space ( $aPath ),
+'aServerSoftware' => $_SERVER [ 'SERVER_SOFTWARE' ],
+'aServerName' => $_SERVER [ 'SERVER_NAME' ],
+'aPHPVersion' => PHP_VERSION,
+'aPHPOs' => PHP_OS,
+'aPHPExtensionDir' => PHP_EXTENSION_DIR,
+'aMySQLClientV' => mysqli_get_client_info ( $this->mysqli ),
+'aMySQLServerV' => mysqli_get_server_version ( $this->mysqli ),
+'aMySQLHost' => mysqli_get_host_info ( $this->mysqli ),
+'aMySQLProtocol' => mysqli_get_proto_info ( $this->mysqli ),
+'aUptime' => $this->_getUptime ()
+);
+return json_encode ( $serverArray );
+}
+/**
+* I get all of the threads
+*
+* @return [json]
+*/
+public function _getThreads()
+{
+return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Threads%'" );
+}
+/**
+* I get the temp size
+*
+* @return [json]
+*/
+public function _getTemp()
+{
+return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%tmp%'" );
+}
+/**
+* I get open tables
+*
+* @return [json]
+*/
+public function _getOpen()
+{
+return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Open%'" );
+}
+/**
+* I get the handlers variables
+*
+* @return [json]
+*/
+public function _getHandlers()
+{
+return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Handler%'" );
+}
+/**
+* I get the server uptime
+*
+* @return [array]
+*/
+public function _getUptime()
+{
+$result = mysqli_query ( $this->mysqli, "SHOW STATUS LIKE '%uptime%'" );
+$row = mysqli_fetch_row ( $result );
+$array = $this->_formatUptime ( $row [ 1 ] );
+return $array;
+}
+private function _getUnixTimestamp( $unix )
+{
+return $this->_queryToARRAY ( "SELECT UNIX_TIMESTAMP() - $unix" );
+}
+/**
+* I get the recent queries
+*
+* @return [json]
+*/
+public function _getQuestions()
+{
+return $this->_queryStatusToJSON ( "SHOW STATUS LIKE 'Questions%'" );
+}
+/**
+* I get the query cache
+*
+* @return [json]
+*/
+public function _getQcache()
+{
+return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Qcache%'" );
+}
+/**
+* I get InnoDB
+*
+* @return [json]
+*/
+public function _getInnoDb()
+{
+return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Innodb%'" );
+}
+/**
+* I get the key cache
+*
+* @return [json]
+*/
+public function _getKeys()
+{
+return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Key%'" );
+}
+/**
+* I get the performance of mysql.
+*
+* @return [json]
+*/
+public function _getPerformance()
+{
+return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Slow%'" );
+}
+/**
+* I get all the sort
+*
+* @return [json]
+*/
+public function _getSort()
+{
+return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Sort%'" );
+}
+/**
+* I get the connections
+*
+* @return [json]
+*/
+public function _getConnections()
+{
+return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Connections%'" );
+}
+/**
+* I get the aborted clients and connections
+*
+* @return unknown
+*/
+public function _getClients()
+{
+return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Aborted%'" );
+}
+/**
+* I get mysql bytes
+*
+* @return [json]
+*/
+public function _getBytes()
+{
+return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Bytes%'" );
+}
+/**
+* I get all the slave hosts
+*
+* @return [json]
+*/
+public function _getReplication()
+{
+return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Slave%'" );
+}
+/**
+* I get the commands
+*
+* @return [json]
+*/
+public function _getCommands()
+{
+return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Com%'" );
+}
+/**
+* I show all of the SHOW commands
+*
+* @return [json]
+*/
+public function _getShowCommands()
+{
+return $this->_queryStatusToJSON ( "SHOW STATUS LIKE '%Com_show%'" );
+}
+/**
+* I get the stats of the mysql connection
+*
+* @return [array]
+*/
+public function _getStat()
+{
+$stats = $this->mysqli->stat ();
+$newStats = explode ( ' ', $stats );
+return $newStats;
+}
+/* ********************************************************************
 * ********************************************************************
-* 
+*
+* 						7. POLLING METHODS
+*
+* Below is all the methods for executing a query on the database,
+* and getting all records from the database.
+*
+* ********************************************************************
+* ********************************************************************/
+/**
+* I get the health of a mysql server
+*
+* @return [array] of results
+*/
+public function _getHealth()
+{
+$query = $this->mysqli->query ( "SHOW GLOBAL STATUS LIKE '%Key_%'" );
+$array = array ();
+while ( $row = mysqli_fetch_assoc ( $query ) )
+{
+$array [ $row [ 'Variable_name' ] ] = array (
+$row [ 'Variable_name' ] => $row [ 'Value' ]
+);
+}
+return $array;
+}
+/**
+* I am a polling method for checking the current select statements.
+* @example Results
+*
+<code>
+	* [
+	*	   {
+	*	      "Threads_cached":"0",
+	*	      "aTimestamp":"2009-02-20T21:52:34-08:00"
+	*	   },
+	*	   {
+	*	      "Threads_connected":"1",
+	*	      "aTimestamp":"2009-02-20T21:52:34-08:00"
+	*	   },
+	*	   {
+	*	      "Threads_created":"2070",
+	*	      "aTimestamp":"2009-02-20T21:52:34-08:00"
+	*	   },
+	*	   {
+	*	      "Threads_running":"1",
+	*	      "aTimestamp":"2009-02-20T21:52:34-08:00"
+	*	   }
+	*	]
+	*
+</code>
+* @return [json] encoded results
+*/
+public function pollQueries()
+{
+$result = mysqli_query ( $this->mysqli, "SHOW GLOBAL STATUS LIKE '%Com_select%'" );
+$timestamp = date ( DATE_W3C );
+while ( $row = mysqli_fetch_row ( $result ) )
+{
+$array [] = array (
+$row [ 0 ] => $row [ 1 ], 'aTimestamp' => $timestamp
+);
+}
+return json_encode ( $array );
+}
+/**
+* I am a polling method for checking the current bytes sent.
+* @example Results
+*
+<code>
+	* [
+	* 	  {
+	* 		"Bytes_sent":"48438",
+	* 		"aTimestamp":"2009-02-20T21:52:34-08:00"
+	*	  }
+	* ]
+	*
+</code>
+* @return [json] encoded results
+*/
+public function pollTraffic()
+{
+$result = mysqli_query ( $this->mysqli, "SHOW GLOBAL STATUS LIKE '%Bytes_sent%'" );
+$timestamp = date ( DATE_W3C );
+while ( $row = mysqli_fetch_row ( $result ) )
+{
+$array [] = array (
+$row [ 0 ] => $row [ 1 ], 'aTimestamp' => $timestamp
+);
+}
+return json_encode ( $array );
+}
+/**
+* I am a polling method for checking the current connections.
+* @example Results
+*
+<code>
+	* [
+	* 	  {
+	* 		"Com_select":"97",
+	* 		"aTimestamp":"2009-02-20T21:52:34-08:00"
+	*	  }
+	* ]
+	*
+</code>
+*
+* @return [json] encoded results
+*/
+public function pollConnections()
+{
+$result = mysqli_query ( $this->mysqli, "SHOW GLOBAL STATUS LIKE '%Threads_%'" );
+$timestamp = array (
+'aTimestamp' => date ( DATE_W3C )
+);
+$array = array ();
+while ( $row = mysqli_fetch_row ( $result ) )
+{
+$array = array (
+$row [ 0 ] => $row [ 1 ]
+);
+//array_push( $array, array( $row[0] => $row[1] ) );
+}
+//$a[] = array_merge( $timestamp, $array );
+//return $a;
+return json_encode ( $array );
+}
+/* ********************************************************************
+* ********************************************************************
+*
+* 						8. DATA METHODS
+*
+* Below is all the methods for executing a query on the database,
+* and getting all records from the database.
+*
+* ********************************************************************
+* ********************************************************************/
+/**
+* I get all the table data
+*
+* @param [string] $whatDatabase the database
+* @param [string] $whatTable the table
+* @return [json]
+*/
+public function getTableData( $whatDatabase, $whatTable )
+{
+$sql = "SELECT * FROM $whatDatabase.$whatTable";
+return $this->_queryToJSON ( $sql );
+}
+/**
+* I execute a query
+*
+* @param [string] $query the query to execute
+* @return [json]
+*/
+public function executeQuery( $sql )
+{
+$query = mysqli_escape_string ( $this->mysqli, $sql );
+return $this->_queryToJSON ( $query );
+}
+/* ********************************************************************
+* ********************************************************************
+*
+* 						9. RESULT HANDLERS
+*
+* ********************************************************************
+* ********************************************************************/
+/**
+* I execute a query and return the results as json.
+*
+* @param [string] $sql the query to be executed
+* @return [json] the result in json
+*/
+private function _queryToJSON( $sql )
+{
+$result = mysqli_query ( $this->mysqli, $sql );
+while ( $row = mysqli_fetch_assoc ( $result ) )
+{
+$array [] = $row;
+}
+//$this->dumpIt( $sql );
+return json_encode ( $array );
+}
+/**
+* I execute a query and return the result as an array.
+*
+* @param [string] $sql the query to be executed
+* @return [array] the result array
+*/
+private function _queryToARRAY( $sql )
+{
+$query = mysqli_query ( $this->mysqli, $sql );
+$array = array ();
+while ( $row = mysqli_fetch_assoc ( $query ) )
+{
+$array [] = $row;
+}
+//$this->dumpIt( $sql );
+return $array;
+}
+/**
+* I get the query status
+*
+* @param [string] $sql
+* @return [json] mysql status with the ('_') striped out
+*/
+private function _queryStatusToJSON( $sql )
+{
+$result = mysqli_query ( $this->mysqli, $sql );
+while ( $row = mysqli_fetch_assoc ( $result ) )
+{
+//replace some of the names
+$row = str_replace ( 'Com_', '', $row );
+//take out the _ of the rows
+$row = str_replace ( '_', ' ', $row );
+$array [] = $row;
+}
+sort ( $array );
+//$this->dumpIt( $sql );
+return json_encode ( $array );
+}
+/* ********************************************************************
+* ********************************************************************
+*
 * 						10. UTILITY METHODS
-* 
+*
 * Below is all the utility methods for handling the results from a query
 * and dumping variables or creating timestamps
-* 
-* 
+*
+*
 * ********************************************************************
 * ********************************************************************/
-	
-	/**
-	 * I ping mysql for a connection
-	 *
-	 * @return true or false
-	 */
-	public function ping()
-	{
-		$msg = '';
-		/* check if server is alive */
-		if ( $this->mysqli->ping () )
-		{
-			$msg = true;
-		}
-		else
-		{
-			$msg = false;
-		}
-		return $msg;
-	}
-	
-	/**
-	 * I get help from the mysql database
-	 *
-	 * @return [json]
-	 */
-	public function getHelp()
-	{
-		$sql = 'SELECT help_keyword.name, 
-					   help_topic.name, 
-					   help_topic.description, 
-					   help_category.name AS AVG_help_category_name, 
-					   help_category.url, 
-					   help_topic.example, 
-					   help_topic.url
-					FROM mysql.help_keyword 
-						INNER JOIN mysql.help_relation 
-							ON help_keyword.help_keyword_id = help_relation.help_keyword_id
-						INNER JOIN mysql.help_topic 
-							ON help_topic.help_topic_id = help_relation.help_topic_id
-						INNER JOIN mysql.help_category 
-							ON help_topic.help_category_id = help_category.help_category_id';
-		return $this->_queryToJSON ( $sql );
-	}
-	
-	/**
-	 * I format debug dumps
-	 *
-	 * @param [var] the variable you with to dump
-	 */
-	public function dumpIt( $var )
-	{
-		print "<pre>\n";
-		print_r ( $var );
-		print "</pre>\n";
-	}
-	
-	/**
-	 * I make a formatted timestamp.
-	 * <code> 
-	 * 2008-12-30 22:40:00
-	 * </code>
-	 *
-	 * @return [string] a timestamp
-	 */
-	private function makeTimestamp()
-	{
-		$time = time ();
-		
-		return date ( 'm-d-Y-H-i', $time );
-	}
-	
-	/**
-	 * I format uptime from MySQL
-	 *
-	 * @param [int] $time the old time
-	 * @return [string] the new time
-	 */
-	private function _formatUptime( $time = 0 )
-	{
-		$days = ( int ) floor ( $time / 86400 );
-		$hours = ( int ) floor ( $time / 3600 ) % 24;
-		$minutes = ( int ) floor ( $time / 60 ) % 60;
-		
-		if ( $days == 1 )
-		{
-			$uptime = "$days day, ";
-		}
-		else if ( $days > 1 )
-		{
-			$uptime = "$days days, ";
-		}
-		if ( $hours == 1 )
-		{
-			$uptime .= "$hours hour";
-		}
-		else if ( $hours > 1 )
-		{
-			$uptime .= "$hours hours";
-		}
-		if ( $uptime && $minutes > 0 && $seconds > 0 )
-		{
-			$uptime .= ", ";
-		}
-		else if ( $uptime && $minutes > 0 & $seconds == 0 )
-		{
-			$uptime .= " and ";
-		}
-		( $minutes > 0 ) ? $uptime .= "$minutes minute" . ( ( $minutes > 1 ) ? "s" : NULL ) : NULL;
-		
-		return $uptime;
-	}
-	
-	/**
-	 * I try and throw an error.
-	 *
-	 * @param [string] $msg the message of the mess
-	 * @param [string] $type the type of error
-	 * @return error
-	 */
-	private function _throwError( $msg, $type )
-	{
-		switch ( $type )
-		{
-			case 'user':
-				throw ErrorException ();
-				break;
-			
-			case 'error':
-				return trigger_error ( $msg, E_ERROR );
-				break;
-			
-			case 'other':
-				return trigger_error ( $msg, E_USER_ERROR );
-				break;
-		}
-		return trigger_error ( $msg, E_USER_ERROR );
-	}
-
+/**
+* I ping mysql for a connection
+*
+* @return true or false
+*/
+public function ping()
+{
+$msg = '';
+/* check if server is alive */
+if ( $this->mysqli->ping () )
+{
+$msg = true;
 }
-
+else
+{
+$msg = false;
+}
+return $msg;
+}
+/**
+* I get help from the mysql database
+*
+* @return [json]
+*/
+public function getHelp()
+{
+$sql = 'SELECT help_keyword.name,
+help_topic.name,
+help_topic.description,
+help_category.name AS AVG_help_category_name,
+help_category.url,
+help_topic.example,
+help_topic.url
+FROM mysql.help_keyword
+INNER JOIN mysql.help_relation
+ON help_keyword.help_keyword_id = help_relation.help_keyword_id
+INNER JOIN mysql.help_topic
+ON help_topic.help_topic_id = help_relation.help_topic_id
+INNER JOIN mysql.help_category
+ON help_topic.help_category_id = help_category.help_category_id';
+return $this->_queryToJSON ( $sql );
+}
+/**
+* I format debug dumps
+*
+* @param [var] the variable you with to dump
+*/
+public function dumpIt( $var )
+{
+print "
+<pre>
+	\n";
+	print_r ( $var );
+	print "
+</pre>\n";
+}
+/**
+* I make a formatted timestamp.
+*
+<code>
+	* 2008-12-30 22:40:00
+	*
+</code>
+*
+* @return [string] a timestamp
+*/
+private function makeTimestamp()
+{
+$time = time ();
+return date ( 'm-d-Y-H-i', $time );
+}
+/**
+* I format uptime from MySQL
+*
+* @param [int] $time the old time
+* @return [string] the new time
+*/
+private function _formatUptime( $time = 0 )
+{
+$days = ( int ) floor ( $time / 86400 );
+$hours = ( int ) floor ( $time / 3600 ) % 24;
+$minutes = ( int ) floor ( $time / 60 ) % 60;
+if ( $days == 1 )
+{
+$uptime = "$days day, ";
+}
+else if ( $days > 1 )
+{
+$uptime = "$days days, ";
+}
+if ( $hours == 1 )
+{
+$uptime .= "$hours hour";
+}
+else if ( $hours > 1 )
+{
+$uptime .= "$hours hours";
+}
+if ( $uptime && $minutes > 0 && $seconds > 0 )
+{
+$uptime .= ", ";
+}
+else if ( $uptime && $minutes > 0 & $seconds == 0 )
+{
+$uptime .= " and ";
+}
+( $minutes > 0 ) ? $uptime .= "$minutes minute" . ( ( $minutes > 1 ) ? "s" : NULL ) : NULL;
+return $uptime;
+}
+/**
+* I try and throw an error.
+*
+* @param [string] $msg the message of the mess
+* @param [string] $type the type of error
+* @return error
+*/
+private function _throwError( $msg, $type )
+{
+switch ( $type )
+{
+case 'user':
+throw ErrorException ();
+break;
+case 'error':
+return trigger_error ( $msg, E_ERROR );
+break;
+case 'other':
+return trigger_error ( $msg, E_USER_ERROR );
+break;
+}
+return trigger_error ( $msg, E_USER_ERROR );
+}
+}
 ?>

@@ -46,59 +46,16 @@ $fields = array(
 	array('name' => 'created', 'type' => 'datetime')
 );
 
-$vo = PHPGen::generateVO($options, $database, $table, $fields);
 
-file_put_contents($vo['filename'], $vo['contents']);
-print_r($vo);
+
+//$vo = PHPGen::generateVO($options, $database, $table, $fields);
+
+
+
+//file_put_contents($vo['filename'], $vo['contents']);
+#print_r();
  
-/*
-require_once 'library/MySQLService.php';
-
-$u = 'root';
-$p = 'fred';
-$h = 'localhost';
-$d = 'demo';
-
-$mysql = new MySQLService ( );
-$mysql->connect ( $h, $u, $p );
-$tables = $mysql->getTables ( $d );
-
-$tablePrimarys = array();
-$tablePrimary = array();
-$fields = array();
-$keys = array();
-
-$tableFields = array();
-foreach($tables as $table){
-	$fieldNames = array();
-	foreach($table['aFields'] as $field){
-		$fieldNames[] = $field['Field'];		
-	}
-		$tableFields[] = array('table' => $table['label'], 'fields' => $fieldNames );
-	
-	echo '<h2> Table Fields </h2>';
-	print_r($fieldNames);
-}
-
-
-
-
-foreach($tables as $table){
-	$keys[] = $table['aIndexes'];
-}
-
-echo '<h2> Tables </h2>';
-print_r($tableNames);
-
-echo '<h2> Tables and Fields </h2>';
-print_r($tableFields);
-
-echo '<h2> Table Keys </h2>';
-print_r($keys);
-*/
-
-
-				
+			
 /*
 $sh = 'runsdk.sh';
 print_r( pathinfo($sh) );
