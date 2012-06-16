@@ -14,35 +14,40 @@ require("cg_config.php");
 
 <link rel="stylesheet" href="assets/css/style.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="assets/js/libs/jqueryFileTree/jqueryFileTree.css" type="text/css" media="screen" />
- 
+ <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0rc1/jquery.mobile-1.0rc1.min.css" /
 
 <!--jQuery Code-->
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
-<script type="text/javascript" src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>
+>
+<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.0rc1/jquery.mobile-1.0rc1.min.js"></script>
+ 
 
 <!--jQuery Plugins-->
 <script src="assets/js/jquery.debug.js" type="text/javascript"></script>
-<script src="assets/js/jquery.json.js" type="text/javascript"></script>
+
 <script src="assets/js/jquery.cookie.js" type="text/javascript"></script>
 <script src="assets/js/jquery.highlight.js" type="text/javascript"></script>
 <script src="assets/js/libs/jqueryFileTree/jqueryFileTree.js" type="text/javascript"></script>
 
-
-
-<!--CodeGen JS-->
-<script src="assets/js/CodeGen.js" type="text/javascript"></script>
-<script src="assets/js/CodeGenUtilities.js" type="text/javascript"></script>
-
-
-
-<script src="app/js/ICanHaz.min.js" type="text/javascript"></script>
+<script src="assets/js/jquery.tmpl.js" type="text/javascript"></script>
 <script src="app/js/json2.js" type="text/javascript"></script>
+<script src="assets/js/jquery.json.js" type="text/javascript"></script>
 <script src="app/js/underscore-min.js" type="text/javascript"></script>
-
 <script src="app/js/backbone-min.js" type="text/javascript"></script>
+
+
+
+<!-- [App Models/Routers/View] -->
+<script src="app/cgAppModels.js" type="text/javascript"></script>
 <script src="app/cgAppModels.js" type="text/javascript"></script>
 <script src="app/cgAppRouters.js" type="text/javascript"></script>
 <script src="app/cgAppView.js" type="text/javascript"></script>
+
+<!--CodeGen JS-->
+<script src="assets/js/app.js" type="text/javascript"></script>
+<script src="assets/js/CodeGen.js" type="text/javascript"></script>
+<script src="assets/js/CodeGenUtilities.js" type="text/javascript"></script>
+
 
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
@@ -53,7 +58,7 @@ var appRouter = new cgAppRouter();
 	
 	
 	$('.cg-gen-databases-btn').click(function(){
-	 	cg_loadDatabases();
+	 	//cg_loadDatabases();
 	});
 	
 		
@@ -126,10 +131,11 @@ var appRouter = new cgAppRouter();
 	/**
 	 * Gets all databases when password input is out of focus
 	 */
-	var cg_loadDatabases = function() {
-		var host = $("#txt_settings_host").val();
-		var user = $("#txt_settings_user").val();
-		var pass = $("#txt_settings_pass ").val()
+	var cg_loadDatabases = function( host, user, pass ) {
+
+		 host = $("#txt_settings_host").val();
+		 user = $("#txt_settings_user").val();
+		 pass = $("#txt_settings_pass ").val()
 
 		if (host != '' && user != '' && pass != '') {
 			$.get(service, {
@@ -141,18 +147,51 @@ var appRouter = new cgAppRouter();
 				var options = '';
 				var dbArray = eval(result);
 
-				$.each(dbArray, function(i, obj) {
-					options += '<option>' + dbArray[i]['label'] + '</option>';
-				})
+		
 				for (i = 0; i < dbArray.length; i++) {
 					$('#cg_database_list').append('<li>'+ dbArray[i]['label']+'<p class="ui-li-count">'+ dbArray[i]['size']['totalSize'] +'</p></li>');
+					$("#txt_databases").append('<option value="' + dbArray[i]['label'] + '">' + dbArray[i]['label'] + '</option>');
 				}
 				
 		 
 				$('#cg_database_list').listview('refresh');
-				var myselect = $("select#txt_database");
-					myselect.html(options);
-					myselect.selectmenu("refresh");
+				$("#txt_databases").selectmenu("refresh");
+				$("#txt_databases").selectmenu("update");
+			});
+		} else {
+			return false;
+		}
+	};
+	
+	/**
+	 * Gets all databases when password input is out of focus
+	 */
+	var cg_loadTables = function( host, user, pass, db ) {
+
+		 host = $("#txt_settings_host").val();
+		 user = $("#txt_settings_user").val();
+		 pass = $("#txt_settings_pass ").val();
+		if (host != '' && user != '' && pass != '') {
+			$.get(service, {
+				m: 'getTables',
+				h: host,
+				u: user,
+				p: pass,
+				d: db
+			}, function(result) {
+				var options = '';
+				var dbArray = eval(result);
+				
+				
+				for (i = 0; i < dbArray.length; i++) {
+				//	$('#cg_tables_list').append('<li>'+ dbArray[i]['label']+'<p class="ui-li-count">'+ dbArray[i]['size']['totalSize'] +'</p></li>');
+					$('#txt_tables').append('<option>'+ dbArray[i]['label']+'</option>');
+					console.log(dbArray[i]);
+				};
+				
+		 
+			//	$('#cg_tables_list').listview('refresh');
+				$("#txt_tables").selectmenu("refresh");
 			});
 		} else {
 			return false;
@@ -291,7 +330,7 @@ var appRouter = new cgAppRouter();
 			cg_config = resultObj;
 
 			$("#txt_configLocation").val(resultObj);
-			$("#txt_configLocation").val(resultObj).highlightFade("yellow");
+			//$("#txt_configLocation").val(resultObj).highlightFade("yellow");
 			window.console.log(resultObj);
 			//createSchema();
 
@@ -321,6 +360,12 @@ var appRouter = new cgAppRouter();
 		return false;
 	};
 
+
+
+	$('#txt_databases').live('change', function(){
+		cg_loadTables('localhost', 'root', 'fred', $(this).val());
+	
+	});
 </script>
 
 
@@ -356,17 +401,16 @@ var appRouter = new cgAppRouter();
 	</div><!--/header-->
 	<div data-role="content">
 	
-	
+		<div id="app-view">
+			<button id="add-friend">Add Friend</button>
+			    <ul id="friends-list">
+			    </ul>
+		</div>
 		<ul id="cg_database_list" data-role="listview">
 			<li data-role="list-divider" data-theme="a">Databases</li>
 			 
-		
 		</ul>
-	
-	
-	
-	
-	
+
 	</div>
  	<div id="cg_footer" data-role="footer" class="ui-bar" data-position="fixed">
 		<a href="#" data-role="button" data-icon="refresh" class="cg-gen-databases-btn">Load Databases</a>

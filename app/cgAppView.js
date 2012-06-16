@@ -27,7 +27,7 @@ var cgAppView = Backbone.View.extend({
 	
 	
 	cg_getDatabases: function(){
-		
+		alert('cg_getDatabases');
 	},
 	cg_getTables: function(){
 		
