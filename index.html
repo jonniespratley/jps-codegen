@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Codegen by jonniespratley</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Codegen</h1>
+        <p>Use templates and a configuration file to generate apps.</p>
+        <p class="view"><a href="https://github.com/jonniespratley/jps-codegen">View the Project on GitHub <small>jonniespratley/jps-codegen</small></a></p>
+        <ul>
+          <li><a href="https://github.com/jonniespratley/jps-codegen/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/jonniespratley/jps-codegen/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/jonniespratley/jps-codegen">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p><a href="https://github.com/todo" class="user-mention">@todo</a>: July 11th 2011</p>
+
+<h2>GENERATOR FLOW</h2>
+
+<ol>
+<li>Client-side</li>
+<li>RPC-Connector</li>
+<li>Server-side</li>
+</ol><h3>CLIENT SIDE</h3>
+
+<p>Step 1 - Client-side UI Info - What type of user interface should be created, flash/flex app, html ui, jquery mobile ui, etc.</p>
+
+<pre><code>    Types:
+        1. Flex/Flash UI
+        2. HTML/HTML5 UI
+        3. jQuery Mobile UI
+        4. WordPress Plugin UI
+
+Step 2 - JS Framework Info - What type of user interface framework is going to be used, backbone.js, cairngorm, other.
+
+    Types:
+        1. None - html/php
+        2. Backbone.js - js/php
+        3. Cairngorm - fx
+</code></pre>
+
+<h3>RPC CONNECTOR</h3>
+
+<pre><code>Step 1 - Client-to-Server Info - What type of RPC is going to be used to connect the client application to the server tier? 
+    How is the client going to talk to the server.
+
+
+Step 2 - RPC Info - What is the information needed to connect to that service.
+    Types:
+        1. HTTPService - fx/php
+        2. AMFPHP Service - fx/php
+        3. REST JSON Service - php/backbone.js
+        4. REST API Service - php/backbone.js
+        5. Custom Service - unknown/service inspector will allow developer to add custom methods to the data connector.
+
+Step 3 - Model -&gt; Table Relationships - Allow choice of tables and fields for each client side entity be optionaly selected, this allows more control over what code is generated.
+    Types:
+        1. Client-side Model Name-&gt;defaults, validation, view
+</code></pre>
+
+<h3>SERVER SIDE</h3>
+
+<pre><code>Step 1 - Database Info - The credentials for the data access layer, such as host, port, user, pass, database, etc.
+
+    Types:
+        1. SQLite - path, database,
+        2. MySQL - host, port, user, pass, database
+        3. CouchDB - host, port, user, pass, database
+        4. JSON File - just the path to where to save the file is needed
+
+Step 2 - 
+</code></pre>
+
+<p><a href="https://github.com/todo" class="user-mention">@todo</a>: July 10th 2011
+1. Setup firebugPHP for debuging.
+2. Finish converting all html views to jquery mobilized
+3. Documentent any code not documentent
+4. Create UI for data manager, utilities, and inspector
+5. Move CodeGen over to Backbone.js framework for client side.
+6. Add new app templates to be generated, </p>
+
+<p>Including:
+        jQuery Mobile Web App
+        jQuery Mobile Web App with backbone.js client side
+        Wordpress Plugin Web App
+        Wordpress Theme Web App</p>
+
+<p><a href="https://github.com/todo" class="user-mention">@todo</a>: Sept 29th 2009</p>
+
+<ol>
+<li>Fix all main generators to accept new parameters when generating code,
+if an array is passed as the options read from the array keys else read from the xml file.</li>
+</ol><p><a href="https://github.com/todo" class="user-mention">@todo</a>: Sept 28th 2009</p>
+
+<ol>
+<li>When creating application make main folder name of the application. For flex import. with services folder inside of folder.</li>
+<li>Add new options for generation, including getters/setters
+REST url style
+API key use
+Admin Logging
+User monitoring
+Field alias, as well as uploading edited config and schema files.
+Field toggle display.</li>
+</ol><p><a href="https://github.com/todo" class="user-mention">@todo</a>: July 11th 2009</p>
+
+<ol>
+<li>Edit php service template and add post switch statement on REST part.</li>
+<li>Add my jquery pages plugin to the main navigation of the site.</li>
+<li>Fix boxes to make all drag drop.</li>
+<li>Use 960.css style</li>
+<li>Create class to display recent updates to CodeGen repo</li>
+<li>Create automation script that downloads all the recent versions</li>
+<li>Create a update checker.</li>
+<li>Incorporate Flex service browser and api tester.</li>
+<li>Create sql schema export.</li>
+<li>Create class to find table relationships using rails method of
+    has_many:
+    has_one:
+    belongs_to:
+    has_and_belongs_to_many:</li>
+</ol><p><a href="https://github.com/todo" class="user-mention">@todo</a>: Auguest 7th 2009
+1. Upon successful generation of flex application, save the information in the sqlite database cg_historys table</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/jonniespratley">jonniespratley</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
