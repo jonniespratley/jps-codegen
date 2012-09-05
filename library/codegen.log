@@ -1754,3 +1754,6 @@
 [Fri Feb 10 2012 09:23:20] [-PHP-SERVICE] wrote Service.php to output/server/Array
 [Fri Feb 10 2012 09:23:20] [-PHP-SERVICE] wrote Service.php to output/server/Array
 [Fri Feb 10 2012 09:23:20] [-PHP-SERVICE] wrote Service.php to output/server/Array
+[Tue Sep 4 2012 19:03:39] [-HTML-Main] wrote index.php to output/server/
+[Tue Sep 4 2012 19:03:39] [-PHP-REST] wrote REST.php to output/server/
+[Tue Sep 4 2012 19:03:39] [-PHP-CONN] wrote Connection.php to output/server/

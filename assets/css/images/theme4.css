@@ -1,0 +1,242 @@
+/* @group Akira CSS by Shawn Drew */
+
+/* Akira CSS by Shawn Drew */
+
+/* general */
+
+h1 {padding-bottom:0.2em;}
+
+.meta {color:#999; font-size:.9em; display:block;}
+.meta em {font-style:normal; font-weight:bold;}
+
+/* login */
+#login-page.container {width:320px;}
+
+/* dashboard */
+
+/* @group Dashboard Summary */
+
+.summary {display:table; width:100%; padding:0; margin:0 0 20px 0;}
+.summary ul {margin:0; padding:0; overflow:hidden; display:table-row;}
+.summary li {margin:0; padding:19px; display:table-cell; border-right:1px solid #eee;}
+.summary li:last-child {border:none;}
+.summary a {display:block; font-size:1.2em; line-height:1.4em; text-transform:uppercase; color:#000;}
+.summary .count {display:block; font-size:1.75em; font-weight:bold;}
+
+    /* dashboard - ie fixes */
+    .ie7 .summary {display:block;}
+    .ie7 .summary ul {margin:0; padding:0; overflow:hidden; display:block;}
+    .ie7 .summary li {float:left;}
+    
+    .ielt9 .summary .last {border:none;}
+
+/* @end */
+
+/* @group Tasks */
+
+/* tasks */
+.tasks {margin:0; padding:0;}
+.tasks li {list-style-type:none; padding-bottom:0.3em;}
+.tasks input {vertical-align:baseline;}
+.tasks .meta {padding-left:18px;}
+.tasks.done {opacity:0.8;}
+
+/* @end */
+
+/* @group Messages */
+
+/* messages */
+.messages {margin:0; padding:0;}
+.messages .messages {padding-top:19px;}
+.messages li {list-style-type:none; padding-bottom:0.3em;}
+.messages .well {padding:19px;}
+.messages .messages .well {border:none; -webkit-box-shadow:none;-moz-box-shadow:none; box-shadow:none; border-left:3px solid #eee;border-left:3px solid rgba(0, 0, 0, 0.05);}
+
+/* @end */
+
+/* blank slate */
+.blank-slate {text-align:center;}
+
+/* files */
+.files li {list-style-type:none;}
+.files .meta {padding-left:18px;}
+
+/* @group Zebra List */
+
+.zebra-list {margin:0 0 18px 0; padding:0;}
+.zebra-list li {border:1px solid #DDD; padding:8px; border-bottom:none;}
+.zebra-list li:nth-child(odd) {background-color:#F9F9F9;}
+.zebra-list li:first-child {-webkit-border-radius:4px 4px 0 0; -moz-border-radius:4px 4px 0 0; border-radius:4px 4px 0 0;}
+.zebra-list li:last-child {border-bottom:1px solid #DDD; -webkit-border-radius:0 0 4px 4px; -moz-border-radius:0 0 4px 4px; border-radius:0 0 4px 4px;}
+
+/* @end */
+ul{
+	list-style: none;
+}
+/* General */
+
+/* Side Nav */
+.sidebar-nav {
+        padding: 9px 0;
+      }
+
+/* Bootstrap Data Tables Styles */
+div.dataTables_length label {
+    float: left;
+    text-align: left;
+}
+
+div.dataTables_length select {
+    width: 75px;
+}
+
+div.dataTables_filter label {
+    float: right;
+}
+
+div.dataTables_info {
+    padding-top: 8px;
+}
+
+div.dataTables_paginate {
+    float: right;
+    margin: 0;
+}
+
+table {
+    margin: 1em 0;
+    clear: both;
+}
+
+table.dataTable th:active {
+    outline: none;
+}
+.dataTables_filter input, .dataTables_length select {
+ display: inline-block;
+  *display: inline;
+  margin-bottom: 0;
+  *zoom: 1;
+}
+
+.sort-index, .hidden {
+    left: -10000px;
+    position: absolute;
+    top: -10000px;
+    visibility: hidden;
+}
+/* Comment Table */
+.comment-table tbody tr td {
+vertical-align:top;
+}
+.member-avatar img {
+border: 1px solid #DDDDDD;
+padding: 1px;
+text-align: center;
+margin-top: 5px;
+margin-left: auto;
+margin-right: auto;
+float: left;
+}
+table.member-info {
+margin-top: 5px;
+line-height:10px;
+clear: none;
+}
+table.member-info tbody tr td {
+line-height:15px;
+}
+.comment-info {
+margin-bottom:2px;
+}
+.post-toolbar {
+cursor:pointer;
+}
+tr .post-toolbar {
+    visibility:hidden;
+}
+
+tr:hover .post-toolbar {
+    visibility: visible;
+}
+
+/* @group Portlets */
+
+/* Portlets */
+.box {
+    margin-bottom:10px;
+}
+.box h4.box-header {
+    size:10px;
+    padding: 7px 7px;
+  margin: 0;
+  list-style: none;
+  cursor:move;
+}
+
+
+.box-content {
+    padding:10px;
+}
+
+.box-btn {
+    float:right;
+    margin-left:2px;
+    margin-right:2px;
+    height: 14px;
+    width: 14px;
+    text-decoration:none;
+    display: block;
+    float: right;
+    overflow: hidden;
+    background-position:center;
+    cursor:pointer;
+}
+
+.box-btn [class^="icon-"], .box-btn [class*=" icon-"] { 
+    vertical-align:top;
+}
+
+.box-container-closed {
+    display:none;
+}
+
+/* Portlets */
+.box-placeholder {
+    background-color: #f5f5f5;
+    border: 1px dashed #DDDDDD;
+    display: block;
+    /* float: left;*/
+    margin-bottom: 13px !important;
+    margin-left: 1%;
+    margin-right: 0.6%;
+}
+.box-placeholder * {
+    visibility:hidden;
+}
+.column {
+    min-height:20px;
+}
+
+/* @end */
+
+/* @group Member Box - Side Nav */
+
+/* Member Box - Side Nav */
+.member-box {
+    
+  display:block;
+  padding:10px;
+  
+}
+
+img.member-box-avatar {
+    height:32px;
+    width:32px;
+    padding:1px;
+    margin-right:10px;
+    float:left;
+}
+
+/* @end */
+
+/* @end */

@@ -4,8 +4,8 @@ require("cg_config.php");
 
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>CodeGen - Version<?php echo CGManager::$CG_VERSION ?></title>
@@ -13,13 +13,18 @@ require("cg_config.php");
 <!--CSS-->
 
 <link rel="stylesheet" href="assets/css/style.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="assets/css/bootstrap.min.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="assets/css/bootstrap-responsive.min.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="assets/css/font-awesome.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="assets/js/libs/jqueryFileTree/jqueryFileTree.css" type="text/css" media="screen" />
- <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0rc1/jquery.mobile-1.0rc1.min.css" /
+ 
+
+
 
 <!--jQuery Code-->
->
-<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
-<script src="http://code.jquery.com/mobile/1.0rc1/jquery.mobile-1.0rc1.min.js"></script>
+<script src="assets/js/jquery.js"></script>
+<script src="assets/js/jquery-ui.js"></script>
+
  
 
 <!--jQuery Plugins-->
@@ -33,8 +38,9 @@ require("cg_config.php");
 <script src="app/js/json2.js" type="text/javascript"></script>
 <script src="assets/js/jquery.json.js" type="text/javascript"></script>
 <script src="app/js/underscore-min.js" type="text/javascript"></script>
-<script src="app/js/backbone-min.js" type="text/javascript"></script>
-
+<script src="assets/js/libs/Backbone.js" type="text/javascript"></script>
+<!--
+-->
 
 
 <!-- [App Models/Routers/View] -->
@@ -52,17 +58,20 @@ require("cg_config.php");
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
 		
-var appModel = new cgAppModel();
-var appView = new cgAppView();
-var appRouter = new cgAppRouter();
+//var appModel = new cgAppModel();
+//var appView = new cgAppView();
+//var appRouter = new cgAppRouter();
 	
 	
 	$('.cg-gen-databases-btn').click(function(){
-	 	//cg_loadDatabases();
+	 	cg_loadDatabases();
 	});
-	
+	$('#codegen_tabs a').click(function (e) {
+	 		e.preventDefault();
+	  		$(this).tab('show');
+		});
 		
-		Backbone.history.start({pushState: true});
+		//Backbone.history.start({pushState: true});
 		// Parsing the Url below results an object that is returned with the
 		// following properties:
 		//
@@ -376,186 +385,75 @@ var appRouter = new cgAppRouter();
 <body>
 	
 	
-	
-	
-	
-	
-	
-	
-<!-- ********* cg_page_index ********** -->	
-<div data-role="page" data-id="cg_page_index" id="cg_page_index">
-	<div data-role="header" data-id="cg_header" id="cg_header">
-		<a href="#cg_page_index">Dashboard</a>
-		<h1>cg_page_inspector</h1>
-		<a href="#cg_page_settings" data-rel="dialog">Settings</a>
-			<div id="cg_header_navbar" data-id="cg_header_navbar" data-role="navbar">
-				<ul>
-
-					<li><a href="#cg_page_generator">Generator</a></li>
+<div class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="#">CodeGen</a>
+    <ul class="nav">
+      <li class="active"><a href="#">Home</a></li>
+      <li><a href="#">Documentation</a></li>
+      <li><a href="#">Credits</a></li>
+    </ul>
+  </div>
+</div>	
+	<div class="container">
+  <div class="row">
+    <div class="span2">
+      <!--Sidebar content-->
+      <ul class="nav nav-list well">
+      	<li class="nav-header">Menu</li>
+      	<li class="active">
+      		<a href="#cg_page_index">Get Started</a>
+		
+      	</li>
+      	
+      	<li><a href="#cg_page_generator">Generator</a></li>
 					<li><a href="#cg_page_inspector">Inspector</a></li>
 					<li><a href="#cg_page_manager">Manager</a></li>
 					<li><a href="#cg_page_utilities">Utilities</a></li>
-
-				</ul>
-			</div><!--/navbar-->
-	</div><!--/header-->
-	<div data-role="content">
+      	<li class="list-divider">
+      		
+      	</li>
+      	<li class="nav-header">Configuration</li>
+      	<li><a href="#cg_page_settings" data-rel="dialog">Settings</a></li>
+      </ul>
+      
+    </div>
+    <div class="span10">
+      <!--Body content-->
+      
+      
+			<div class="row">
+			  <div class="span9">
+			  	<div class="well">
+			  		<h2>Get Started</h2>
+			  		<p>welcome to the codegen where you can use the generator and custom build templates to automate any project for you.</p>
+			  	</div>
+			    <div class="row">
+			      
+			      <div class="span12">
+			      	
 	
-		<div id="app-view">
-			<button id="add-friend">Add Friend</button>
-			    <ul id="friends-list">
-			    </ul>
-		</div>
-		<ul id="cg_database_list" data-role="listview">
-			<li data-role="list-divider" data-theme="a">Databases</li>
-			 
-		</ul>
-
-	</div>
- 	<div id="cg_footer" data-role="footer" class="ui-bar" data-position="fixed">
-		<a href="#" data-role="button" data-icon="refresh" class="cg-gen-databases-btn">Load Databases</a>
-	 
-	</div>
-</div><!--/page-->
-<!-- ********* cg_page_index ********** -->
-
-
-
-
-
-
-<!-- ********* cg_page_generator ********** -->
-<div data-role="page" id="cg_page_generator">
-	<div data-role="header" data-id="cg_header" id="cg_header">
-		<a href="#cg_page_index">Dashboard</a>
-		<h1>cg_page_inspector</h1>
-		<a href="#cg_page_settings" data-rel="dialog">Settings</a>
-			<div id="cg_header_navbar" data-id="cg_header_navbar" data-role="navbar">
-				<ul>
-
-					<li><a href="#cg_page_generator">Generator</a></li>
-					<li><a href="#cg_page_inspector">Inspector</a></li>
-					<li><a href="#cg_page_manager">Manager</a></li>
-					<li><a href="#cg_page_utilities">Utilities</a></li>
-
-				</ul>
-			</div><!--/navbar-->
-	</div><!--/header-->
-		<div data-role="content">
-		
-		<?php include 'cg_generate.php'; ?>
-			
-		</div>
-	 
-</div>
-<!-- ********* cg_page_generator ********** -->
-
-
-
-
-
-<!-- ********* cg_page_inspector ********** -->
-<div data-role="page" id="cg_page_inspector">
-	<div data-role="header" data-id="cg_header" id="cg_header">
-		<a href="#cg_page_index">Dashboard</a>
-		<h1>cg_page_inspector</h1>
-		<a href="#cg_page_settings" data-rel="dialog">Settings</a>
-			<div id="cg_header_navbar" data-id="cg_header_navbar" data-role="navbar">
-				<ul>
-
-					<li><a href="#cg_page_generator">Generator</a></li>
-					<li><a href="#cg_page_inspector">Inspector</a></li>
-					<li><a href="#cg_page_manager">Manager</a></li>
-					<li><a href="#cg_page_utilities">Utilities</a></li>
-
-				</ul>
-			</div><!--/navbar-->
-	</div><!--/header-->
-		<div data-role="content">
-		
-		
-			
-		</div>
-		<div data-role="footer">
-				<h4>Footer</h4>
-		</div>
-</div>
-<!-- ********* cg_page_inspector ********** -->
-
-
-
-<!-- ********* cg_page_manager ********** -->
-<div data-role="page" id="cg_page_manager">
-	<div data-role="header" data-id="cg_header" id="cg_header">
-		<h1>cg_page_manager</h1>
-		<a href="#cg_page_settings">Settings</a>
-			<div id="cg_header_navbar" data-id="cg_header_navbar" data-role="navbar">
-				<ul>
-				 
-					<li><a href="#cg_page_generator">Generator</a></li>
-					<li><a href="#cg_page_inspector">Inspector</a></li>
-					<li><a href="#cg_page_manager">Manager</a></li>
-					<li><a href="#cg_page_utilities">Utilities</a></li>
-
-				</ul>
-			</div><!--/navbar-->
-	</div><!--/header-->
-		<div data-role="content">
-		
-		
-			
-		</div>
-		<div data-role="footer">
-				<h4>Footer</h4>
-		</div>
-</div>
-<!-- ********* cg_page_manager ********** -->
-
-
-
-
-
-<!-- ********* cg_page_utilities ********** -->
-<div data-role="page" id="cg_page_utilities">
-	<div data-role="header" data-id="cg_header" id="cg_header">
-		<a href="#cg_page_index">Dashboard</a>
-		<h1>cg_page_inspector</h1>
-		<a href="#cg_page_settings" data-rel="dialog">Settings</a>
-			<div id="cg_header_navbar" data-id="cg_header_navbar" data-role="navbar">
-				<ul>
-
-					<li><a href="#cg_page_generator">Generator</a></li>
-					<li><a href="#cg_page_inspector">Inspector</a></li>
-					<li><a href="#cg_page_manager">Manager</a></li>
-					<li><a href="#cg_page_utilities">Utilities</a></li>
-
-				</ul>
-			</div><!--/navbar-->
-	</div><!--/header-->
-		<div data-role="content">
-		
-		
-			
-		</div>
-		<div data-role="footer">
-				<h4>Footer</h4>
-		</div>
-</div>
-<!-- ********* cg_page_utilities ********** -->
-
+			      	
+			      	<?php include 'cg_generate.php'; ?>
+			      	
+			      	
+			      	
+			      	
+			      	
+			      	
+			      	
+			      	
+			      	
+			      	
+			      	
+			      	
+			      	
+			      	
 
 
 
 <!-- ********* cg_page_settings ********** -->
-<div data-role="page" id="cg_page_settings">
-	<div data-role="header" data-id="cg_header" id="cg_header">
-		<h1>cg_page_settings</h1>
-		 
-	</div><!--/header-->
-		<div data-role="content">
-		
-	 
-				<h3 class="cg_box_header">Database Settings</h3>
+ <h3 class="cg_box_header">Database Settings</h3>
 				<div class="cg_box_content">
 					<p>This is going to be the settings for the application. </p>
 					<ul data-role="listview">
@@ -586,12 +484,34 @@ var appRouter = new cgAppRouter();
 					</ul>
 				</div>
 				<!--/cg_box_content--> 
- 
-			
-		</div>
-	 
-</div>
 <!-- ********* cg_page_settings ********** -->
+
+			      	
+			      	
+			      	
+			      	
+			      	
+			      	
+			      	
+			      	
+			      	
+			      	
+			      </div>
+			    </div>
+			  </div>
+			</div>
+				
+	
+      
+    </div>
+  </div>
+</div>
+
+
+
+ 
+
+ 
 
 
 
