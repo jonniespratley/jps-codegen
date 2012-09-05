@@ -167,7 +167,7 @@ class SuperDatabaseService {
             #header('Content-type: application/json');
             
 			header('Content-type: text/plain');
-            return json_encode(array(array($results)));
+            return json_encode(array($results));
             
         } else if ('php' === $this->svcResultFormat) {
             #header('Content-type: application/x-httpd-php');

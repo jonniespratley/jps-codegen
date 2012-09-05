@@ -1,3 +1,6 @@
+/* 
+ * Database Model
+ */
 var Database = Backbone.Model.extend({
 	
 	/* initialize - This is called everytime the model is created */
@@ -16,6 +19,10 @@ var Database = Backbone.Model.extend({
 	}
 });
 
+
+/* 
+ * Table Model
+ */
 var Table = Backbone.Model.extend({
 	
 	/* initialize - This is called everytime the model is created */
@@ -34,6 +41,9 @@ var Table = Backbone.Model.extend({
 	}
 });
 
+/* 
+ * Field Model
+ */
 var Field = Backbone.Model.extend({
 	
 	/* initialize - This is called everytime the model is created */
@@ -57,7 +67,9 @@ var Field = Backbone.Model.extend({
 
 
 
-//Model
+/* 
+ * App Model 
+ */
 var cgAppModel = Backbone.Model.extend({
 	
 	/* initialize - This is called everytime the model is created */

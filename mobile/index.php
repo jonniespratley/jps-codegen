@@ -11,6 +11,7 @@
 <script type="text/javascript" src="../assets/js/libs/backbone.js"></script>
 <script type="text/javascript" src="../assets/js/libs/ICanHaz.min.js"></script>
 <script type="text/javascript" src="../assets/js/script.js"></script>
+
 <!--CodeGen JS-->
 <script src="assets/js/CodeGen.js" type="text/javascript"></script>
 <script src="assets/js/CodeGenUtilities.js" type="text/javascript"></script>
