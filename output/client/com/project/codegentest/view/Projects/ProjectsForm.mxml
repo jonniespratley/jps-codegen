@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?><!--ProjectsForm.mxml: This component holds viewing details and creating or updating a record in the Projects table.Your Copywrite information--><mx:VBox	width="100%"	height="100%"	creationComplete="init()"	xmlns:mx="http://www.adobe.com/2006/mxml">	<mx:Script>		<![CDATA[			import mx.controls.Alert;			import mx.validators.Validator;			import mx.events.ValidationResultEvent;			import com.project.codegentest.events.*;			import com.project.codegentest.vo.*;			import com.project.codegentest.model.ModelLocator;			[Bindable] private var model:ModelLocator = ModelLocator.getInstance();			[Bindable] private var validators:Array = new Array();			/* I set up the validation array, adding all validators to the array. */			private function init():void			{				validators = [ createdV, createddateV, date_createdV, date_modifiedV, demo_urlV, descriptionV, developerV, live_urlV, local_urlV, milestonesV, modifiedV, modifieddateV, namespaceV, notesV, projectV, projectidV, publishedV, readmeV, repo_urlV, statusV, tasksV, technologiesV, titleV, typeV ];			}			/* I check to see if the required fields are present, and if so, I then send the data to the server */			private function validateAndSubmit():void			{				var vals:Array = new Array();					 vals = Validator.validateAll( validators );					if ( vals.length == 0 )					{						saveProjects();					} else {						var alert:Alert = Alert.show( "Please correct invalid form.", "Validation Error" );							alert.isPopUp = false;				}			}			/* I either save or update a Projects record */			private function saveProjects():void			{				var vo:ProjectsVO;				if ( model.selectedProjects == null )				{					vo = new ProjectsVO();					
+			vo.created = txt_created.text;
+			vo.createddate = txt_createddate.text;
+			vo.date_created = txt_date_created.text;
+			vo.date_modified = txt_date_modified.text;
+			vo.demo_url = txt_demo_url.text;
+			vo.description = txt_description.text;
+			vo.developer = txt_developer.text;
+			vo.live_url = txt_live_url.text;
+			vo.local_url = txt_local_url.text;
+			vo.milestones = txt_milestones.text;
+			vo.modified = txt_modified.text;
+			vo.modifieddate = txt_modifieddate.text;
+			vo.namespace = txt_namespace.text;
+			vo.notes = txt_notes.text;
+			vo.project = txt_project.text;
+			vo.projectid = txt_projectid.text;
+			vo.published = txt_published.text;
+			vo.readme = txt_readme.text;
+			vo.repo_url = txt_repo_url.text;
+			vo.status = txt_status.text;
+			vo.tasks = txt_tasks.text;
+			vo.technologies = txt_technologies.text;
+			vo.title = txt_title.text;
+			vo.type = txt_type.text;				} else {					vo = new ProjectsVO( model.selectedProjects );					
+			vo.created = txt_created.text;
+			vo.createddate = txt_createddate.text;
+			vo.date_created = txt_date_created.text;
+			vo.date_modified = txt_date_modified.text;
+			vo.demo_url = txt_demo_url.text;
+			vo.description = txt_description.text;
+			vo.developer = txt_developer.text;
+			vo.live_url = txt_live_url.text;
+			vo.local_url = txt_local_url.text;
+			vo.milestones = txt_milestones.text;
+			vo.modified = txt_modified.text;
+			vo.modifieddate = txt_modifieddate.text;
+			vo.namespace = txt_namespace.text;
+			vo.notes = txt_notes.text;
+			vo.project = txt_project.text;
+			vo.projectid = txt_projectid.text;
+			vo.published = txt_published.text;
+			vo.readme = txt_readme.text;
+			vo.repo_url = txt_repo_url.text;
+			vo.status = txt_status.text;
+			vo.tasks = txt_tasks.text;
+			vo.technologies = txt_technologies.text;
+			vo.title = txt_title.text;
+			vo.type = txt_type.text;				}				var e_saveProjects:SaveProjectsEvent = new SaveProjectsEvent( vo );					 e_saveProjects.dispatch();			}			/* I clear all of the form input fields, and the error strings, if any */			private function clear():void			{				model.selectedProjects = new ProjectsVO();				
+			txt_created.text = "";
+			txt_created.errorString = "";
+			
+			txt_createddate.text = "";
+			txt_createddate.errorString = "";
+			
+			txt_date_created.text = "";
+			txt_date_created.errorString = "";
+			
+			txt_date_modified.text = "";
+			txt_date_modified.errorString = "";
+			
+			txt_demo_url.text = "";
+			txt_demo_url.errorString = "";
+			
+			txt_description.text = "";
+			txt_description.errorString = "";
+			
+			txt_developer.text = "";
+			txt_developer.errorString = "";
+			
+			txt_live_url.text = "";
+			txt_live_url.errorString = "";
+			
+			txt_local_url.text = "";
+			txt_local_url.errorString = "";
+			
+			txt_milestones.text = "";
+			txt_milestones.errorString = "";
+			
+			txt_modified.text = "";
+			txt_modified.errorString = "";
+			
+			txt_modifieddate.text = "";
+			txt_modifieddate.errorString = "";
+			
+			txt_namespace.text = "";
+			txt_namespace.errorString = "";
+			
+			txt_notes.text = "";
+			txt_notes.errorString = "";
+			
+			txt_project.text = "";
+			txt_project.errorString = "";
+			
+			txt_projectid.text = "";
+			txt_projectid.errorString = "";
+			
+			txt_published.text = "";
+			txt_published.errorString = "";
+			
+			txt_readme.text = "";
+			txt_readme.errorString = "";
+			
+			txt_repo_url.text = "";
+			txt_repo_url.errorString = "";
+			
+			txt_status.text = "";
+			txt_status.errorString = "";
+			
+			txt_tasks.text = "";
+			txt_tasks.errorString = "";
+			
+			txt_technologies.text = "";
+			txt_technologies.errorString = "";
+			
+			txt_title.text = "";
+			txt_title.errorString = "";
+			
+			txt_type.text = "";
+			txt_type.errorString = "";
+						}		]]>	</mx:Script>	<mx:Panel width="100%" height="100%" layout="vertical" title="Projects Details">		<!-- Projects Form -->		<mx:Form id="form_Projects" width="100%" height="100%">			
+				<mx:FormItem label="Created" required="false" width="100%">
+					<mx:TextInput id="txt_created" text="{ model.SELECTED_PROJECTS.created }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Createddate" required="false" width="100%">
+					<mx:TextInput id="txt_createddate" text="{ model.SELECTED_PROJECTS.createddate }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Date_created" required="false" width="100%">
+					<mx:TextInput id="txt_date_created" text="{ model.SELECTED_PROJECTS.date_created }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Date_modified" required="false" width="100%">
+					<mx:TextInput id="txt_date_modified" text="{ model.SELECTED_PROJECTS.date_modified }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Demo_url" required="false" width="100%">
+					<mx:TextInput id="txt_demo_url" text="{ model.SELECTED_PROJECTS.demo_url }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Description" required="false" width="100%">
+					<mx:TextInput id="txt_description" text="{ model.SELECTED_PROJECTS.description }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Developer" required="false" width="100%">
+					<mx:TextInput id="txt_developer" text="{ model.SELECTED_PROJECTS.developer }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Live_url" required="false" width="100%">
+					<mx:TextInput id="txt_live_url" text="{ model.SELECTED_PROJECTS.live_url }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Local_url" required="false" width="100%">
+					<mx:TextInput id="txt_local_url" text="{ model.SELECTED_PROJECTS.local_url }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Milestones" required="false" width="100%">
+					<mx:TextInput id="txt_milestones" text="{ model.SELECTED_PROJECTS.milestones }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Modified" required="false" width="100%">
+					<mx:TextInput id="txt_modified" text="{ model.SELECTED_PROJECTS.modified }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Modifieddate" required="false" width="100%">
+					<mx:TextInput id="txt_modifieddate" text="{ model.SELECTED_PROJECTS.modifieddate }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Namespace" required="false" width="100%">
+					<mx:TextInput id="txt_namespace" text="{ model.SELECTED_PROJECTS.namespace }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Notes" required="false" width="100%">
+					<mx:TextInput id="txt_notes" text="{ model.SELECTED_PROJECTS.notes }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Project" required="false" width="100%">
+					<mx:TextInput id="txt_project" text="{ model.SELECTED_PROJECTS.project }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Projectid" required="false" width="100%">
+					<mx:TextInput id="txt_projectid" text="{ model.SELECTED_PROJECTS.projectid }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Published" required="false" width="100%">
+					<mx:TextInput id="txt_published" text="{ model.SELECTED_PROJECTS.published }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Readme" required="false" width="100%">
+					<mx:TextInput id="txt_readme" text="{ model.SELECTED_PROJECTS.readme }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Repo_url" required="false" width="100%">
+					<mx:TextInput id="txt_repo_url" text="{ model.SELECTED_PROJECTS.repo_url }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Status" required="false" width="100%">
+					<mx:TextInput id="txt_status" text="{ model.SELECTED_PROJECTS.status }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Tasks" required="false" width="100%">
+					<mx:TextInput id="txt_tasks" text="{ model.SELECTED_PROJECTS.tasks }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Technologies" required="false" width="100%">
+					<mx:TextInput id="txt_technologies" text="{ model.SELECTED_PROJECTS.technologies }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Title" required="false" width="100%">
+					<mx:TextInput id="txt_title" text="{ model.SELECTED_PROJECTS.title }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Type" required="false" width="100%">
+					<mx:TextInput id="txt_type" text="{ model.SELECTED_PROJECTS.type }" width="100%"/>
+				</mx:FormItem>		</mx:Form>		<!-- Projects Action Buttons -->		<mx:ControlBar>						<mx:Button				label="Save"				click="validateAndSubmit()"/>						<mx:Button				label="Clear"				click="clear()"/>		</mx:ControlBar>	</mx:Panel>	<!--All the validators for required inputs-->	
+				<mx:StringValidator id="createdV" source="{ txt_created }" required="true" property="text"/>
+				<mx:StringValidator id="createddateV" source="{ txt_createddate }" required="true" property="text"/>
+				<mx:StringValidator id="date_createdV" source="{ txt_date_created }" required="true" property="text"/>
+				<mx:StringValidator id="date_modifiedV" source="{ txt_date_modified }" required="true" property="text"/>
+				<mx:StringValidator id="demo_urlV" source="{ txt_demo_url }" required="true" property="text"/>
+				<mx:StringValidator id="descriptionV" source="{ txt_description }" required="true" property="text"/>
+				<mx:StringValidator id="developerV" source="{ txt_developer }" required="true" property="text"/>
+				<mx:StringValidator id="live_urlV" source="{ txt_live_url }" required="true" property="text"/>
+				<mx:StringValidator id="local_urlV" source="{ txt_local_url }" required="true" property="text"/>
+				<mx:StringValidator id="milestonesV" source="{ txt_milestones }" required="true" property="text"/>
+				<mx:StringValidator id="modifiedV" source="{ txt_modified }" required="true" property="text"/>
+				<mx:StringValidator id="modifieddateV" source="{ txt_modifieddate }" required="true" property="text"/>
+				<mx:StringValidator id="namespaceV" source="{ txt_namespace }" required="true" property="text"/>
+				<mx:StringValidator id="notesV" source="{ txt_notes }" required="true" property="text"/>
+				<mx:StringValidator id="projectV" source="{ txt_project }" required="true" property="text"/>
+				<mx:StringValidator id="projectidV" source="{ txt_projectid }" required="true" property="text"/>
+				<mx:StringValidator id="publishedV" source="{ txt_published }" required="true" property="text"/>
+				<mx:StringValidator id="readmeV" source="{ txt_readme }" required="true" property="text"/>
+				<mx:StringValidator id="repo_urlV" source="{ txt_repo_url }" required="true" property="text"/>
+				<mx:StringValidator id="statusV" source="{ txt_status }" required="true" property="text"/>
+				<mx:StringValidator id="tasksV" source="{ txt_tasks }" required="true" property="text"/>
+				<mx:StringValidator id="technologiesV" source="{ txt_technologies }" required="true" property="text"/>
+				<mx:StringValidator id="titleV" source="{ txt_title }" required="true" property="text"/>
+				<mx:StringValidator id="typeV" source="{ txt_type }" required="true" property="text"/></mx:VBox>       

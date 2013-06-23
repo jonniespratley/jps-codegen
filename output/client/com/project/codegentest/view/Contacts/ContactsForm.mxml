@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?><!--ContactsForm.mxml: This component holds viewing details and creating or updating a record in the Contacts table.Your Copywrite information--><mx:VBox	width="100%"	height="100%"	creationComplete="init()"	xmlns:mx="http://www.adobe.com/2006/mxml">	<mx:Script>		<![CDATA[			import mx.controls.Alert;			import mx.validators.Validator;			import mx.events.ValidationResultEvent;			import com.project.codegentest.events.*;			import com.project.codegentest.vo.*;			import com.project.codegentest.model.ModelLocator;			[Bindable] private var model:ModelLocator = ModelLocator.getInstance();			[Bindable] private var validators:Array = new Array();			/* I set up the validation array, adding all validators to the array. */			private function init():void			{				validators = [ addressV, cityV, emailV, idV, nameV, phoneV, stateV ];			}			/* I check to see if the required fields are present, and if so, I then send the data to the server */			private function validateAndSubmit():void			{				var vals:Array = new Array();					 vals = Validator.validateAll( validators );					if ( vals.length == 0 )					{						saveContacts();					} else {						var alert:Alert = Alert.show( "Please correct invalid form.", "Validation Error" );							alert.isPopUp = false;				}			}			/* I either save or update a Contacts record */			private function saveContacts():void			{				var vo:ContactsVO;				if ( model.selectedContacts == null )				{					vo = new ContactsVO();					
+			vo.address = txt_address.text;
+			vo.city = txt_city.text;
+			vo.email = txt_email.text;
+			vo.id = txt_id.text;
+			vo.name = txt_name.text;
+			vo.phone = txt_phone.text;
+			vo.state = txt_state.text;				} else {					vo = new ContactsVO( model.selectedContacts );					
+			vo.address = txt_address.text;
+			vo.city = txt_city.text;
+			vo.email = txt_email.text;
+			vo.id = txt_id.text;
+			vo.name = txt_name.text;
+			vo.phone = txt_phone.text;
+			vo.state = txt_state.text;				}				var e_saveContacts:SaveContactsEvent = new SaveContactsEvent( vo );					 e_saveContacts.dispatch();			}			/* I clear all of the form input fields, and the error strings, if any */			private function clear():void			{				model.selectedContacts = new ContactsVO();				
+			txt_address.text = "";
+			txt_address.errorString = "";
+			
+			txt_city.text = "";
+			txt_city.errorString = "";
+			
+			txt_email.text = "";
+			txt_email.errorString = "";
+			
+			txt_id.text = "";
+			txt_id.errorString = "";
+			
+			txt_name.text = "";
+			txt_name.errorString = "";
+			
+			txt_phone.text = "";
+			txt_phone.errorString = "";
+			
+			txt_state.text = "";
+			txt_state.errorString = "";
+						}		]]>	</mx:Script>	<mx:Panel width="100%" height="100%" layout="vertical" title="Contacts Details">		<!-- Contacts Form -->		<mx:Form id="form_Contacts" width="100%" height="100%">			
+				<mx:FormItem label="Address" required="false" width="100%">
+					<mx:TextInput id="txt_address" text="{ model.SELECTED_CONTACTS.address }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="City" required="false" width="100%">
+					<mx:TextInput id="txt_city" text="{ model.SELECTED_CONTACTS.city }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Email" required="false" width="100%">
+					<mx:TextInput id="txt_email" text="{ model.SELECTED_CONTACTS.email }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Id" required="true" width="100%">
+					<mx:TextInput id="txt_id" text="{ model.SELECTED_CONTACTS.id }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Name" required="false" width="100%">
+					<mx:TextInput id="txt_name" text="{ model.SELECTED_CONTACTS.name }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Phone" required="false" width="100%">
+					<mx:TextInput id="txt_phone" text="{ model.SELECTED_CONTACTS.phone }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="State" required="false" width="100%">
+					<mx:TextInput id="txt_state" text="{ model.SELECTED_CONTACTS.state }" width="100%"/>
+				</mx:FormItem>		</mx:Form>		<!-- Contacts Action Buttons -->		<mx:ControlBar>						<mx:Button				label="Save"				click="validateAndSubmit()"/>						<mx:Button				label="Clear"				click="clear()"/>		</mx:ControlBar>	</mx:Panel>	<!--All the validators for required inputs-->	
+				<mx:StringValidator id="addressV" source="{ txt_address }" required="true" property="text"/>
+				<mx:StringValidator id="cityV" source="{ txt_city }" required="true" property="text"/>
+				<mx:StringValidator id="emailV" source="{ txt_email }" required="true" property="text"/>
+				<mx:StringValidator id="idV" source="{ txt_id }" required="true" property="text"/>
+				<mx:StringValidator id="nameV" source="{ txt_name }" required="true" property="text"/>
+				<mx:StringValidator id="phoneV" source="{ txt_phone }" required="true" property="text"/>
+				<mx:StringValidator id="stateV" source="{ txt_state }" required="true" property="text"/></mx:VBox>       

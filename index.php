@@ -1,0 +1,321 @@
+<?php
+/*
+ * @TODO: July 11th 2009
+ * 
+ * 1. Edit php service template and add post switch statement on REST part.
+ * 2. Add my jquery pages plugin to the main navigation of the site.
+ * 3. Fix boxes to make all drag drop.
+ * 4. Use 960.css style
+ * 5. Create class to display recent updates to CodeGen repo
+ * 6. Create automation script that downloads all the recent versions
+ * 7. Create a update checker.
+ * 8. Incorporate Flex service browser and api tester.
+ * 9. Create sql schema export.
+ * 10. Create class to find table relationships using rails method of
+ * 		has_many:
+ * 		has_one:
+ * 		belongs_to:
+ * 		has_and_belongs_to_many:
+ * 		
+ *  
+
+ * @TODO: Auguest 7th 2009
+ * 1. Upon successful generation of flex application, save the information in the sqlite database cg_historys table
+ * 
+ */
+
+error_reporting(0);
+
+
+/**
+ * @name  	index.php
+ * @author  Jonnie Spratley
+ * @version 1.9
+ * @description - This is a REST Service file for the CodeGen front-end, both html and Flex versions.
+ *
+ */
+
+require_once 'library/CodeGen.php';
+require_once 'library/ClassInspector.php';
+require_once 'library/ConfigManager.php';
+require_once 'library/CGManager.php';
+require_once 'library/FileSystemService.php';
+require_once 'library/HTMLHelper.php';
+require_once 'library/MySQLService.php';
+require_once 'library/TemplateManager.php';
+
+$configMessage = '';
+$schemaMessage = '';
+$appMessage = '';
+$configLocation = '';
+$schemaLocation = '';
+$appOutputLog = '';
+$mode = '';
+
+$host = '';
+$user = '';
+$pass = '';
+$database = '';
+$app = '';
+$namespace = '';
+$endpoint = '';
+$copywrite = '';
+$framework = '';
+
+$sqlitePath = dirname ( __FILE__ ) . DIRECTORY_SEPARATOR . 'CodeGen.sqlite';
+$outputPath = dirname ( __FILE__ ) . DIRECTORY_SEPARATOR . TemplateManager::$CONFIG_OUTPUT;
+
+$codegen = new CodeGen ( $sqlitePath );
+$mysql = new MySQLService ( );
+switch ($_SERVER ['REQUEST_METHOD']) {
+	
+	case 'GET' :
+		$getData = $_GET;
+		
+		if (isset ( $_GET ['m'] )) {
+			$mode = $_GET ['m'];
+			unset ( $getData ['m'] );
+		}
+		
+		switch ($mode) {
+			
+			case 'getHTMLDemo' :
+				return ConfigManager::getHtmlDemoURL ();
+				break;
+			
+			/* ===========================================================================================
+             * getDatabases - @param $host, $user, $pass - Your MySQL credentials
+             * =========================================================================================== */
+			case 'getDatabases' :
+				
+				$mysql->connect ( $_GET ['h'], $_GET ['u'], $_GET ['p'] );
+				$databases = $mysql->getDatabases ();
+				
+				echo json_encode ( $databases );
+				break;
+			
+			/* ===========================================================================================
+             * getTables - @param $host, $user, $pass - Your MySQL credentials, $database - The database
+             * =========================================================================================== */
+			case 'getTables' :
+				
+				$mysql->connect ( $_GET ['h'], $_GET ['u'], $_GET ['p'] );
+				$tables = $mysql->getTables ( $_GET ['d'] );
+				
+				echo json_encode ( $tables );
+				break;
+			
+			case 'getDatabasesAndTables' :
+
+				$mysql->connect ( $_GET ['h'], $_GET ['u'], $_GET ['p'] );
+				$tables = $mysql->getDatabasesAndTables( $_GET ['d'] );
+
+				echo json_encode ( $tables );
+				break;
+			/* ===========================================================================================
+             * getTables - @param $host, $user, $pass - Your MySQL credentials, $database - The database
+             * =========================================================================================== */
+			case 'checkDatabase' :
+				
+				break;
+			
+			/* ===========================================================================================
+             * getConfig - @param $database - The database the config file is for.
+             * =========================================================================================== */
+			case 'getConfig' :
+				$config = file_get_contents ( $outputPath . ucfirst ( $_GET ['d'] ) );
+				echo htmlentities ( $config );
+				break;
+			
+			/* ===========================================================================================
+             * getSchema - @param database - The database the config file is for.
+             * =========================================================================================== */
+			case 'getSchema' :
+				$schema = file_get_contents ( $outputPath . ucfirst ( $_GET ['d'] ) );
+				
+				echo htmlentities ( $schema );
+				break;
+			
+			/* ===========================================================================================
+             * getTemplates - The location of the templates
+             * =========================================================================================== */
+			case 'getTemplates' :
+				$filesSvc = new FileSystemService ( );
+				$templates = $filesSvc->browseDirectory ( dirname ( __FILE__ ) . DIRECTORY_SEPARATOR . 'Templates', true );
+				
+				echo json_encode ( $templates );
+				break;
+			
+			/* ===========================================================================================
+             * getOutput - The generated files 
+             * =========================================================================================== */
+			case 'getOutput' :
+				$filesSvc = new FileSystemService ( );
+				$output = $filesSvc->browseDirectory ( dirname ( __FILE__ ) . DIRECTORY_SEPARATOR . 'output', true );
+				
+				echo json_encode ( $output );
+				break;
+			
+			/* ===========================================================================================
+             * getDirectory -
+             * =========================================================================================== */
+			case 'getDirectory' :
+				$filesSvc = new FileSystemService ( );
+				$output = $filesSvc->browseDirectory ( $_GET ['p'], true );
+				
+				echo json_encode ( $output );
+				break;
+			
+			/* ===========================================================================================
+             * getServices -
+             * =========================================================================================== */
+			case 'getServices' :
+				$filesSvc = new FileSystemService ( );
+				$output = $filesSvc->browseDirectory ( $_GET ['p'], true );
+				
+				echo json_encode ( $output );
+				break;
+			
+			/* ===========================================================================================
+             * saveSettings -
+             * =========================================================================================== */
+			case 'saveSettings' :
+				$settings = CodeGen::saveSettings ( $_GET ['s'] );
+				echo json_encode ( array ($settings ) );
+				break;
+			
+			/* ===========================================================================================
+             * readFile -
+             * =========================================================================================== */
+			case 'readFile' :
+				$file = FileSystemService::readFile ( $_GET ['f'] );
+				
+				echo htmlentities ( $file );
+				break;
+			
+			/* ===========================================================================================
+             * inspectClass -
+             * =========================================================================================== */
+			case 'inspectClass' :
+				$file = ClassInspector::inspectClass ( $_GET ['f'] );
+				echo json_encode ( array ($file ) );
+				break;
+			
+			/* ===========================================================================================
+             * callClassFunction -
+             * =========================================================================================== */
+			case 'callClassFunction' :
+				$request = ClassInspector::call ( $_GET ['_class'], $_GET ['_func'], $_GET ['_args'] );
+				$file [] = array ('methodCalled' => $_GET ['_func'], 'methodResults' => $request );
+				
+				echo json_encode ( $request );
+				break;
+			
+			/* ===========================================================================================
+             * If no mode is called, then just render the regular webpage
+             * =========================================================================================== */
+			default :
+				include 'includes/cg_index.php';
+				break;
+		
+		}
+		
+		break; //ends get switch
+	
+
+	case 'POST' :
+		$postData = $_POST;
+		
+		if (isset ( $_POST ['m'] )) {
+			$mode = $_POST ['m'];
+			unset ( $postData ['m'] );
+		}
+		
+		switch ($mode) {
+			/* ===========================================================================================
+             * generateConfig
+             * =========================================================================================== */
+			case 'generateConfig' :
+				$configLocation = CodeGen::writeConfig ( $outputPath, $_POST ['h'],/*Host*/ 
+																	$_POST ['u'], /*User*/ 
+																	$_POST ['p'], /*Pass */ 
+																	$_POST ['d'], /*Database*/ 
+																	$_POST ['a'], /*Application*/ 
+																	$_POST ['e'], /*Endpoint*/ 
+																	$_POST ['n'], /*Namespace*/ 
+																	$_POST ['f'], /*Framework*/ 
+																	$_POST ['c'] ); /*Copywrite*/
+				
+				echo json_encode ( $configLocation );
+				break;
+			
+			/* ===========================================================================================
+             * generateSchema - @param $outputPath - The location where you want to output the schema
+             * =========================================================================================== */
+			case 'generateSchema' :
+				
+				$codegen->start ( $outputPath, $_POST ['d'] );
+				$schema = $codegen->writeSchema ( $outputPath );
+				
+				echo json_encode ( $schema );
+				break;
+			
+			/* ===========================================================================================
+             * generateApplication - @param $outputPath, $database - The database and output path
+             * =========================================================================================== */
+			case 'generateApplication' :
+				
+				$codegen->start ( $outputPath, $_POST ['d'] );
+				$appOutputLog = $codegen->generateCode ( $outputPath, $_POST ['d'] );
+				
+				//echo htmlentities( json_encode ( $appOutputLog ) );
+				//echo $appOutputLog;
+				break;
+			/* ===========================================================================================
+             * saveSettings - @param Array - The name value pair array of settings to be saved.
+             * =========================================================================================== */
+			case 'saveSettings' :
+				$service = $codegen->saveSettings ( $postData );
+				echo $service;
+				break;
+			
+			/* ===========================================================================================
+	          * saveApp - @param 
+             * =========================================================================================== */
+			case 'saveApp' :
+				$service = $codegen->saveApp ( $_POST ['name'], $_POST ['url'], $_POST ['config'], $_POST ['schema'] );
+				echo $service;
+				break;
+			
+			/* ===========================================================================================
+	          * removeApp - @param 
+             * =========================================================================================== */
+			case 'removeApp' :
+				$service = $codegen->removeApp ( $_POST ['id'] );
+				echo $service;
+				break;
+			
+			/* ===========================================================================================
+	             * writeFile -
+	             * =========================================================================================== */
+			case 'writeFile' :
+				$file = FileSystemService::writeFile ( $_POST ['f'], $_POST ['c'] );
+				echo json_encode ( $file );
+				break;
+		
+		}
+		
+		break; //ends post switch
+	
+
+	/* ===========================================================================================
+     * If no mode is called, then just render the regular webpage
+     * =========================================================================================== */
+	default :
+		include 'includes/cg_index.php';
+		break;
+
+} //Ends request switch
+
+
+?>

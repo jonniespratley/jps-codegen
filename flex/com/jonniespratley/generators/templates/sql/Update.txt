@@ -1,0 +1,3 @@
+UPDATE @database.@table
+SET @columnname = @columnvalue
+WHERE @condition = @value

@@ -1,0 +1,23 @@
+/**
+@COPYWRITE
+*/
+package @NAMESPACE_AS3.events
+{
+	import com.adobe.cairngorm.control.CairngormEvent;
+	import flash.events.Event;
+		
+	public final class Get@TABLE_UFIRSTEvent extends CairngormEvent
+	{
+		public static const GET_@EVENTCONST_EVENT:String = "GET_@EVENTCONST_EVENT";
+
+		public function Get@TABLE_UFIRSTEvent()
+		{
+			super( GET_@EVENTCONST_EVENT );
+		}
+		
+		override public function clone():Event
+		{
+			return new Get@TABLE_UFIRSTEvent();
+		}
+	}
+}

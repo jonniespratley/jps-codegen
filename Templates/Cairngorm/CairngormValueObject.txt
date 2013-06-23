@@ -1,0 +1,1 @@
+/**@COPYWRITE*/package @NAMESPACE_AS3.vo{		[RemoteClass(alias="@NAMESPACE_AS3.vo.@TABLE_UFIRSTVO")]		[Bindable]	public class @TABLE_UFIRSTVO extends Object	{		@FIELDVARS				public function  @TABLE_UFIRSTVO( obj:Object = null )		{						if ( obj != null )			{				@FIELDS			} 		}	}}       

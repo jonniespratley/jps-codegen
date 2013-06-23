@@ -1,0 +1,147 @@
+@import url('960.css');
+@import url('text.css');
+@import url('reset.css');
+
+/* ===========================================================================================
+ * Filename:
+ * Template:
+ * Author:
+ * Date Created:
+ * Media: screen
+ * ----
+ * Notes:
+ =========================================================================================== */
+ 
+ 
+ /* @group Base */
+ 
+ 
+ /* @end */
+ 
+ /* @group Global */
+ 
+ 
+ /* @end */
+ 
+ /* @group Sections */
+ 
+ 
+ /* @end */
+ 
+ /* @group Navagation */
+ .tabs {
+ 	margin:0;
+ 	padding:0;
+ 	overflow: hidden;
+ 	border-bottom: 1px solid #b2b2b2;
+ }
+
+ .tabs ul {
+ 	margin: 0;
+ 	padding: 0;
+ 	padding-left: 10px;
+ 	list-style-type: none;
+ }
+
+ .tabs li {
+ 	display: inline;
+ 	margin: 0;
+ }
+
+ .tabs li a {
+ 	float: left;
+ 	display: block;
+ 	text-decoration: none;
+ 	margin: 0;
+ 	padding: 7px 8px;
+ 	border-right: 1px solid #b2b2b2;
+ 	color: #333333;
+ 	background: #fefefe;
+ }
+
+ .tabs li a:visited {
+ 	color: #333333;
+ }
+
+ .tabs li a:hover, .tabs li a.selected {
+ 	background: #e9e9e9;
+ 	color: #000;
+ }
+ 
+ /* @end */
+ 
+ /* @group Tables */
+ 
+ 
+ /* @end */
+ 
+ /* @group Forms */
+ 
+ 
+ /* @end */
+ 
+ /* @group Slider */
+ 
+ /**
+  * This <div> element is wrapped by jCarousel around the list
+  * and has the classname "jcarousel-container".
+  */
+ .jcarousel-container {
+     position: relative;
+ }
+
+ .jcarousel-clip {
+     z-index: 2;
+     padding: 0;
+     margin: 0;
+     overflow: hidden;
+     position: relative;
+ }
+
+ .jcarousel-list {
+     z-index: 1;
+     overflow: hidden;
+     position: relative;
+     top: 0;
+     left: 0;
+     margin: 0;
+     padding: 0;
+ }
+
+ .jcarousel-list li,
+ .jcarousel-item {
+     float: left;
+     list-style: none;
+     /* We set the width/height explicitly. No width/height causes infinite loops. */
+     width: 330px;
+     height: 220px;
+ }
+
+ /**
+  * The buttons are added dynamically by jCarousel before
+  * the <ul> list (inside the <div> described above) and
+  * have the classnames "jcarousel-next" and "jcarousel-prev".
+  */
+ .jcarousel-next {
+     z-index: 3;
+     display: none;
+ }
+
+ .jcarousel-prev {
+     z-index: 3;
+     display: none;
+ }
+ 
+ 
+ /* @end */
+ 
+ /* @group Misc */
+ 
+ 
+ /* @end */
+ 
+ /* @group Colors */
+ 
+ 
+ /* @end */
+ 

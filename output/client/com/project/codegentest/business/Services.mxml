@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Your Copywrite information
+-->
+<cairngorm:ServiceLocator xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:cairngorm="com.adobe.cairngorm.business.*" >
+	
+   
+			<mx:HTTPService
+    			id="ContactsService"
+    			url="http://localhost/project/services/ContactsService.php"
+    			useProxy="false"
+    			showBusyCursor="true"/>
+			
+			<mx:HTTPService
+    			id="ProjectsService"
+    			url="http://localhost/project/services/ProjectsService.php"
+    			useProxy="false"
+    			showBusyCursor="true"/>
+			
+
+</cairngorm:ServiceLocator>

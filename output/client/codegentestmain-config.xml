@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<flex-config>
+	<compiler>
+
+
+		<!-- List of path elements that form the roots of ActionScript class hierarchies. -->
+
+      <source-path>
+         <path-element>.</path-element>
+      </source-path>
+
+		<debug>true</debug>
+		<include-libraries>
+			<library>libs/Cairngorm.swc</library>
+			<library>libs/as3json.swc</library>
+		</include-libraries>
+	</compiler>
+	
+
+		
+		
+
+		<!-- Metadata added to SWFs via the SWF Metadata tag. -->
+		<metadata>
+			<title>Adobe Flex 3 Application</title>
+			<description>http://www.adobe.com/products/flex</description>
+			<publisher>unknown</publisher>
+			<creator>unknown</creator>
+			<language>EN</language>
+		</metadata>
+	
+
+		<!-- A list of runtime shared library URLs to be loaded before applications start. -->
+		<!--
+		   <runtime-shared-libraries>
+		      <url>string</url>
+		      <url>string</url>
+		   </runtime-shared-libraries>
+		   -->
+</flex-config>

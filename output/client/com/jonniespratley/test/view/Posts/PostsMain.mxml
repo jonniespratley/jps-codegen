@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+PostsMain.mxml I am the main holder for both the form and list.
+This is a sample application.
+-->
+<mx:HDividedBox
+	width="100%"
+	height="100%"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:Posts="com.jonniespratley.test.view.Posts.*">
+
+	<Posts:PostsList id="view_PostsList"/>
+	<Posts:PostsForm id="view_PostsForm"/>
+
+</mx:HDividedBox>

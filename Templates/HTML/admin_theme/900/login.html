@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>D-FreshCMS - Login</title>
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<link rel="stylesheet" type="text/css" href="css/doubleblue.css" title="styles1" media="screen" />
+<link rel="alternate stylesheet" type="text/css" href="css/babyblue.css" title="styles2" media="screen" />	
+<link rel="alternate stylesheet" type="text/css" href="css/basicgrey.css" title="styles3" media="screen" />	
+<link rel="alternate stylesheet" type="text/css" href="css/skyblue.css" title="styles4" media="screen" />
+<link rel="alternate stylesheet" type="text/css" href="css/basicblack.css" title="styles5" media="screen" />
+<link rel="alternate stylesheet" type="text/css" href="css/orangetaste.css" title="styles6" media="screen" />
+<script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="js/supersleight.js"></script>
+<script type="text/javascript" src="js/jquery.example.min.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="js/styleswitch.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+	$(document).ready(function(){
+			$('#username').example('Username');	
+			$('#password').example('Password');
+	});
+/* ]]> */
+</script>
+</head>
+
+<body>
+    <div id="wrap">
+        <div class="msg-warning">
+            <img src="images/icons/22/messagebox_warning.png" alt=""/>
+            <p>Please fill in all of the fields!</p>
+        </div>    
+        <div class="msg-error">
+            <img src="images/icons/22/remove.png" alt=""/>
+            <p>Wrong username or password!</p>
+        </div>
+        
+        <div class="block">
+            <form action="index.html" method="post">
+            <div class="left"></div>
+            <div class="right">
+                <div class="div-row">
+                	<input type="text" id="username" name="username" />
+                </div>
+                <div class="div-row">
+                     <input type="text" id="password" name="password" />
+                </div>
+                <div class="rm-row">
+                    <input type="checkbox" value="c" name="rm" id="remember"/> <label for="remember">Remember me?</label>
+                </div>
+                <div class="send-row">
+                    <button id="login" value="" type="submit" name="login"></button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

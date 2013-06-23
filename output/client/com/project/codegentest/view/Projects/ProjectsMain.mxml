@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ProjectsMain.mxml I am the main holder for both the form and list.
+Your Copywrite information
+-->
+<mx:HDividedBox
+	width="100%"
+	height="100%"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:Projects="com.project.codegentest.view.Projects.*">
+
+	<Projects:ProjectsList id="view_ProjectsList"/>
+	<Projects:ProjectsForm id="view_ProjectsForm"/>
+
+</mx:HDividedBox>

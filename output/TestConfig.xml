@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+  <host>localhost</host>
+  <user>root</user>
+  <pass>fred</pass>
+  <database>test</database>
+  <application>Test</application>
+  <namespace>com.project.codegentest</namespace>
+  <endpoint>http://localhost/project/services</endpoint>
+  <framework>Cairngorm</framework>
+  <copywrite>Your Copywrite information</copywrite>
+</config>

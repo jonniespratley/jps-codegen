@@ -1,0 +1,3 @@
+SELECT @expression
+FROM @database.@table
+JOIN @conditions

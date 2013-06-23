@@ -1,0 +1,62 @@
+<?php 
+require_once '@TABLE_UFIRSTService.php';
+require_once 'vo/@TABLE_UFIRSTVO.php';
+
+$service = new @TABLE_UFIRSTService();
+$result = '';
+$recordList = '';
+
+if ( isset($_POST['save']) )
+{
+	unset( $_POST['save'] );
+	$recordValues = $_POST;
+	$result = $service->save@TABLE_UFIRST( $recordValues );	
+}
+
+$recordsArray = $service->getAll@TABLE_UFIRST();
+$recordVO = new @TABLE_UFIRSTVO();
+
+for ( $i = 0; $i < count( $recordsArray ); $i++ ) 
+{
+	$recordVO = $recordsArray[ $i ];
+	$recordList .= '<tr id="'.$recordVO->@PRIMARY_KEY.'">';
+
+	@HTML_FIELD_LIST
+
+	$recordList .= '<td class="actions">';
+	$recordList .= '<button onclick="window.location=\'@TABLE_UFIRSTForm.php?record_id='.$recordVO->@PRIMARY_KEY.'\'">Edit</button>';
+	$recordList .= '<button onclick=" remove('.$recordVO->@PRIMARY_KEY.')">Delete</button></td>';
+	$recordList .= '</tr>';
+}
+?>
+
+<?php include '_header.php'; ?> 
+
+<script type="text/javascript">
+var service = '@TABLE_UFIRSTService.php';
+function remove( id ){
+	$.post( service, { m: 'remove', id: id }, function(data){
+		if ( data ) {
+			$('#'+id).fadeOut('slow');
+		} else {
+			alert( 'There was a problem!' );
+		}
+	});
+}
+</script>
+
+
+ 
+   <h1>@TABLE_UFIRST</h1>
+	<a href="@TABLE_UFIRSTForm.php">New @TABLE_UFIRST</a>
+	<a href="@DATABASEMain.php">Back</a>
+
+	<table width="100%" border="0">
+		<tr>
+			@HTML_FIELD_HEADER   
+		</tr>
+		<?php echo $recordList; ?>
+	</table>
+	 
+ 
+<?php include '_footer.php'; ?>

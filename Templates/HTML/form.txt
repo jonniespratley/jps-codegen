@@ -1,0 +1,33 @@
+<?php 
+require_once "@TABLE_UFIRSTService.php";
+require_once "vo/@TABLE_UFIRSTVO.php";
+
+@HTML_CLEAR_VARS
+$record_id = '';
+if ( isset($_GET[ '@PRIMARY_KEY' ]) )
+{
+	$record_id = isset($_GET[ '@PRIMARY_KEY' ]);
+	$service = new @TABLE_UFIRSTService();
+	$recordVO = new @TABLE_UFIRSTVO();
+	$record = $service->getOne@TABLE_UFIRST( $record_id ); 
+	$recordVO = $record[ 0 ];//First object in array
+	
+	@HTML_SET_VARS	
+}
+?>
+
+<?php include '_header.php'; ?>
+ 
+   <form id="form@TABLE_UFIRST" name="form@TABLE_UFIRST" method="post" action="@TABLE_UFIRSTList.php">
+
+		@HTML_FORM_FIELDS
+
+	    <div>
+	    	<input type="hidden" name="@PRIMARY_KEY" value="<?php echo $record_id; ?>"/>
+		   <input name="save" type="submit" value="Save" />
+			<input type="button" onclick="window.location='@TABLE_UFIRSTList.php'" value="Cancel"/>
+	    </div>
+	</form>
+	
+  
+<?php include '_footer.php'; ?>

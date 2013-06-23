@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+PostsList.mxml: This component holds listing all records in the Posts table and removing a Posts record
+Test app by jonnie spratley 
+-->
+<mx:VBox
+	width="100%"
+	height="100%"
+	creationComplete="init()"
+	xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+
+			import com.jonniespratley.testapp.events.*;
+			import com.jonniespratley.testapp.vo.*;
+			import com.jonniespratley.testapp.model.ModelLocator;
+
+			[Bindable] private var model:ModelLocator = ModelLocator.getInstance();
+
+			/* I add an event listener to the datagrid as well as call for the @TABLE records */
+			private function init():void
+			{
+				getPosts();
+				dg_Posts.addEventListener( KeyboardEvent.KEY_DOWN, keyboardHandler );
+			}
+			
+			/* I get all of the Posts from the database and display them in a datagrid */
+			private function getPosts():void
+			{
+				var e_getPosts:GetPostsEvent = new GetPostsEvent();
+					 e_getPosts.dispatch();
+			}
+
+			/* I remove a Posts from the database */
+			private function removePosts( item:Object ):void
+			{
+				var vo:PostsVO = new PostsVO( item );
+				var voIndex:int = dg_Posts.selectedIndex;
+				var e_removePosts:RemovePostsEvent = new RemovePostsEvent( vo, voIndex );
+					 e_removePosts.dispatch();
+			}
+
+			/* I set the current selected Posts on the model, for all areas of application */
+			private function onSelect( event:Event ):void
+			{
+				 model.selectedPosts = new PostsVO( event.currentTarget.selectedItem );
+			}
+
+			/* I handle when the keyboard delete key is pressed, I remove a Posts, only if it is selected first */
+			private function keyboardHandler( event:KeyboardEvent ):void
+			{
+				if ( event.keyCode == 8 &&  dg_Posts.selectedIndex != -1 )
+				{
+					removePosts( dg_Posts.selectedItem );
+				}
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Panel width="100%" height="100%" layout="vertical" title="Posts List" resizeEffect="Resize">
+		
+		<!-- Posts DataGrid -->
+		<mx:DataGrid id="dg_Posts" 
+			width="100%" 
+			height="100%" 
+			dataProvider="{ model.PostsCollection }" 
+			change="onSelect( event )">
+			<mx:columns>
+				
+			<mx:DataGridColumn headerText="Created" dataField="created"/>
+			<mx:DataGridColumn headerText="Id" dataField="id"/>
+			<mx:DataGridColumn headerText="Post_content" dataField="post_content"/>
+			<mx:DataGridColumn headerText="Post_title" dataField="post_title"/>
+			<mx:DataGridColumn headerText="Updated" dataField="updated"/>
+			</mx:columns>
+		</mx:DataGrid>
+
+		
+		<!-- Posts Action Buttons-->
+		<mx:ControlBar>
+			
+			<mx:Button label="Refresh" 
+				click="getPosts()"/>
+			
+			<mx:Button label="Remove" 
+				click="removePosts( dg_Posts.selectedItem )" 
+				enabled="{ dg_Posts.selectedIndex != -1 ? true : false }"/>
+		</mx:ControlBar>
+		
+	</mx:Panel>
+	
+</mx:VBox>       

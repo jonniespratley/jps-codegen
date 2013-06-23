@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+-->
+<mx:Application
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:Cg_apps="com.project.codegentest.view.Cg_apps.*" 
+	xmlns:Cg_assets="com.project.codegentest.view.Cg_assets.*" 
+	xmlns:Cg_history="com.project.codegentest.view.Cg_history.*" 
+	xmlns:Cg_settings="com.project.codegentest.view.Cg_settings.*" 
+	xmlns:Cg_users="com.project.codegentest.view.Cg_users.*" >
+
+	<mx:ApplicationControlBar dock="true">
+		<mx:LinkBar dataProvider="{ vs_main }"/>
+	</mx:ApplicationControlBar>
+
+	<mx:ViewStack id="vs_main" width="100%" height="100%">
+		
+			<Cg_apps:Cg_appsMain  
+				label="Cg_apps"/>
+			<Cg_assets:Cg_assetsMain  
+				label="Cg_assets"/>
+			<Cg_history:Cg_historyMain  
+				label="Cg_history"/>
+			<Cg_settings:Cg_settingsMain  
+				label="Cg_settings"/>
+			<Cg_users:Cg_usersMain  
+				label="Cg_users"/>
+	</mx:ViewStack>
+	
+</mx:Application>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+ContactsList.mxml: This component holds listing all records in the Contacts table and removing a Contacts record
+Your Copywrite information 
+-->
+<mx:VBox
+	width="100%"
+	height="100%"
+	creationComplete="init()"
+	xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+
+			import com.project.codegentest.events.*;
+			import com.project.codegentest.vo.*;
+			import com.project.codegentest.model.ModelLocator;
+
+			[Bindable] private var model:ModelLocator = ModelLocator.getInstance();
+
+			/* I add an event listener to the datagrid as well as call for the @TABLE records */
+			private function init():void
+			{
+				getContacts();
+				dg_Contacts.addEventListener( KeyboardEvent.KEY_DOWN, keyboardHandler );
+			}
+			
+			/* I get all of the Contacts from the database and display them in a datagrid */
+			private function getContacts():void
+			{
+				var e_getContacts:GetContactsEvent = new GetContactsEvent();
+					 e_getContacts.dispatch();
+			}
+
+			/* I remove a Contacts from the database */
+			private function removeContacts( item:Object ):void
+			{
+				var vo:ContactsVO = new ContactsVO( item );
+				var voIndex:int = dg_Contacts.selectedIndex;
+				var e_removeContacts:RemoveContactsEvent = new RemoveContactsEvent( vo, voIndex );
+					 e_removeContacts.dispatch();
+			}
+
+			/* I set the current selected Contacts on the model, for all areas of application */
+			private function onSelect( event:Event ):void
+			{
+				 model.selectedContacts = new ContactsVO( event.currentTarget.selectedItem );
+			}
+
+			/* I handle when the keyboard delete key is pressed, I remove a Contacts, only if it is selected first */
+			private function keyboardHandler( event:KeyboardEvent ):void
+			{
+				if ( event.keyCode == 8 &&  dg_Contacts.selectedIndex != -1 )
+				{
+					removeContacts( dg_Contacts.selectedItem );
+				}
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Panel width="100%" height="100%" layout="vertical" title="Contacts List" resizeEffect="Resize">
+		
+		<!-- Contacts DataGrid -->
+		<mx:DataGrid id="dg_Contacts" 
+			width="100%" 
+			height="100%" 
+			dataProvider="{ model.ContactsCollection }" 
+			change="onSelect( event )">
+			<mx:columns>
+				
+			<mx:DataGridColumn headerText="Address" dataField="address"/>
+			<mx:DataGridColumn headerText="City" dataField="city"/>
+			<mx:DataGridColumn headerText="Email" dataField="email"/>
+			<mx:DataGridColumn headerText="Id" dataField="id"/>
+			<mx:DataGridColumn headerText="Name" dataField="name"/>
+			<mx:DataGridColumn headerText="Phone" dataField="phone"/>
+			<mx:DataGridColumn headerText="State" dataField="state"/>
+			</mx:columns>
+		</mx:DataGrid>
+
+		
+		<!-- Contacts Action Buttons-->
+		<mx:ControlBar>
+			
+			<mx:Button label="Refresh" 
+				click="getContacts()"/>
+			
+			<mx:Button label="Remove" 
+				click="removeContacts( dg_Contacts.selectedItem )" 
+				enabled="{ dg_Contacts.selectedIndex != -1 ? true : false }"/>
+		</mx:ControlBar>
+		
+	</mx:Panel>
+	
+</mx:VBox>       

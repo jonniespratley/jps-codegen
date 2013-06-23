@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Your Copywrite information
+-->
+<mx:Application
+	layout="vertical"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:business="com.project.codegentest.business.*" 
+	xmlns:control="com.project.codegentest.control.*"
+	
+			xmlns:Contacts="com.project.codegentest.view.Contacts.*" 
+			xmlns:Projects="com.project.codegentest.view.Projects.*" >
+
+	<business:Services/>
+	
+	<control:TestController/>
+
+	<mx:ApplicationControlBar dock="true">
+		<mx:LinkBar dataProvider="{ vs_main }"/>
+	</mx:ApplicationControlBar>
+
+	<mx:ViewStack id="vs_main" width="100%" height="100%">
+		
+			<Contacts:ContactsMain  
+				label="Contacts"/>
+			<Projects:ProjectsMain  
+				label="Projects"/>
+	</mx:ViewStack>
+	
+</mx:Application>

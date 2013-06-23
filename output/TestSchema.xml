@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<schema name="test">
+  <table name="contacts">
+    <field name="id" type="mediumint unsigned" required="true" key="pri" extra="auto_increment"/>
+    <field name="name" type="varchar" required="false"/>
+    <field name="email" type="varchar" required="false"/>
+    <field name="phone" type="varchar" required="false"/>
+    <field name="address" type="varchar" required="false"/>
+    <field name="city" type="varchar" required="false"/>
+    <field name="state" type="varchar" required="false"/>
+  </table>
+  <table name="projects">
+    <field name="created" type="varchar" required="false"/>
+    <field name="modified" type="varchar" required="false"/>
+    <field name="date_created" type="varchar" required="false"/>
+    <field name="date_modified" type="varchar" required="false"/>
+    <field name="project" type="varchar" required="false"/>
+    <field name="developer" type="varchar" required="false"/>
+    <field name="description" type="text" required="false"/>
+    <field name="modifieddate" type="varchar" required="false"/>
+    <field name="createddate" type="varchar" required="false"/>
+    <field name="status" type="varchar" required="false"/>
+    <field name="readme" type="int" required="false"/>
+    <field name="milestones" type="int" required="false"/>
+    <field name="tasks" type="int" required="false"/>
+    <field name="published" type="int" required="false"/>
+    <field name="projectid" type="varchar" required="false"/>
+    <field name="notes" type="varchar" required="false"/>
+    <field name="title" type="varchar" required="false"/>
+    <field name="demo_url" type="varchar" required="false"/>
+    <field name="namespace" type="varchar" required="false"/>
+    <field name="repo_url" type="varchar" required="false"/>
+    <field name="local_url" type="varchar" required="false"/>
+    <field name="live_url" type="varchar" required="false"/>
+    <field name="type" type="varchar" required="false"/>
+    <field name="technologies" type="varchar" required="false"/>
+  </table>
+</schema>

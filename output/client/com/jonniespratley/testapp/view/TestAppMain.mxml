@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Test app by jonnie spratley
+-->
+<mx:Application
+	layout="vertical"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:business="com.jonniespratley.testapp.business.*" 
+	xmlns:control="com.jonniespratley.testapp.control.*"
+	
+			xmlns:Posts="com.jonniespratley.testapp.view.Posts.*" 
+			xmlns:Uploads="com.jonniespratley.testapp.view.Uploads.*" >
+
+	<business:Services/>
+	
+	<control:TestAppController/>
+
+	<mx:ApplicationControlBar dock="true">
+		<mx:LinkBar dataProvider="{ vs_main }"/>
+	</mx:ApplicationControlBar>
+
+	<mx:ViewStack id="vs_main" width="100%" height="100%">
+		
+			<Posts:PostsMain  
+				label="Posts"/>
+			<Uploads:UploadsMain  
+				label="Uploads"/>
+	</mx:ViewStack>
+	
+</mx:Application>

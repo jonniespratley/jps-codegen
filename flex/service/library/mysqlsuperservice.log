@@ -1,0 +1,5 @@
+
+[Mon Aug 10 2009 16:26:29] [sql] SHOW STATUS LIKE '%Threads%'
+[Mon Aug 10 2009 16:26:38] [sql] SHOW STATUS LIKE '%Threads%'
+[Mon Aug 10 2009 16:38:23] [rename table] ALTER TABLE `test`.`tags` RENAME `post_tags`
+[Mon Aug 10 2009 16:40:03] [rename table] ALTER TABLE `test`.`tags` RENAME `post_tags`

@@ -1,0 +1,29 @@
+/**
+@COPYWRITE
+*/
+package @NAMESPACE_AS3.events
+{
+	import com.adobe.cairngorm.control.CairngormEvent;
+	import flash.events.Event;
+	import @NAMESPACE_AS3.vo.*;
+		
+	public final class Remove@TABLE_UFIRSTEvent extends CairngormEvent
+	{
+		public static const REMOVE_@EVENTCONST_EVENT:String = "REMOVE_@EVENTCONST_EVENT";
+
+		public var vo:@TABLE_UFIRSTVO;
+		public var index:int;
+		
+		public function Remove@TABLE_UFIRSTEvent( vo:@TABLE_UFIRSTVO, index:int )
+		{
+			super( REMOVE_@EVENTCONST_EVENT );
+			this.vo =  vo;
+			this.index = index;
+		}
+		
+		override public function clone():Event
+		{
+			return new Remove@TABLE_UFIRSTEvent( vo, index );
+		}
+	}
+}

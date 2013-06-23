@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This is a sample application.
+-->
+<cairngorm:ServiceLocator xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:cairngorm="com.adobe.cairngorm.business.*" >
+	
+   
+			<mx:HTTPService
+    			id="PostsService"
+    			url="services//PostsService.php"
+    			useProxy="false"
+    			showBusyCursor="true"/>
+			
+			<mx:HTTPService
+    			id="UploadsService"
+    			url="services//UploadsService.php"
+    			useProxy="false"
+    			showBusyCursor="true"/>
+			
+
+</cairngorm:ServiceLocator>

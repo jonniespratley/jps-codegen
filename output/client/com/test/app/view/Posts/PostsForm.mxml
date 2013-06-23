@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?><!--PostsForm.mxml: This component holds viewing details and creating or updating a record in the Posts table.This is a sample application.--><mx:VBox	width="100%"	height="100%"	creationComplete="init()"	xmlns:mx="http://www.adobe.com/2006/mxml">	<mx:Script>		<![CDATA[			import mx.controls.Alert;			import mx.validators.Validator;			import mx.events.ValidationResultEvent;			import com.test.app.events.*;			import com.test.app.vo.*;			import com.test.app.model.ModelLocator;			[Bindable] private var model:ModelLocator = ModelLocator.getInstance();			[Bindable] private var validators:Array = new Array();			/* I set up the validation array, adding all validators to the array. */			private function init():void			{				validators = [ createdV, idV, post_contentV, post_titleV, updatedV ];			}			/* I check to see if the required fields are present, and if so, I then send the data to the server */			private function validateAndSubmit():void			{				var vals:Array = new Array();					 vals = Validator.validateAll( validators );					if ( vals.length == 0 )					{						savePosts();					} else {						var alert:Alert = Alert.show( "Please correct invalid form.", "Validation Error" );							alert.isPopUp = false;				}			}			/* I either save or update a Posts record */			private function savePosts():void			{				var vo:PostsVO;				if ( model.selectedPosts == null )				{					vo = new PostsVO();					
+			vo.created = txt_created.text;
+			vo.id = txt_id.text;
+			vo.post_content = txt_post_content.text;
+			vo.post_title = txt_post_title.text;
+			vo.updated = txt_updated.text;				} else {					vo = new PostsVO( model.selectedPosts );					
+			vo.created = txt_created.text;
+			vo.id = txt_id.text;
+			vo.post_content = txt_post_content.text;
+			vo.post_title = txt_post_title.text;
+			vo.updated = txt_updated.text;				}				var e_savePosts:SavePostsEvent = new SavePostsEvent( vo );					 e_savePosts.dispatch();			}			/* I clear all of the form input fields, and the error strings, if any */			private function clear():void			{				model.selectedPosts = new PostsVO();				
+			txt_created.text = "";
+			txt_created.errorString = "";
+			
+			txt_id.text = "";
+			txt_id.errorString = "";
+			
+			txt_post_content.text = "";
+			txt_post_content.errorString = "";
+			
+			txt_post_title.text = "";
+			txt_post_title.errorString = "";
+			
+			txt_updated.text = "";
+			txt_updated.errorString = "";
+						}		]]>	</mx:Script>	<mx:Panel width="100%" height="100%" layout="vertical" title="Posts Details">		<!-- Posts Form -->		<mx:Form id="form_Posts" width="100%" height="100%">			
+				<mx:FormItem label="Created" required="false" width="100%">
+					<mx:TextInput id="txt_created" text="{ model.SELECTED_POSTS.created }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Id" required="true" width="100%">
+					<mx:TextInput id="txt_id" text="{ model.SELECTED_POSTS.id }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Post_content" required="false" width="100%">
+					<mx:TextInput id="txt_post_content" text="{ model.SELECTED_POSTS.post_content }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Post_title" required="false" width="100%">
+					<mx:TextInput id="txt_post_title" text="{ model.SELECTED_POSTS.post_title }" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Updated" required="false" width="100%">
+					<mx:TextInput id="txt_updated" text="{ model.SELECTED_POSTS.updated }" width="100%"/>
+				</mx:FormItem>		</mx:Form>		<!-- Posts Action Buttons -->		<mx:ControlBar>						<mx:Button				label="Save"				click="validateAndSubmit()"/>						<mx:Button				label="Clear"				click="clear()"/>		</mx:ControlBar>	</mx:Panel>	<!--All the validators for required inputs-->	
+				<mx:StringValidator id="createdV" source="{ txt_created }" required="true" property="text"/>
+				<mx:StringValidator id="idV" source="{ txt_id }" required="true" property="text"/>
+				<mx:StringValidator id="post_contentV" source="{ txt_post_content }" required="true" property="text"/>
+				<mx:StringValidator id="post_titleV" source="{ txt_post_title }" required="true" property="text"/>
+				<mx:StringValidator id="updatedV" source="{ txt_updated }" required="true" property="text"/></mx:VBox>       

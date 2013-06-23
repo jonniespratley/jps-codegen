@@ -1,0 +1,1 @@
+<?php/** * I am a data object representing the @TABLE table. * * @package @NAMESPACE * @name @TABLE */class @TABLEVO{	@FIELDVARS	public function __construct(){}	public function __get( $name ) { return $this->$name; }	public function __set( $name, $value ) { $this->$name = $value; }	public function mapObject( $vo ) {		@FIELDS	}}?>

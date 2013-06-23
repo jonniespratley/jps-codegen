@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+ProjectsList.mxml: This component holds listing all records in the Projects table and removing a Projects record
+Your Copywrite information 
+-->
+<mx:VBox
+	width="100%"
+	height="100%"
+	creationComplete="init()"
+	xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+
+			import com.project.codegentest.events.*;
+			import com.project.codegentest.vo.*;
+			import com.project.codegentest.model.ModelLocator;
+
+			[Bindable] private var model:ModelLocator = ModelLocator.getInstance();
+
+			/* I add an event listener to the datagrid as well as call for the @TABLE records */
+			private function init():void
+			{
+				getProjects();
+				dg_Projects.addEventListener( KeyboardEvent.KEY_DOWN, keyboardHandler );
+			}
+			
+			/* I get all of the Projects from the database and display them in a datagrid */
+			private function getProjects():void
+			{
+				var e_getProjects:GetProjectsEvent = new GetProjectsEvent();
+					 e_getProjects.dispatch();
+			}
+
+			/* I remove a Projects from the database */
+			private function removeProjects( item:Object ):void
+			{
+				var vo:ProjectsVO = new ProjectsVO( item );
+				var voIndex:int = dg_Projects.selectedIndex;
+				var e_removeProjects:RemoveProjectsEvent = new RemoveProjectsEvent( vo, voIndex );
+					 e_removeProjects.dispatch();
+			}
+
+			/* I set the current selected Projects on the model, for all areas of application */
+			private function onSelect( event:Event ):void
+			{
+				 model.selectedProjects = new ProjectsVO( event.currentTarget.selectedItem );
+			}
+
+			/* I handle when the keyboard delete key is pressed, I remove a Projects, only if it is selected first */
+			private function keyboardHandler( event:KeyboardEvent ):void
+			{
+				if ( event.keyCode == 8 &&  dg_Projects.selectedIndex != -1 )
+				{
+					removeProjects( dg_Projects.selectedItem );
+				}
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Panel width="100%" height="100%" layout="vertical" title="Projects List" resizeEffect="Resize">
+		
+		<!-- Projects DataGrid -->
+		<mx:DataGrid id="dg_Projects" 
+			width="100%" 
+			height="100%" 
+			dataProvider="{ model.ProjectsCollection }" 
+			change="onSelect( event )">
+			<mx:columns>
+				
+			<mx:DataGridColumn headerText="Created" dataField="created"/>
+			<mx:DataGridColumn headerText="Createddate" dataField="createddate"/>
+			<mx:DataGridColumn headerText="Date_created" dataField="date_created"/>
+			<mx:DataGridColumn headerText="Date_modified" dataField="date_modified"/>
+			<mx:DataGridColumn headerText="Demo_url" dataField="demo_url"/>
+			<mx:DataGridColumn headerText="Description" dataField="description"/>
+			<mx:DataGridColumn headerText="Developer" dataField="developer"/>
+			<mx:DataGridColumn headerText="Live_url" dataField="live_url"/>
+			<mx:DataGridColumn headerText="Local_url" dataField="local_url"/>
+			<mx:DataGridColumn headerText="Milestones" dataField="milestones"/>
+			<mx:DataGridColumn headerText="Modified" dataField="modified"/>
+			<mx:DataGridColumn headerText="Modifieddate" dataField="modifieddate"/>
+			<mx:DataGridColumn headerText="Namespace" dataField="namespace"/>
+			<mx:DataGridColumn headerText="Notes" dataField="notes"/>
+			<mx:DataGridColumn headerText="Project" dataField="project"/>
+			<mx:DataGridColumn headerText="Projectid" dataField="projectid"/>
+			<mx:DataGridColumn headerText="Published" dataField="published"/>
+			<mx:DataGridColumn headerText="Readme" dataField="readme"/>
+			<mx:DataGridColumn headerText="Repo_url" dataField="repo_url"/>
+			<mx:DataGridColumn headerText="Status" dataField="status"/>
+			<mx:DataGridColumn headerText="Tasks" dataField="tasks"/>
+			<mx:DataGridColumn headerText="Technologies" dataField="technologies"/>
+			<mx:DataGridColumn headerText="Title" dataField="title"/>
+			<mx:DataGridColumn headerText="Type" dataField="type"/>
+			</mx:columns>
+		</mx:DataGrid>
+
+		
+		<!-- Projects Action Buttons-->
+		<mx:ControlBar>
+			
+			<mx:Button label="Refresh" 
+				click="getProjects()"/>
+			
+			<mx:Button label="Remove" 
+				click="removeProjects( dg_Projects.selectedItem )" 
+				enabled="{ dg_Projects.selectedIndex != -1 ? true : false }"/>
+		</mx:ControlBar>
+		
+	</mx:Panel>
+	
+</mx:VBox>       
